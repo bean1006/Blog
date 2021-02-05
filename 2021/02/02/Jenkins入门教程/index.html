@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"chenb.in","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="自动化打包部署的好帮手">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jenkins入门教程">
+<meta property="og:url" content="https://chenb.in/2021/02/02/Jenkins%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="自动化打包部署的好帮手">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/img_convert/80ef6c5703529b4af9c1ab9dc92f150a.png">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008eGmZEly1gnb7mh7zrqj31ov0u0tcf.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008eGmZEly1gnb7rj9camj31180g6405.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008eGmZEgy1gn9c7o1qpej30o018ktb0.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008eGmZEgy1gn9c7kjjz6j30dk0mxaaz.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008eGmZEgy1gn9c7m1759j307z09nt96.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008eGmZEgy1gn9c7pry4uj30lm0f4wg8.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008eGmZEly1gnb7tw5j3uj30if0i9wfp.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008eGmZEly1gnb7ub1e8vj30d9092jrn.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008eGmZEly1gnb7tgo8agj31020j177a.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008eGmZEly1gnb7unh2zbj30ze0ijdit.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008eGmZEly1gnb7v0p9exj30o70l3n0a.jpg">
+<meta property="og:image" content="https://s3.ax1x.com/2021/02/01/yZPeMt.png">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008eGmZEgy1gn9c7ozkpqj30wb0e0ae4.jpg">
+<meta property="article:published_time" content="2021-02-02T09:48:30.000Z">
+<meta property="article:modified_time" content="2021-02-05T00:54:34.994Z">
+<meta property="article:author" content="BeanChan">
+<meta property="article:tag" content="运维">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/img_convert/80ef6c5703529b4af9c1ab9dc92f150a.png">
+
+<link rel="canonical" href="https://chenb.in/2021/02/02/Jenkins%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Jenkins入门教程 | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hexo</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">种一棵树最好的时候是十年前,其次是现在</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>日志</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://chenb.in/2021/02/02/Jenkins%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="BeanChan">
+      <meta itemprop="description" content="爱玩爱闹,但也有着一颗积极向上的心">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Jenkins入门教程
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-02 17:48:30" itemprop="dateCreated datePublished" datetime="2021-02-02T17:48:30+08:00">2021-02-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-02-05 08:54:34" itemprop="dateModified" datetime="2021-02-05T08:54:34+08:00">2021-02-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">工具</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">自动化打包部署的好帮手</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1><span id="1-什么是jenkins">1. 什么是Jenkins</span></h1><h2><span id="11-我们为啥需要jenkins">1.1 我们为啥需要jenkins</span></h2><p>在一次系统开发中,往往需要如下几步:</p>
+<ol>
+<li>写代码</li>
+<li>代码提交</li>
+<li>四处打听有没有人没提交代码</li>
+<li>项目打包(通常是jar包和war包)</li>
+<li>上传到Linux服务器上</li>
+<li>如果项目正在运行,关闭它</li>
+<li>启动刚刚部署的项目</li>
+<li>如果有人突然举手说我代码好像有点问题!重复步骤1-7,可以说是相等的折磨人了</li>
+</ol>
+<p>这时有人就会问了,<strong>有没有那种可以自动打包部署的工具呢</strong>?</p>
+<p><a target="_blank" rel="noopener" href="https://imgchr.com/i/sz9gQ1"><img src="https://img-blog.csdnimg.cn/img_convert/80ef6c5703529b4af9c1ab9dc92f150a.png" alt="sz9gQ1.jpg"></a></p>
+<blockquote>
+<p>正确答案:<strong>Jenkins</strong></p>
+</blockquote>
+<p>Jenkins是一个基于Java构筑的一个<strong>持续集成</strong>工具,可以帮助用户更好地实现持续集成</p>
+<a id="more"></a>
+
+<h2><span id="12-jenkin实现原理">1.2. Jenkin实现原理</span></h2><ol>
+<li><p>程序员们提交代码</p>
+</li>
+<li><p>版本控制服务器(git、svm)整合代码库</p>
+</li>
+<li><p>版本控制服务器通知Jenkins自动化部署</p>
+</li>
+<li><p>Jenkins调用git/svn插件获取源码</p>
+</li>
+<li><p>Jenkins调用maven插件打包成war包或者是jar包</p>
+</li>
+<li><p>Jenkins调用命令将项目部署到服务器</p>
+</li>
+<li><p>使用人员:测试/前端</p>
+</li>
+</ol>
+<hr>
+<h1><span id="2-jenkins搭建">2. Jenkins搭建</span></h1><h2><span id="21-jenkins环境搭建以centos75为例">2.1. Jenkins环境搭建(以CentOS7.5为例)</span></h2><ol>
+<li>jdk</li>
+<li>maven/gradle</li>
+<li>git/svm</li>
+</ol>
+<p>以上为部署java项目的基本环境,请先行搭建好</p>
+<h2><span id="22-安装jenkins">2.2. 安装Jenkins</span></h2><ol>
+<li>安装包下载,Jenkins官网下载较慢,这里提供国内下载地址:<a target="_blank" rel="noopener" href="https://mirrors.aliyun.com/jenkins/war/latest/jenkins.war">Jenkins</a></li>
+<li>在安装包根路径下输入:  </li>
+</ol>
+<ul>
+<li><strong>nohup java -jar -Dhudson.security.csrf.GlobalCrumbIssuerConfiguration.DISABLE_CSRF_PROTECTION=true  jenkins.war –httpPort=8080 &amp;</strong> <ul>
+<li>nohup …………. &amp; 后台启动</li>
+<li>Dhudson.security.csrf.GlobalCrumbIssuerConfiguration.DISABLE_CSRF_PROTECTION=true 为了关闭CSRF,Jenkins2.2版本之后无法关闭CSRF,会导致项目拉取失败</li>
+<li>jenkins.war 下载下来的war包</li>
+<li>–httpPort=8080 指定jenkins管理页面的端口</li>
+</ul>
+</li>
+</ul>
+<ol start="3">
+<li>安装结束后会有一个很长的初始密码,如果忘了可以在~/.jenkins/secrets/initialAdminPassword文件中查看</li>
+<li>在浏览器输入 <a target="_blank" rel="noopener" href="http://localhost:8080/">http://localhost:8080</a></li>
+<li>输入密码后,建议点击安装推荐的插件,保证基本功能可用</li>
+<li>安装完成后设置首个管理员用户和密码</li>
+</ol>
+<h2><span id="23-jenkins初始化配置">2.3. Jenkins初始化配置</span></h2><h3><span id="231-汉化插件可选">2.3.1. 汉化插件(可选)</span></h3><p>Linux安装完成后,第一次打开发现内部全都是英文的    <img src="https://tva1.sinaimg.cn/large/008eGmZEly1gnb7mh7zrqj31ov0u0tcf.jpg" alt="yVxkP1.png"></p>
+<p>汉化步骤:</p>
+<ol>
+<li><p>点击Manage Jenkins</p>
+</li>
+<li><p>点击Mange Plugins</p>
+</li>
+<li><p>点击Advanced,设置Update Sites的URL为:<a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/update-center.json">https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/update-center.json</a> 用国内镜像源安装插件速度会很快</p>
+</li>
+<li><p>插件安装(新老版本二选一) </p>
+<ul>
+<li><p>老版的安装<strong>Locale</strong>插件,随后依次点击Manage Jenkins -&gt; Configure System,找到Locale输入<strong>zh_CN</strong>,并在下面打钩</p>
+</li>
+<li><p>新版的安装Localization:Chinese(Simplified)插件即可(笔者自用,Jenkins版本2.277)</p>
+</li>
+</ul>
+</li>
+<li><p>拉到最下方点击save</p>
+</li>
+<li><p>重启( 推荐方式: <a target="_blank" rel="noopener" href="http://localhost:8080/restart">http://localhost:8080/restart</a> )真的很省事</p>
+</li>
+</ol>
+<h3><span id="232-全局工具配置系统管理底下">2.3.2. 全局工具配置(系统管理底下)</span></h3><p>JDK、Git、Maven配置:</p>
+<p><img src="https://tva1.sinaimg.cn/large/008eGmZEly1gnb7rj9camj31180g6405.jpg" alt="y9nACn.png"></p>
+<p><img src="https://tva1.sinaimg.cn/large/008eGmZEgy1gn9c7o1qpej30o018ktb0.jpg" alt="ypAMdI.png"><br>注意项: </p>
+<ol>
+<li>如果没有git的配置项,先在插件里安装一下git插件,具体安装方式参照上面汉化步骤</li>
+<li>是否自动安装自行考虑,网上看别人的建议是用自己的(自己的才是最好的)</li>
+<li>记得拉到最底下点保存</li>
+<li>换上你<strong>自己</strong>的目录配置项</li>
+<li>记得把Maven的settings.xml里的mrror换成阿里源</li>
+<li>上图git记得配置成git<strong>可执行文件</strong>的全路径</li>
+</ol>
+<h3><span id="233-安装远程服务器插件以及其余插件">2.3.3. 安装远程服务器插件以及其余插件</span></h3><p>一共需要安装三个插件(安装步骤参考上面汉化步骤):</p>
+<ol>
+<li>Publish Over SSH 用于连接远程服务器</li>
+<li>Deploy to container 用于把打包的应用发布到远程服务器</li>
+<li>Maven Integration 用于构建Maven项目</li>
+</ol>
+<h2><span id="24-配置连接远程服务器的ssh">2.4. 配置连接远程服务器的SSH</span></h2><ol>
+<li>依次点击 系统管理 -&gt; 系统配置</li>
+<li>拉到最底下找到Publish over SSH,参考下图填写完毕<br><img src="https://tva1.sinaimg.cn/large/008eGmZEgy1gn9c7kjjz6j30dk0mxaaz.jpg" alt="在这里插入图片描述"></li>
+</ol>
+<p>参考值:</p>
+<table>
+<thead>
+<tr>
+<th>名字</th>
+<th>对应内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Passphrase</td>
+<td>服务器的密码</td>
+</tr>
+<tr>
+<td>Path to key</td>
+<td>连接远程服务器密钥文件的路径</td>
+</tr>
+<tr>
+<td>Key</td>
+<td>SSH Key (具体内容看下面注意项)</td>
+</tr>
+<tr>
+<td>Name</td>
+<td>自定义服务器名</td>
+</tr>
+<tr>
+<td>HostName</td>
+<td>服务器IP地址</td>
+</tr>
+<tr>
+<td>UserName</td>
+<td>服务器用户名</td>
+</tr>
+<tr>
+<td>Remote Directory</td>
+<td>传输文件的目录</td>
+</tr>
+</tbody></table>
+<p>注意项:</p>
+<ol>
+<li><p>如果找不到Publish over SSH,说明该插件未安装,请参考汉化步骤自行安装</p>
+</li>
+<li><p>登录方式:</p>
+<ul>
+<li>如果是用户名密码登录,输入Passphrase即可</li>
+<li>如果是SSH秘钥登录则输入Path to Key以及Key</li>
+</ul>
+</li>
+<li><p>Key在~/.ssh/id_rsa.pub文件里,若无此文件则命令行输入<strong>ssh-keygen</strong>,然后一路回车自动生成(Windows系统还请自行百度)</p>
+</li>
+<li><p>Remote Directory是你打包后的项目(jar包/war包)存放的地方,请先记住后续需要使用</p>
+</li>
+<li><p>右下角有个Test Configuration可以点一下看看有没有Success</p>
+</li>
+</ol>
+<hr>
+<h1><span id="3-守护程序员的笑容自动化集成部署来了来了他来了">3. 守护程序员的笑容—自动化集成部署(来了来了,他来了)</span></h1><h2><span id="31-项目构建">3.1 项目构建</span></h2><p>以构建maven项目为例,构建步骤如下:</p>
+<ol>
+<li><p>新建任务<br> <img src="https://tva1.sinaimg.cn/large/008eGmZEgy1gn9c7m1759j307z09nt96.jpg" alt="yPMZK1.png"></p>
+</li>
+<li><p>构建maven项目<br><a target="_blank" rel="noopener" href="https://imgchr.com/i/ySdOpT"><img src="https://tva1.sinaimg.cn/large/008eGmZEgy1gn9c7pry4uj30lm0f4wg8.jpg" alt="ySdOpT.png"></a></p>
+</li>
+<li><p>源码管理配置(选择github上的项目)</p>
+<p>  <img src="https://tva1.sinaimg.cn/large/008eGmZEly1gnb7tw5j3uj30if0i9wfp.jpg" alt="yVX5JP.png"></p>
+<p> <img src="https://tva1.sinaimg.cn/large/008eGmZEly1gnb7ub1e8vj30d9092jrn.jpg" alt="yVbyH1.png"></p>
+</li>
+<li><p>触发器配置(github稍后会配置)<br><img src="https://tva1.sinaimg.cn/large/008eGmZEly1gnb7tgo8agj31020j177a.jpg">    </p>
+</li>
+<li><p>构建后操作</p>
+<p><img src="https://tva1.sinaimg.cn/large/008eGmZEly1gnb7unh2zbj30ze0ijdit.jpg" alt="yVbyH1.png"></p>
+</li>
+</ol>
+<h2><span id="32-github配置">3.2. github配置</span></h2><p><img src="https://tva1.sinaimg.cn/large/008eGmZEly1gnb7v0p9exj30o70l3n0a.jpg" alt="yVxkP1.png"></p>
+<h2><span id="33-服务器添加脚本">3.3 服务器添加脚本</span></h2><p>进入到2.4配置的Remote Directory里,创建两个脚本(请根据自己的情况修改脚本)</p>
+<p>stop.sh:</p>
+<pre><code>#!/bin/bash
+pid=ps -ef |grep springboot-demo-0.0.1-SNAPSHOT.jar|awk &#39;&#123;print $2&#125;&#39;
+if [ -n &quot;$pid&quot; ]
+then
+kill -9 $pid
+fi
+</code></pre>
+<p>start.sh:</p>
+<pre><code>#!/bin/bash
+chmod 777 /usr/local/java-projects/springboot-demo-0.0.1-SNAPSHOT.jar
+cd /usr/local/java-projects
+nohup java -jar springboot-demo-0.0.1-SNAPSHOT.jar &amp;
+</code></pre>
+<h2><span id="34-测试">3.4  测试</span></h2><ol>
+<li>编写一个HelloController</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">		<span class="meta">@RestController</span></span><br><span class="line">		<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloController</span> </span>&#123;</span><br><span class="line">		    <span class="meta">@GetMapping(&quot;/hello&quot;)</span></span><br><span class="line">		    <span class="function"><span class="keyword">public</span> String <span class="title">hello</span><span class="params">()</span></span>&#123;</span><br><span class="line">		        <span class="keyword">return</span> <span class="string">&quot;Hello World!!!!!!!!!!!!&quot;</span>;</span><br><span class="line">		    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>push项目</li>
+<li>jenkins开始自动部署项目<img src="https://s3.ax1x.com/2021/02/01/yZPeMt.png">
+
+
+</li>
+</ol>
+<ol start="4">
+<li>点击进项目,可查看控制台<br><img src="https://tva1.sinaimg.cn/large/008eGmZEgy1gn9c7ozkpqj30wb0e0ae4.jpg" alt="在这里插入图片描述"></li>
+</ol>
+<ol start="5">
+<li>访问项目路径 <a target="_blank" rel="noopener" href="http://beanchan.cn/hello">http://beanchan.cn/hello</a> (我的,给你偷偷看一眼)</li>
+</ol>
+<hr>
+<p>&emsp;&emsp;至此我的处女作也算是小小的完结了,内容也只是入门,后续部分会慢慢完善,在哪里如有存在着问题,或者这篇哪里还可以改进的,又或者你在通篇按照我的指示完成后还是无法正常使用欢迎与我探讨探讨,感谢你的观看。</p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>如果对你有帮助的话,就请作者喝杯咖啡吧。</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.jpeg" alt="BeanChan 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.jpeg" alt="BeanChan 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%BF%90%E7%BB%B4/" rel="tag"># 运维</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/02/02/hello-world/" rel="prev" title="Hello World">
+      <i class="fa fa-chevron-left"></i> Hello World
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">1. 什么是Jenkins</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-text">1.1 我们为啥需要jenkins</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-text">1.2. Jenkin实现原理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">2. Jenkins搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-text">2.1. Jenkins环境搭建(以CentOS7.5为例)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-text">2.2. 安装Jenkins</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-text">2.3. Jenkins初始化配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">2.3.1. 汉化插件(可选)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">2.3.2. 全局工具配置(系统管理底下)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text">2.3.3. 安装远程服务器插件以及其余插件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-text">2.4. 配置连接远程服务器的SSH</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">3. 守护程序员的笑容—自动化集成部署(来了来了,他来了)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-text">3.1 项目构建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-text">3.2. github配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-text">3.3 服务器添加脚本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-text">3.4  测试</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="BeanChan"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">BeanChan</p>
+  <div class="site-description" itemprop="description">爱玩爱闹,但也有着一颗积极向上的心</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/bean1006" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;bean1006" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:chenbin.0226@foxmail.com" title="E-Mail → mailto:chenbin.0226@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">BeanChan</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
