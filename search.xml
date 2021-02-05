@@ -47,18 +47,13 @@
 <p>以上为部署java项目的基本环境,请先行搭建好</p>
 <h2 id="2-2-安装Jenkins"><a href="#2-2-安装Jenkins" class="headerlink" title="2.2. 安装Jenkins"></a>2.2. 安装Jenkins</h2><ol>
 <li>安装包下载,Jenkins官网下载较慢,这里提供国内下载地址:<a href="https://mirrors.aliyun.com/jenkins/war/latest/jenkins.war">Jenkins</a></li>
-<li>在安装包根路径下输入:  </li>
-</ol>
-<ul>
-<li><strong>nohup java -jar -Dhudson.security.csrf.GlobalCrumbIssuerConfiguration.DISABLE_CSRF_PROTECTION=true  jenkins.war –httpPort=8080 &amp;</strong> <ul>
+<li>在安装包根路径下输入:<br> <strong>nohup java -jar -      Dhudson.security.csrf.GlobalCrumbIssuerConfiguration.DISABLE_CSRF_PROTECTION=true  jenkins.war –httpPort=8080 &amp;</strong> <ul>
 <li>nohup …………. &amp; 后台启动</li>
 <li>Dhudson.security.csrf.GlobalCrumbIssuerConfiguration.DISABLE_CSRF_PROTECTION=true 为了关闭CSRF,Jenkins2.2版本之后无法关闭CSRF,会导致项目拉取失败</li>
 <li>jenkins.war 下载下来的war包</li>
 <li>–httpPort=8080 指定jenkins管理页面的端口</li>
 </ul>
 </li>
-</ul>
-<ol start="3">
 <li>安装结束后会有一个很长的初始密码,如果忘了可以在~/.jenkins/secrets/initialAdminPassword文件中查看</li>
 <li>在浏览器输入 <a href="http://localhost:8080/">http://localhost:8080</a></li>
 <li>输入密码后,建议点击安装推荐的插件,保证基本功能可用</li>
