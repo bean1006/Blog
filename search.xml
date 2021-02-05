@@ -3,7 +3,7 @@
   <entry>
     <title>Jenkins入门教程</title>
     <url>/2021/02/02/Jenkins%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/</url>
-    <content><![CDATA[<h1><span id="1-什么是jenkins">1. 什么是Jenkins</span></h1><h2><span id="11-我们为啥需要jenkins">1.1 我们为啥需要jenkins</span></h2><p>在一次系统开发中,往往需要如下几步:</p>
+    <content><![CDATA[<h1 id="1-什么是Jenkins"><a href="#1-什么是Jenkins" class="headerlink" title="1. 什么是Jenkins"></a>1. 什么是Jenkins</h1><h2 id="1-1-我们为啥需要jenkins"><a href="#1-1-我们为啥需要jenkins" class="headerlink" title="1.1 我们为啥需要jenkins"></a>1.1 我们为啥需要jenkins</h2><p>在一次系统开发中,往往需要如下几步:</p>
 <ol>
 <li>写代码</li>
 <li>代码提交</li>
@@ -22,7 +22,7 @@
 <p>Jenkins是一个基于Java构筑的一个<strong>持续集成</strong>工具,可以帮助用户更好地实现持续集成</p>
 <a id="more"></a>
 
-<h2><span id="12-jenkin实现原理">1.2. Jenkin实现原理</span></h2><ol>
+<h2 id="1-2-Jenkin实现原理"><a href="#1-2-Jenkin实现原理" class="headerlink" title="1.2. Jenkin实现原理"></a>1.2. Jenkin实现原理</h2><ol>
 <li><p>程序员们提交代码</p>
 </li>
 <li><p>版本控制服务器(git、svm)整合代码库</p>
@@ -39,13 +39,13 @@
 </li>
 </ol>
 <hr>
-<h1><span id="2-jenkins搭建">2. Jenkins搭建</span></h1><h2><span id="21-jenkins环境搭建以centos75为例">2.1. Jenkins环境搭建(以CentOS7.5为例)</span></h2><ol>
+<h1 id="2-Jenkins搭建"><a href="#2-Jenkins搭建" class="headerlink" title="2. Jenkins搭建"></a>2. Jenkins搭建</h1><h2 id="2-1-Jenkins环境搭建-以CentOS7-5为例"><a href="#2-1-Jenkins环境搭建-以CentOS7-5为例" class="headerlink" title="2.1. Jenkins环境搭建(以CentOS7.5为例)"></a>2.1. Jenkins环境搭建(以CentOS7.5为例)</h2><ol>
 <li>jdk</li>
 <li>maven/gradle</li>
 <li>git/svm</li>
 </ol>
 <p>以上为部署java项目的基本环境,请先行搭建好</p>
-<h2><span id="22-安装jenkins">2.2. 安装Jenkins</span></h2><ol>
+<h2 id="2-2-安装Jenkins"><a href="#2-2-安装Jenkins" class="headerlink" title="2.2. 安装Jenkins"></a>2.2. 安装Jenkins</h2><ol>
 <li>安装包下载,Jenkins官网下载较慢,这里提供国内下载地址:<a href="https://mirrors.aliyun.com/jenkins/war/latest/jenkins.war">Jenkins</a></li>
 <li>在安装包根路径下输入:  </li>
 </ol>
@@ -64,7 +64,7 @@
 <li>输入密码后,建议点击安装推荐的插件,保证基本功能可用</li>
 <li>安装完成后设置首个管理员用户和密码</li>
 </ol>
-<h2><span id="23-jenkins初始化配置">2.3. Jenkins初始化配置</span></h2><h3><span id="231-汉化插件可选">2.3.1. 汉化插件(可选)</span></h3><p>Linux安装完成后,第一次打开发现内部全都是英文的    <img src="https://tva1.sinaimg.cn/large/008eGmZEly1gnb7mh7zrqj31ov0u0tcf.jpg" alt="yVxkP1.png"></p>
+<h2 id="2-3-Jenkins初始化配置"><a href="#2-3-Jenkins初始化配置" class="headerlink" title="2.3. Jenkins初始化配置"></a>2.3. Jenkins初始化配置</h2><h3 id="2-3-1-汉化插件-可选"><a href="#2-3-1-汉化插件-可选" class="headerlink" title="2.3.1. 汉化插件(可选)"></a>2.3.1. 汉化插件(可选)</h3><p>Linux安装完成后,第一次打开发现内部全都是英文的    <img src="https://tva1.sinaimg.cn/large/008eGmZEly1gnb7mh7zrqj31ov0u0tcf.jpg" alt="yVxkP1.png"></p>
 <p>汉化步骤:</p>
 <ol>
 <li><p>点击Manage Jenkins</p>
@@ -86,7 +86,7 @@
 <li><p>重启( 推荐方式: <a href="http://localhost:8080/restart">http://localhost:8080/restart</a> )真的很省事</p>
 </li>
 </ol>
-<h3><span id="232-全局工具配置系统管理底下">2.3.2. 全局工具配置(系统管理底下)</span></h3><p>JDK、Git、Maven配置:</p>
+<h3 id="2-3-2-全局工具配置-系统管理底下"><a href="#2-3-2-全局工具配置-系统管理底下" class="headerlink" title="2.3.2. 全局工具配置(系统管理底下)"></a>2.3.2. 全局工具配置(系统管理底下)</h3><p>JDK、Git、Maven配置:</p>
 <p><img src="https://tva1.sinaimg.cn/large/008eGmZEly1gnb7rj9camj31180g6405.jpg" alt="y9nACn.png"></p>
 <p><img src="https://tva1.sinaimg.cn/large/008eGmZEgy1gn9c7o1qpej30o018ktb0.jpg" alt="ypAMdI.png"><br>注意项: </p>
 <ol>
@@ -97,13 +97,13 @@
 <li>记得把Maven的settings.xml里的mrror换成阿里源</li>
 <li>上图git记得配置成git<strong>可执行文件</strong>的全路径</li>
 </ol>
-<h3><span id="233-安装远程服务器插件以及其余插件">2.3.3. 安装远程服务器插件以及其余插件</span></h3><p>一共需要安装三个插件(安装步骤参考上面汉化步骤):</p>
+<h3 id="2-3-3-安装远程服务器插件以及其余插件"><a href="#2-3-3-安装远程服务器插件以及其余插件" class="headerlink" title="2.3.3. 安装远程服务器插件以及其余插件"></a>2.3.3. 安装远程服务器插件以及其余插件</h3><p>一共需要安装三个插件(安装步骤参考上面汉化步骤):</p>
 <ol>
 <li>Publish Over SSH 用于连接远程服务器</li>
 <li>Deploy to container 用于把打包的应用发布到远程服务器</li>
 <li>Maven Integration 用于构建Maven项目</li>
 </ol>
-<h2><span id="24-配置连接远程服务器的ssh">2.4. 配置连接远程服务器的SSH</span></h2><ol>
+<h2 id="2-4-配置连接远程服务器的SSH"><a href="#2-4-配置连接远程服务器的SSH" class="headerlink" title="2.4. 配置连接远程服务器的SSH"></a>2.4. 配置连接远程服务器的SSH</h2><ol>
 <li>依次点击 系统管理 -&gt; 系统配置</li>
 <li>拉到最底下找到Publish over SSH,参考下图填写完毕<br><img src="https://tva1.sinaimg.cn/large/008eGmZEgy1gn9c7kjjz6j30dk0mxaaz.jpg" alt="在这里插入图片描述"></li>
 </ol>
@@ -162,7 +162,7 @@
 </li>
 </ol>
 <hr>
-<h1><span id="3-守护程序员的笑容自动化集成部署来了来了他来了">3. 守护程序员的笑容—自动化集成部署(来了来了,他来了)</span></h1><h2><span id="31-项目构建">3.1 项目构建</span></h2><p>以构建maven项目为例,构建步骤如下:</p>
+<h1 id="3-守护程序员的笑容—自动化集成部署-来了来了-他来了"><a href="#3-守护程序员的笑容—自动化集成部署-来了来了-他来了" class="headerlink" title="3. 守护程序员的笑容—自动化集成部署(来了来了,他来了)"></a>3. 守护程序员的笑容—自动化集成部署(来了来了,他来了)</h1><h2 id="3-1-项目构建"><a href="#3-1-项目构建" class="headerlink" title="3.1 项目构建"></a>3.1 项目构建</h2><p>以构建maven项目为例,构建步骤如下:</p>
 <ol>
 <li><p>新建任务<br> <img src="https://tva1.sinaimg.cn/large/008eGmZEgy1gn9c7m1759j307z09nt96.jpg" alt="yPMZK1.png"></p>
 </li>
@@ -178,8 +178,8 @@
 <p><img src="https://tva1.sinaimg.cn/large/008eGmZEly1gnb7unh2zbj30ze0ijdit.jpg" alt="yVbyH1.png"></p>
 </li>
 </ol>
-<h2><span id="32-github配置">3.2. github配置</span></h2><p><img src="https://tva1.sinaimg.cn/large/008eGmZEly1gnb7v0p9exj30o70l3n0a.jpg" alt="yVxkP1.png"></p>
-<h2><span id="33-服务器添加脚本">3.3 服务器添加脚本</span></h2><p>进入到2.4配置的Remote Directory里,创建两个脚本(请根据自己的情况修改脚本)</p>
+<h2 id="3-2-github配置"><a href="#3-2-github配置" class="headerlink" title="3.2. github配置"></a>3.2. github配置</h2><p><img src="https://tva1.sinaimg.cn/large/008eGmZEly1gnb7v0p9exj30o70l3n0a.jpg" alt="yVxkP1.png"></p>
+<h2 id="3-3-服务器添加脚本"><a href="#3-3-服务器添加脚本" class="headerlink" title="3.3 服务器添加脚本"></a>3.3 服务器添加脚本</h2><p>进入到2.4配置的Remote Directory里,创建两个脚本(请根据自己的情况修改脚本)</p>
 <p>stop.sh:</p>
 <pre><code>#!/bin/bash
 pid=ps -ef |grep springboot-demo-0.0.1-SNAPSHOT.jar|awk &#39;&#123;print $2&#125;&#39;
@@ -194,13 +194,13 @@ chmod 777 /usr/local/java-projects/springboot-demo-0.0.1-SNAPSHOT.jar
 cd /usr/local/java-projects
 nohup java -jar springboot-demo-0.0.1-SNAPSHOT.jar &amp;
 </code></pre>
-<h2><span id="34-测试">3.4  测试</span></h2><ol>
+<h2 id="3-4-测试"><a href="#3-4-测试" class="headerlink" title="3.4  测试"></a>3.4  测试</h2><ol>
 <li>编写一个HelloController</li>
 </ol>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">		<span class="meta">@RestController</span></span><br><span class="line">		<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloController</span> </span>&#123;</span><br><span class="line">		    <span class="meta">@GetMapping(&quot;/hello&quot;)</span></span><br><span class="line">		    <span class="function"><span class="keyword">public</span> String <span class="title">hello</span><span class="params">()</span></span>&#123;</span><br><span class="line">		        <span class="keyword">return</span> <span class="string">&quot;Hello World!!!!!!!!!!!!&quot;</span>;</span><br><span class="line">		    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ol start="2">
 <li>push项目</li>
-<li>jenkins开始自动部署项目<img src="https://s3.ax1x.com/2021/02/01/yZPeMt.png">
+<li>jenkins开始自动部署项目<img src="https://s3.ax1x.com/2021/02/01/yZPeMt.png"/>
 
 
 </li>
@@ -215,9 +215,10 @@ nohup java -jar springboot-demo-0.0.1-SNAPSHOT.jar &amp;
 <p>&emsp;&emsp;至此我的处女作也算是小小的完结了,内容也只是入门,后续部分会慢慢完善,在哪里如有存在着问题,或者这篇哪里还可以改进的,又或者你在通篇按照我的指示完成后还是无法正常使用欢迎与我探讨探讨,感谢你的观看。</p>
 ]]></content>
       <categories>
-        <category>工具</category>
+        <category>运维</category>
       </categories>
       <tags>
+        <tag>工具</tag>
         <tag>运维</tag>
       </tags>
   </entry>
