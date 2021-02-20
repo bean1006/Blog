@@ -3,12 +3,12 @@
   <entry>
     <title>Solr入门教程</title>
     <url>/2021/02/07/Solr%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/</url>
-    <content><![CDATA[<h1 id="1-Solr基础介绍"><a href="#1-Solr基础介绍" class="headerlink" title="1 Solr基础介绍"></a>1 Solr基础介绍</h1><h2 id="1-1-什么是Solr"><a href="#1-1-什么是Solr" class="headerlink" title="1.1 什么是Solr"></a>1.1 什么是Solr</h2><p>SOLR是Apache开源的、基于Lucene的Java Api的封装,是一款成熟稳定的搜索引擎。</p>
+    <content><![CDATA[<h1 id="1-Solr基础介绍"><a href="#1-Solr基础介绍" class="headerlink" title="1 Solr基础介绍"></a>1 Solr基础介绍</h1><h2 id="1-1-什么是Solr"><a href="#1-1-什么是Solr" class="headerlink" title="1.1 什么是Solr"></a>1.1 什么是Solr</h2><p>Solr是Apache开源的、基于Lucene的Java Api的封装,是一款成熟稳定的搜索引擎。</p>
 <h2 id="1-2-Solr的优缺点"><a href="#1-2-Solr的优缺点" class="headerlink" title="1.2 Solr的优缺点"></a>1.2 Solr的优缺点</h2><p>优点: </p>
 <ol>
 <li><p>大量的用户群体与成熟的社区</p>
 </li>
-<li><p>支持多种格式索引,例如HTML、PDF、JSON、XML等</p>
+<li><p>支持多种格式索引,例如HTML、CSV、JSON、XML等</p>
 </li>
 <li><p>诞生于与2004年,多年的沉淀使得Solr成熟、稳定</p>
 </li>
