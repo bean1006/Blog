@@ -648,6 +648,14 @@ nohup java -jar springboot-demo-0.0.1-SNAPSHOT.jar &amp;
 <p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210301142215.png" alt="image-20210301142215448"></p>
 <p>如果还将标签推送到远端仓库的话,还需要使用<code>git push :refs/tags/标签名</code>来删除</p>
 <p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210301142332.png" alt="image-20210301142331928"></p>
+<h2 id="命令汇总-4"><a href="#命令汇总-4" class="headerlink" title="命令汇总"></a>命令汇总</h2><p>查看所有标签: <code>git tag</code></p>
+<p>给最新版本打标签: <code>git tag 标签名</code></p>
+<p>给指定版本打标签: <code>git tag 版本号 commit 号</code></p>
+<p>查看标签详情: <code>git show 标签名</code></p>
+<p>推送单个标签: <code>git push origin 标签名</code></p>
+<p>推送所有标签: <code>git push origin --tags</code></p>
+<p>删除本地仓库的标签: <code>git tag -d 标签名</code></p>
+<p>删除远端仓库的标签: <code>git push :refs/tags/标签名</code></p>
 ]]></content>
       <categories>
         <category>运维</category>
@@ -896,6 +904,17 @@ nohup java -jar springboot-demo-0.0.1-SNAPSHOT.jar &amp;
       <tags>
         <tag>Solr</tag>
         <tag>搜索引擎</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Quartz</title>
+    <url>/2021/03/02/Quartz/</url>
+    <content><![CDATA[<h1 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1. 介绍"></a>1. 介绍</h1><h1 id="2-基本使用"><a href="#2-基本使用" class="headerlink" title="2. 基本使用"></a>2. 基本使用</h1><h1 id="3-整合Springboot"><a href="#3-整合Springboot" class="headerlink" title="3. 整合Springboot"></a>3. 整合Springboot</h1>]]></content>
+      <categories>
+        <category>框架</category>
+      </categories>
+      <tags>
+        <tag>Quartz</tag>
       </tags>
   </entry>
 </search>
