@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Git教程</title>
-    <url>/2021/02/20/Git%E6%95%99%E7%A8%8B/</url>
+    <title>Git</title>
+    <url>/2021/02/20/Git/</url>
     <content><![CDATA[<h1 id="1-Git介绍"><a href="#1-Git介绍" class="headerlink" title="1 Git介绍"></a>1 Git介绍</h1><h2 id="1-1-什么是git"><a href="#1-1-什么是git" class="headerlink" title="1.1 什么是git"></a>1.1 什么是git</h2><p>按官方的话说:世界上最先进的分布式版本控制工具</p>
 <p>如果不用版本控制工具我们怎么整合代码?</p>
 <p>这里讲述一个Git出生前的一些事:</p>
@@ -442,8 +442,8 @@
       </tags>
   </entry>
   <entry>
-    <title>Solr入门教程</title>
-    <url>/2021/02/07/Solr%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/</url>
+    <title>Solr</title>
+    <url>/2021/02/07/Solr/</url>
     <content><![CDATA[<h1 id="1-Solr基础介绍"><a href="#1-Solr基础介绍" class="headerlink" title="1 Solr基础介绍"></a>1 Solr基础介绍</h1><h2 id="1-1-什么是Solr"><a href="#1-1-什么是Solr" class="headerlink" title="1.1 什么是Solr"></a>1.1 什么是Solr</h2><p>Solr是Apache开源的、基于Lucene的Java Api的封装,是一款成熟稳定的搜索引擎。</p>
 <h2 id="1-2-Solr的优缺点"><a href="#1-2-Solr的优缺点" class="headerlink" title="1.2 Solr的优缺点"></a>1.2 Solr的优缺点</h2><p>优点: </p>
 <ol>
@@ -675,15 +675,16 @@
 </ol>
 ]]></content>
       <categories>
-        <category>搜索引擎</category>
+        <category>框架</category>
       </categories>
       <tags>
         <tag>Solr</tag>
+        <tag>搜索引擎</tag>
       </tags>
   </entry>
   <entry>
-    <title>Jenkins入门教程</title>
-    <url>/2021/02/02/Jenkins%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/</url>
+    <title>Jenkins</title>
+    <url>/2021/02/02/Jenkins/</url>
     <content><![CDATA[<h1 id="1-什么是Jenkins"><a href="#1-什么是Jenkins" class="headerlink" title="1. 什么是Jenkins"></a>1. 什么是Jenkins</h1><h2 id="1-1-我们为啥需要jenkins"><a href="#1-1-我们为啥需要jenkins" class="headerlink" title="1.1 我们为啥需要jenkins"></a>1.1 我们为啥需要jenkins</h2><p>在一次系统开发中,往往需要如下几步:</p>
 <ol>
 <li>写代码</li>
