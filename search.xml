@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Quartz</title>
-    <url>/2021/03/02/Quartz/</url>
-    <content><![CDATA[<h1 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1. 介绍"></a>1. 介绍</h1><h1 id="2-基本使用"><a href="#2-基本使用" class="headerlink" title="2. 基本使用"></a>2. 基本使用</h1><h1 id="3-整合Springboot"><a href="#3-整合Springboot" class="headerlink" title="3. 整合Springboot"></a>3. 整合Springboot</h1>]]></content>
-      <categories>
-        <category>框架</category>
-      </categories>
-      <tags>
-        <tag>Quartz</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Git</title>
     <url>/2021/02/20/Git/</url>
     <content><![CDATA[<h1 id="1-Git介绍"><a href="#1-Git介绍" class="headerlink" title="1 Git介绍"></a>1 Git介绍</h1><h2 id="1-1-什么是git"><a href="#1-1-什么是git" class="headerlink" title="1.1 什么是git"></a>1.1 什么是git</h2><p>按官方的话说:世界上最先进的分布式版本控制工具</p>
