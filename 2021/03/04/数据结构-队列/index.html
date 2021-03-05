@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"chenb.in","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="基于Java数组实现各个队列">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据结构-队列">
+<meta property="og:url" content="https://chenb.in/2021/03/04/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E9%98%9F%E5%88%97/index.html">
+<meta property="og:site_name" content="BeanChan&#39;s Blog">
+<meta property="og:description" content="基于Java数组实现各个队列">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/bean-chan/images/raw/master/img/20210304111620.png">
+<meta property="og:image" content="https://gitee.com/bean-chan/images/raw/master/img/20210304112336.png">
+<meta property="og:image" content="https://gitee.com/bean-chan/images/raw/master/img/20210304112748.png">
+<meta property="og:image" content="https://gitee.com/bean-chan/images/raw/master/img/20210304112838.png">
+<meta property="og:image" content="https://gitee.com/bean-chan/images/raw/master/img/20210304111620.png">
+<meta property="og:image" content="https://gitee.com/bean-chan/images/raw/master/img/20210304150530.png">
+<meta property="og:image" content="https://gitee.com/bean-chan/images/raw/master/img/20210304150818.png">
+<meta property="og:image" content="https://gitee.com/bean-chan/images/raw/master/img/20210304151404.png">
+<meta property="og:image" content="https://gitee.com/bean-chan/images/raw/master/img/20210304152420.png">
+<meta property="og:image" content="https://gitee.com/bean-chan/images/raw/master/img/20210305162405.png">
+<meta property="article:published_time" content="2021-03-04T02:45:34.000Z">
+<meta property="article:modified_time" content="2021-03-05T08:25:20.521Z">
+<meta property="article:author" content="BeanChan">
+<meta property="article:tag" content="队列">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/bean-chan/images/raw/master/img/20210304111620.png">
+
+<link rel="canonical" href="https://chenb.in/2021/03/04/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E9%98%9F%E5%88%97/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>数据结构-队列 | BeanChan's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="BeanChan's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">BeanChan's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">种一棵树最好的时候是十年前,其次是现在</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>日志</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://chenb.in/2021/03/04/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E9%98%9F%E5%88%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="BeanChan">
+      <meta itemprop="description" content="爱玩爱闹,但也有着一颗积极向上的心">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BeanChan's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          数据结构-队列
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-04 10:45:34" itemprop="dateCreated datePublished" datetime="2021-03-04T10:45:34+08:00">2021-03-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-03-05 16:25:20" itemprop="dateModified" datetime="2021-03-05T16:25:20+08:00">2021-03-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">基于Java数组实现各个队列</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="1-队列介绍"><a href="#1-队列介绍" class="headerlink" title="1 队列介绍"></a>1 队列介绍</h1><h2 id="1-1-定义"><a href="#1-1-定义" class="headerlink" title="1.1 定义"></a>1.1 定义</h2><p>队列是一种特殊的线性表,遵循FIFO(first in first out)先进先出原则,整个队列由一个线性表构成,可以是数组或者链表,同时由队头(font)来表示第一个元素、队尾(rear)最后一个元素,并且队列只允许在队头删除元素,队尾添加元素</p>
+<h2 id="1-2-本例仓库地址"><a href="#1-2-本例仓库地址" class="headerlink" title="1.2 本例仓库地址"></a>1.2 本例仓库地址</h2><p>仓库地址:<a target="_blank" rel="noopener" href="https://gitee.com/bean-chan/data-structure.git">https://gitee.com/bean-chan/data-structure.git</a></p>
+<h1 id="三种队列"><a href="#三种队列" class="headerlink" title="三种队列"></a>三种队列</h1><h2 id="2-1-普通队列"><a href="#2-1-普通队列" class="headerlink" title="2.1 普通队列"></a>2.1 普通队列</h2><h3 id="2-1-1-实现原理"><a href="#2-1-1-实现原理" class="headerlink" title="2.1.1 实现原理"></a>2.1.1 实现原理</h3><p>创建之初,队头与队尾处在第一个位置上</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210304111620.png" alt="image-20210304111620056" style="zoom:50%;" />
+
+<p>随后往队伍里连续先后添加两个元素A与B后</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210304112336.png" alt="image-20210304112336248" style="zoom:50%;" />
+
+<p>队尾向后连续位移两个位置,并且每添加一次元素,队尾就会向后位移一个位置,直到整个线性表最末端为止,此时则队列不再允许添加元素</p>
+<p>我们进行删除操作时,队头会向后位移一个位置,例如我们将A出队</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210304112748.png" alt="image-20210304112748369" style="zoom:50%;" />
+
+<p>之后再将B出队</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210304112838.png" alt="image-20210304112838312" style="zoom:50%;" />
+
+<p>当队头与队尾指向同一位置时,说明此刻队列为空</p>
+<h3 id="2-1-2-基于数组实现"><a href="#2-1-2-基于数组实现" class="headerlink" title="2.1.2 基于数组实现"></a>2.1.2 基于数组实现</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Classname</span> NormalQueue</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> ChenBin</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@CreateDate</span> 2021/3/4 1:35 PM</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NormalQueue</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Integer[] dataArr; <span class="comment">// 存放元素的数组</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> capacity; <span class="comment">// 容量</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> font; <span class="comment">// 队头指针</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> rear; <span class="comment">// 队尾指针</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_SIZE = <span class="number">6</span>; <span class="comment">// 默认容量</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 构造器</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">NormalQueue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.dataArr = <span class="keyword">new</span> Integer[DEFAULT_SIZE];</span><br><span class="line">        <span class="keyword">this</span>.capacity = DEFAULT_SIZE;</span><br><span class="line">        <span class="keyword">this</span>.font = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">this</span>.rear = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 队列是否为空</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> rear - font == <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 查看队首元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">peek</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (isEmpty()) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">return</span> dataArr[rear - <span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 入队一个元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">push</span><span class="params">(Integer val)</span> </span>&#123;</span><br><span class="line">        checkCapacity();</span><br><span class="line">        dataArr[rear] = val;</span><br><span class="line">        rear++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 出队一个元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">pop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (isEmpty()) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        checkCapacity();</span><br><span class="line">        Integer temp = dataArr[font];</span><br><span class="line">        dataArr[font++] = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">return</span> temp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 容量检查</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">checkCapacity</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (rear &gt;= capacity) &#123;</span><br><span class="line">            <span class="comment">// 空间不足,扩容</span></span><br><span class="line">            capacity = capacity * <span class="number">2</span>;</span><br><span class="line">            Integer[] tempArr = <span class="keyword">new</span> Integer[capacity];</span><br><span class="line">            System.arraycopy(dataArr, <span class="number">0</span>, tempArr, <span class="number">0</span>, rear - font);</span><br><span class="line">            <span class="keyword">this</span>.dataArr = tempArr;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(</span><br><span class="line">                <span class="string">&quot;NormalQueue&#123;&quot;</span> +</span><br><span class="line">                        <span class="string">&quot;dataArr=&quot;</span> + Arrays.toString(dataArr) +</span><br><span class="line">                        <span class="string">&quot;, capacity=&quot;</span> + capacity +</span><br><span class="line">                        <span class="string">&quot;, font=&quot;</span> + font +</span><br><span class="line">                        <span class="string">&quot;, rear=&quot;</span> + rear +</span><br><span class="line">                        <span class="string">&#x27;&#125;&#x27;</span></span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        NormalQueue queue = <span class="keyword">new</span> NormalQueue();</span><br><span class="line">        System.out.println(queue.peek());</span><br><span class="line">        queue.print();</span><br><span class="line">        queue.push(<span class="number">1</span>);</span><br><span class="line">        queue.push(<span class="number">2</span>);</span><br><span class="line">        queue.push(<span class="number">3</span>);</span><br><span class="line">        queue.push(<span class="number">4</span>);</span><br><span class="line">        queue.push(<span class="number">5</span>);</span><br><span class="line">        queue.push(<span class="number">6</span>);</span><br><span class="line">        queue.push(<span class="number">7</span>);</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        queue.print();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="2-2-循环队列"><a href="#2-2-循环队列" class="headerlink" title="2.2 循环队列"></a>2.2 循环队列</h2><h3 id="2-2-1-实现原理"><a href="#2-2-1-实现原理" class="headerlink" title="2.2.1 实现原理"></a>2.2.1 实现原理</h3><p>普通队列最大的缺点就是出队后空出来的位置无法复用,而循环队列很好的解决了这个问题</p>
+<p>跟普通队列一样,一开始,队头队尾指向第一个位置</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210304111620.png" alt="image-20210304111620056" style="zoom:50%;" />
+
+<p>连续添加五个元素</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210304150530.png" alt="image-20210304150529969" style="zoom:50%;" />
+
+<p>此时,再添加一个元素时,队尾指针就会超出最大容量,此时队尾指针就成了空指针,而循环队列为了避免这种情况,采用对最大值取模的方式,让队尾指针重新指向队头</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210304150818.png" alt="image-20210304150818589" style="zoom:50%;" />
+
+<p>由普通队列得知,当队头与队尾指针指向同一位置时,内容为空,但此时内容满了发现队头与队尾也指向相同位置</p>
+<p>此处解决方案有二:</p>
+<ol>
+<li><p>添加一个size属性代表元素容量,当队头与队尾指向同一元素时,如果size&gt;0,则代表队满,如果size=0,则代表队空</p>
+</li>
+<li><p>让队头的前一个位置为空置位,不得塞元素,如下图,此时最大容量为5,即元素F无法入队,当前队列已满,只有出队一个元素才可以再入队</p>
+ <img src="https://gitee.com/bean-chan/images/raw/master/img/20210304151404.png" alt="image-20210304151404743" style="zoom:50%;" />
+
+</li>
+</ol>
+<p>基于方案二,此时再删除一个元素A、添加一个F,则此时队列情况如下</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210304152420.png" alt="image-20210304152420838" style="zoom:50%;" />
+
+
+
+
+
+<h3 id="2-2-2-基于数组实现-方案二"><a href="#2-2-2-基于数组实现-方案二" class="headerlink" title="2.2.2 基于数组实现(方案二)"></a>2.2.2 基于数组实现(方案二)</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Classname</span> NormalQueue</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> ChenBin</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@CreateDate</span> 2021/3/4 1:35 PM</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CircularQueue</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Integer[] dataArr;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> capacity;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> font;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> rear;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_SIZE = <span class="number">6</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 构造器</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CircularQueue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.dataArr = <span class="keyword">new</span> Integer[DEFAULT_SIZE];</span><br><span class="line">        <span class="keyword">this</span>.capacity = DEFAULT_SIZE;</span><br><span class="line">        <span class="keyword">this</span>.font = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">this</span>.rear = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 队列是否为空</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> rear - font == <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 查看队首元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">peek</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (isEmpty()) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        <span class="comment">// rear先加capacity,再对capacity取模</span></span><br><span class="line">        <span class="keyword">return</span> dataArr[(rear + capacity - <span class="number">1</span>) % capacity];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 入队一个元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">push</span><span class="params">(Integer val)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 队满</span></span><br><span class="line">        <span class="keyword">if</span> ((rear + <span class="number">1</span>) % capacity == font) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;队满,无法添加&quot;</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        dataArr[(rear) % capacity] = val;</span><br><span class="line">        rear = (rear + <span class="number">1</span>) % capacity;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 出队一个元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">pop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (isEmpty()) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        Integer temp = dataArr[(font + capacity) % capacity];</span><br><span class="line">        dataArr[(font + capacity) % capacity] = <span class="keyword">null</span>;</span><br><span class="line">        font++;</span><br><span class="line">        <span class="keyword">return</span> temp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(</span><br><span class="line">                <span class="string">&quot;NormalQueue&#123;&quot;</span> +</span><br><span class="line">                        <span class="string">&quot;dataArr=&quot;</span> + Arrays.toString(dataArr) +</span><br><span class="line">                        <span class="string">&quot;, capacity=&quot;</span> + capacity +</span><br><span class="line">                        <span class="string">&quot;, font=&quot;</span> + font +</span><br><span class="line">                        <span class="string">&quot;, rear=&quot;</span> + rear +</span><br><span class="line">                        <span class="string">&#x27;&#125;&#x27;</span></span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        CircularQueue queue = <span class="keyword">new</span> CircularQueue();</span><br><span class="line"><span class="comment">//        System.out.println(queue.peek());</span></span><br><span class="line">        queue.print();</span><br><span class="line">        queue.push(<span class="number">1</span>);</span><br><span class="line">        queue.print();</span><br><span class="line">        queue.push(<span class="number">2</span>);</span><br><span class="line">        queue.push(<span class="number">3</span>);</span><br><span class="line">        queue.push(<span class="number">4</span>);</span><br><span class="line">        queue.push(<span class="number">5</span>);</span><br><span class="line">        queue.print();</span><br><span class="line">        queue.push(<span class="number">6</span>);</span><br><span class="line">        queue.print();</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        queue.print();</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        queue.print();</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        queue.print();</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        queue.print();</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        queue.print();</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        queue.push(<span class="number">6</span>);</span><br><span class="line">        queue.push(<span class="number">7</span>);</span><br><span class="line">        queue.print();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="2-3-双端队列"><a href="#2-3-双端队列" class="headerlink" title="2.3 双端队列"></a>2.3 双端队列</h2><h3 id="2-3-1-实现原理"><a href="#2-3-1-实现原理" class="headerlink" title="2.3.1 实现原理"></a>2.3.1 实现原理</h3><p>前两种队列都只能做到队头出,队尾进,尽管这也是队列设计出来的初衷,但是有些情况就是需要既可以队头进出元素,又可以队尾进出元素,而这就是双端队列</p>
+<p>具体原理与普通队列相似,只是首尾都可以进出元素,除了有后继指针外,还需要前驱指针,否则队尾弹出元素后无法指定队尾</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210305162405.png" alt="image-20210305162405642" style="zoom:50%;" />
+
+<h3 id="2-3-2-基于链表实现"><a href="#2-3-2-基于链表实现" class="headerlink" title="2.3.2 基于链表实现"></a>2.3.2 基于链表实现</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Classname</span> Node</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> ChenBin</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@CreateDate</span> 2021/3/4 4:27 PM</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 节点值</span></span><br><span class="line">    Integer value;</span><br><span class="line">    <span class="comment">// 后继</span></span><br><span class="line">    Node next;</span><br><span class="line">    <span class="comment">// 前驱</span></span><br><span class="line">    Node prev;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(Integer value)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.value = value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">getValue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setValue</span><span class="params">(Integer value)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.value = value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Node <span class="title">getNext</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setNext</span><span class="params">(Node next)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.next = next;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Classname</span> NormalQueue</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> ChenBin</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@CreateDate</span> 2021/3/4 1:35 PM</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Deque</span> </span>&#123;</span><br><span class="line">  </span><br><span class="line">    <span class="comment">// 队头</span></span><br><span class="line">    Node head;</span><br><span class="line">    <span class="comment">// 队尾</span></span><br><span class="line">    Node rear;</span><br><span class="line">    <span class="keyword">int</span> size;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Deque</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        head = <span class="keyword">new</span> Node();</span><br><span class="line">        rear = head;</span><br><span class="line">        size = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 队列是否为空</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> size == <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 查看队首元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">peek</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (isEmpty()) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">return</span> head.next.value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 队头入队一个元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addFirst</span><span class="params">(Integer val)</span> </span>&#123;</span><br><span class="line">        size++;</span><br><span class="line">        Node node = <span class="keyword">new</span> Node(val);</span><br><span class="line">        node.next = head.next;</span><br><span class="line">        <span class="keyword">if</span> (head.next != <span class="keyword">null</span>)</span><br><span class="line">            head.next.prev = node;</span><br><span class="line">        head.next = node;</span><br><span class="line">        node.prev = head;</span><br><span class="line">        <span class="keyword">if</span> (size == <span class="number">1</span>) &#123;</span><br><span class="line">            rear = node;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 队尾入队一个元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addLast</span><span class="params">(Integer val)</span> </span>&#123;</span><br><span class="line">        size++;</span><br><span class="line">        Node newNode = <span class="keyword">new</span> Node(val);</span><br><span class="line">        newNode.prev = rear;</span><br><span class="line">        rear.next = newNode;</span><br><span class="line">        rear = newNode;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 队头出队一个元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">removeFirst</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (size == <span class="number">0</span>) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (size == <span class="number">1</span>) &#123;</span><br><span class="line">            Integer val = head.next.value;</span><br><span class="line">            head.next = <span class="keyword">null</span>;</span><br><span class="line">            rear = head;</span><br><span class="line">            <span class="keyword">return</span> val;</span><br><span class="line">        &#125;</span><br><span class="line">        size = size - <span class="number">1</span> &lt; <span class="number">0</span> ? <span class="number">0</span> : size - <span class="number">1</span>;</span><br><span class="line">        <span class="comment">// 两个元素以上</span></span><br><span class="line">        Node temp = head.next;</span><br><span class="line">        temp.next.prev = head;</span><br><span class="line">        head.next = temp.next;</span><br><span class="line">        <span class="keyword">return</span> temp.value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 队尾出队一个元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">removeLast</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (size == <span class="number">0</span>) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        size = size - <span class="number">1</span> &lt; <span class="number">0</span> ? <span class="number">0</span> : size - <span class="number">1</span>;</span><br><span class="line">        Node temp = rear.prev;</span><br><span class="line">        rear = temp;</span><br><span class="line">        rear.next = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">return</span> temp.value;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Node temp = head;</span><br><span class="line">        System.out.print(<span class="string">&quot;Arr[ &quot;</span>);</span><br><span class="line">        <span class="keyword">while</span> (temp.next != <span class="keyword">null</span>) &#123;</span><br><span class="line">            System.out.print(temp.next.value + <span class="string">&quot; &quot;</span>);</span><br><span class="line">            temp = temp.next;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">&quot;]&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Deque queue = <span class="keyword">new</span> Deque();</span><br><span class="line">        System.out.println(queue.peek());</span><br><span class="line">        queue.addFirst(<span class="number">1</span>);</span><br><span class="line">        queue.print();</span><br><span class="line">        queue.addLast(<span class="number">2</span>);</span><br><span class="line">        queue.addFirst(<span class="number">0</span>);</span><br><span class="line">        queue.print();</span><br><span class="line">        queue.removeFirst();</span><br><span class="line">        queue.print();</span><br><span class="line">        queue.removeLast();</span><br><span class="line">        queue.print();</span><br><span class="line">        queue.removeFirst();</span><br><span class="line">        queue.print();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+    </div>
+	<div>
+         
+         <div>  
+  
+<div style="text-align:center;color: #ccc;font-size:14px;">------ 本文结束------</div>  
+  
+</div> 
+
+         
+		 </div>
+    
+    
+    
+        <div class="reward-container">
+  <div>您的鼓励是我最大的动力。</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.jpeg" alt="BeanChan 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.jpeg" alt="BeanChan 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>BeanChan
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://chenb.in/2021/03/04/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E9%98%9F%E5%88%97/" title="数据结构-队列">https://chenb.in/2021/03/04/数据结构-队列/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%98%9F%E5%88%97/" rel="tag"><i class="fa fa-tag"></i> 队列</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/02/20/Git/" rel="prev" title="Git">
+      <i class="fa fa-chevron-left"></i> Git
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC81Mjg0Ni8yOTMyNA"></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E9%98%9F%E5%88%97%E4%BB%8B%E7%BB%8D"><span class="nav-text">1 队列介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-%E5%AE%9A%E4%B9%89"><span class="nav-text">1.1 定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-%E6%9C%AC%E4%BE%8B%E4%BB%93%E5%BA%93%E5%9C%B0%E5%9D%80"><span class="nav-text">1.2 本例仓库地址</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E7%A7%8D%E9%98%9F%E5%88%97"><span class="nav-text">三种队列</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E6%99%AE%E9%80%9A%E9%98%9F%E5%88%97"><span class="nav-text">2.1 普通队列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-1-%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="nav-text">2.1.1 实现原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-2-%E5%9F%BA%E4%BA%8E%E6%95%B0%E7%BB%84%E5%AE%9E%E7%8E%B0"><span class="nav-text">2.1.2 基于数组实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-%E5%BE%AA%E7%8E%AF%E9%98%9F%E5%88%97"><span class="nav-text">2.2 循环队列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-1-%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="nav-text">2.2.1 实现原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-2-%E5%9F%BA%E4%BA%8E%E6%95%B0%E7%BB%84%E5%AE%9E%E7%8E%B0-%E6%96%B9%E6%A1%88%E4%BA%8C"><span class="nav-text">2.2.2 基于数组实现(方案二)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-%E5%8F%8C%E7%AB%AF%E9%98%9F%E5%88%97"><span class="nav-text">2.3 双端队列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-1-%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="nav-text">2.3.1 实现原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-2-%E5%9F%BA%E4%BA%8E%E9%93%BE%E8%A1%A8%E5%AE%9E%E7%8E%B0"><span class="nav-text">2.3.2 基于链表实现</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="BeanChan"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">BeanChan</p>
+  <div class="site-description" itemprop="description">爱玩爱闹,但也有着一颗积极向上的心</div>
+</div>
+
+
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/bean1006" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;bean1006" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:chenbin@chenb.in" title="E-Mail → mailto:chenbin@chenb.in"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">BeanChan</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+</body>
+</html>

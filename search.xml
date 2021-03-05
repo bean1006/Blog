@@ -1,6 +1,770 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>数据结构-队列</title>
+    <url>/2021/03/04/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E9%98%9F%E5%88%97/</url>
+    <content><![CDATA[<h1 id="1-队列介绍"><a href="#1-队列介绍" class="headerlink" title="1 队列介绍"></a>1 队列介绍</h1><h2 id="1-1-定义"><a href="#1-1-定义" class="headerlink" title="1.1 定义"></a>1.1 定义</h2><p>队列是一种特殊的线性表,遵循FIFO(first in first out)先进先出原则,整个队列由一个线性表构成,可以是数组或者链表,同时由队头(font)来表示第一个元素、队尾(rear)最后一个元素,并且队列只允许在队头删除元素,队尾添加元素</p>
+<h2 id="1-2-本例仓库地址"><a href="#1-2-本例仓库地址" class="headerlink" title="1.2 本例仓库地址"></a>1.2 本例仓库地址</h2><p>仓库地址:<a href="https://gitee.com/bean-chan/data-structure.git">https://gitee.com/bean-chan/data-structure.git</a></p>
+<h1 id="三种队列"><a href="#三种队列" class="headerlink" title="三种队列"></a>三种队列</h1><h2 id="2-1-普通队列"><a href="#2-1-普通队列" class="headerlink" title="2.1 普通队列"></a>2.1 普通队列</h2><h3 id="2-1-1-实现原理"><a href="#2-1-1-实现原理" class="headerlink" title="2.1.1 实现原理"></a>2.1.1 实现原理</h3><p>创建之初,队头与队尾处在第一个位置上</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210304111620.png" alt="image-20210304111620056" style="zoom:50%;" />
+
+<p>随后往队伍里连续先后添加两个元素A与B后</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210304112336.png" alt="image-20210304112336248" style="zoom:50%;" />
+
+<p>队尾向后连续位移两个位置,并且每添加一次元素,队尾就会向后位移一个位置,直到整个线性表最末端为止,此时则队列不再允许添加元素</p>
+<p>我们进行删除操作时,队头会向后位移一个位置,例如我们将A出队</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210304112748.png" alt="image-20210304112748369" style="zoom:50%;" />
+
+<p>之后再将B出队</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210304112838.png" alt="image-20210304112838312" style="zoom:50%;" />
+
+<p>当队头与队尾指向同一位置时,说明此刻队列为空</p>
+<h3 id="2-1-2-基于数组实现"><a href="#2-1-2-基于数组实现" class="headerlink" title="2.1.2 基于数组实现"></a>2.1.2 基于数组实现</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Classname</span> NormalQueue</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> ChenBin</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@CreateDate</span> 2021/3/4 1:35 PM</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NormalQueue</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Integer[] dataArr; <span class="comment">// 存放元素的数组</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> capacity; <span class="comment">// 容量</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> font; <span class="comment">// 队头指针</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> rear; <span class="comment">// 队尾指针</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_SIZE = <span class="number">6</span>; <span class="comment">// 默认容量</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 构造器</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">NormalQueue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.dataArr = <span class="keyword">new</span> Integer[DEFAULT_SIZE];</span><br><span class="line">        <span class="keyword">this</span>.capacity = DEFAULT_SIZE;</span><br><span class="line">        <span class="keyword">this</span>.font = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">this</span>.rear = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 队列是否为空</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> rear - font == <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 查看队首元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">peek</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (isEmpty()) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">return</span> dataArr[rear - <span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 入队一个元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">push</span><span class="params">(Integer val)</span> </span>&#123;</span><br><span class="line">        checkCapacity();</span><br><span class="line">        dataArr[rear] = val;</span><br><span class="line">        rear++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 出队一个元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">pop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (isEmpty()) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        checkCapacity();</span><br><span class="line">        Integer temp = dataArr[font];</span><br><span class="line">        dataArr[font++] = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">return</span> temp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 容量检查</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">checkCapacity</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (rear &gt;= capacity) &#123;</span><br><span class="line">            <span class="comment">// 空间不足,扩容</span></span><br><span class="line">            capacity = capacity * <span class="number">2</span>;</span><br><span class="line">            Integer[] tempArr = <span class="keyword">new</span> Integer[capacity];</span><br><span class="line">            System.arraycopy(dataArr, <span class="number">0</span>, tempArr, <span class="number">0</span>, rear - font);</span><br><span class="line">            <span class="keyword">this</span>.dataArr = tempArr;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(</span><br><span class="line">                <span class="string">&quot;NormalQueue&#123;&quot;</span> +</span><br><span class="line">                        <span class="string">&quot;dataArr=&quot;</span> + Arrays.toString(dataArr) +</span><br><span class="line">                        <span class="string">&quot;, capacity=&quot;</span> + capacity +</span><br><span class="line">                        <span class="string">&quot;, font=&quot;</span> + font +</span><br><span class="line">                        <span class="string">&quot;, rear=&quot;</span> + rear +</span><br><span class="line">                        <span class="string">&#x27;&#125;&#x27;</span></span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        NormalQueue queue = <span class="keyword">new</span> NormalQueue();</span><br><span class="line">        System.out.println(queue.peek());</span><br><span class="line">        queue.print();</span><br><span class="line">        queue.push(<span class="number">1</span>);</span><br><span class="line">        queue.push(<span class="number">2</span>);</span><br><span class="line">        queue.push(<span class="number">3</span>);</span><br><span class="line">        queue.push(<span class="number">4</span>);</span><br><span class="line">        queue.push(<span class="number">5</span>);</span><br><span class="line">        queue.push(<span class="number">6</span>);</span><br><span class="line">        queue.push(<span class="number">7</span>);</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        queue.print();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="2-2-循环队列"><a href="#2-2-循环队列" class="headerlink" title="2.2 循环队列"></a>2.2 循环队列</h2><h3 id="2-2-1-实现原理"><a href="#2-2-1-实现原理" class="headerlink" title="2.2.1 实现原理"></a>2.2.1 实现原理</h3><p>普通队列最大的缺点就是出队后空出来的位置无法复用,而循环队列很好的解决了这个问题</p>
+<p>跟普通队列一样,一开始,队头队尾指向第一个位置</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210304111620.png" alt="image-20210304111620056" style="zoom:50%;" />
+
+<p>连续添加五个元素</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210304150530.png" alt="image-20210304150529969" style="zoom:50%;" />
+
+<p>此时,再添加一个元素时,队尾指针就会超出最大容量,此时队尾指针就成了空指针,而循环队列为了避免这种情况,采用对最大值取模的方式,让队尾指针重新指向队头</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210304150818.png" alt="image-20210304150818589" style="zoom:50%;" />
+
+<p>由普通队列得知,当队头与队尾指针指向同一位置时,内容为空,但此时内容满了发现队头与队尾也指向相同位置</p>
+<p>此处解决方案有二:</p>
+<ol>
+<li><p>添加一个size属性代表元素容量,当队头与队尾指向同一元素时,如果size&gt;0,则代表队满,如果size=0,则代表队空</p>
+</li>
+<li><p>让队头的前一个位置为空置位,不得塞元素,如下图,此时最大容量为5,即元素F无法入队,当前队列已满,只有出队一个元素才可以再入队</p>
+ <img src="https://gitee.com/bean-chan/images/raw/master/img/20210304151404.png" alt="image-20210304151404743" style="zoom:50%;" />
+
+</li>
+</ol>
+<p>基于方案二,此时再删除一个元素A、添加一个F,则此时队列情况如下</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210304152420.png" alt="image-20210304152420838" style="zoom:50%;" />
+
+
+
+
+
+<h3 id="2-2-2-基于数组实现-方案二"><a href="#2-2-2-基于数组实现-方案二" class="headerlink" title="2.2.2 基于数组实现(方案二)"></a>2.2.2 基于数组实现(方案二)</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Classname</span> NormalQueue</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> ChenBin</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@CreateDate</span> 2021/3/4 1:35 PM</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CircularQueue</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Integer[] dataArr;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> capacity;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> font;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> rear;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_SIZE = <span class="number">6</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 构造器</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CircularQueue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.dataArr = <span class="keyword">new</span> Integer[DEFAULT_SIZE];</span><br><span class="line">        <span class="keyword">this</span>.capacity = DEFAULT_SIZE;</span><br><span class="line">        <span class="keyword">this</span>.font = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">this</span>.rear = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 队列是否为空</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> rear - font == <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 查看队首元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">peek</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (isEmpty()) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        <span class="comment">// rear先加capacity,再对capacity取模</span></span><br><span class="line">        <span class="keyword">return</span> dataArr[(rear + capacity - <span class="number">1</span>) % capacity];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 入队一个元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">push</span><span class="params">(Integer val)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 队满</span></span><br><span class="line">        <span class="keyword">if</span> ((rear + <span class="number">1</span>) % capacity == font) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;队满,无法添加&quot;</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        dataArr[(rear) % capacity] = val;</span><br><span class="line">        rear = (rear + <span class="number">1</span>) % capacity;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 出队一个元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">pop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (isEmpty()) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        Integer temp = dataArr[(font + capacity) % capacity];</span><br><span class="line">        dataArr[(font + capacity) % capacity] = <span class="keyword">null</span>;</span><br><span class="line">        font++;</span><br><span class="line">        <span class="keyword">return</span> temp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(</span><br><span class="line">                <span class="string">&quot;NormalQueue&#123;&quot;</span> +</span><br><span class="line">                        <span class="string">&quot;dataArr=&quot;</span> + Arrays.toString(dataArr) +</span><br><span class="line">                        <span class="string">&quot;, capacity=&quot;</span> + capacity +</span><br><span class="line">                        <span class="string">&quot;, font=&quot;</span> + font +</span><br><span class="line">                        <span class="string">&quot;, rear=&quot;</span> + rear +</span><br><span class="line">                        <span class="string">&#x27;&#125;&#x27;</span></span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        CircularQueue queue = <span class="keyword">new</span> CircularQueue();</span><br><span class="line"><span class="comment">//        System.out.println(queue.peek());</span></span><br><span class="line">        queue.print();</span><br><span class="line">        queue.push(<span class="number">1</span>);</span><br><span class="line">        queue.print();</span><br><span class="line">        queue.push(<span class="number">2</span>);</span><br><span class="line">        queue.push(<span class="number">3</span>);</span><br><span class="line">        queue.push(<span class="number">4</span>);</span><br><span class="line">        queue.push(<span class="number">5</span>);</span><br><span class="line">        queue.print();</span><br><span class="line">        queue.push(<span class="number">6</span>);</span><br><span class="line">        queue.print();</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        queue.print();</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        queue.print();</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        queue.print();</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        queue.print();</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        queue.print();</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        queue.push(<span class="number">6</span>);</span><br><span class="line">        queue.push(<span class="number">7</span>);</span><br><span class="line">        queue.print();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="2-3-双端队列"><a href="#2-3-双端队列" class="headerlink" title="2.3 双端队列"></a>2.3 双端队列</h2><h3 id="2-3-1-实现原理"><a href="#2-3-1-实现原理" class="headerlink" title="2.3.1 实现原理"></a>2.3.1 实现原理</h3><p>前两种队列都只能做到队头出,队尾进,尽管这也是队列设计出来的初衷,但是有些情况就是需要既可以队头进出元素,又可以队尾进出元素,而这就是双端队列</p>
+<p>具体原理与普通队列相似,只是首尾都可以进出元素,除了有后继指针外,还需要前驱指针,否则队尾弹出元素后无法指定队尾</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210305162405.png" alt="image-20210305162405642" style="zoom:50%;" />
+
+<h3 id="2-3-2-基于链表实现"><a href="#2-3-2-基于链表实现" class="headerlink" title="2.3.2 基于链表实现"></a>2.3.2 基于链表实现</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Classname</span> Node</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> ChenBin</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@CreateDate</span> 2021/3/4 4:27 PM</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 节点值</span></span><br><span class="line">    Integer value;</span><br><span class="line">    <span class="comment">// 后继</span></span><br><span class="line">    Node next;</span><br><span class="line">    <span class="comment">// 前驱</span></span><br><span class="line">    Node prev;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(Integer value)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.value = value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">getValue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setValue</span><span class="params">(Integer value)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.value = value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Node <span class="title">getNext</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setNext</span><span class="params">(Node next)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.next = next;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Classname</span> NormalQueue</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> ChenBin</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@CreateDate</span> 2021/3/4 1:35 PM</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Deque</span> </span>&#123;</span><br><span class="line">  </span><br><span class="line">    <span class="comment">// 队头</span></span><br><span class="line">    Node head;</span><br><span class="line">    <span class="comment">// 队尾</span></span><br><span class="line">    Node rear;</span><br><span class="line">    <span class="keyword">int</span> size;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Deque</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        head = <span class="keyword">new</span> Node();</span><br><span class="line">        rear = head;</span><br><span class="line">        size = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 队列是否为空</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> size == <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 查看队首元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">peek</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (isEmpty()) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">return</span> head.next.value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 队头入队一个元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addFirst</span><span class="params">(Integer val)</span> </span>&#123;</span><br><span class="line">        size++;</span><br><span class="line">        Node node = <span class="keyword">new</span> Node(val);</span><br><span class="line">        node.next = head.next;</span><br><span class="line">        <span class="keyword">if</span> (head.next != <span class="keyword">null</span>)</span><br><span class="line">            head.next.prev = node;</span><br><span class="line">        head.next = node;</span><br><span class="line">        node.prev = head;</span><br><span class="line">        <span class="keyword">if</span> (size == <span class="number">1</span>) &#123;</span><br><span class="line">            rear = node;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 队尾入队一个元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addLast</span><span class="params">(Integer val)</span> </span>&#123;</span><br><span class="line">        size++;</span><br><span class="line">        Node newNode = <span class="keyword">new</span> Node(val);</span><br><span class="line">        newNode.prev = rear;</span><br><span class="line">        rear.next = newNode;</span><br><span class="line">        rear = newNode;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 队头出队一个元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">removeFirst</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (size == <span class="number">0</span>) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (size == <span class="number">1</span>) &#123;</span><br><span class="line">            Integer val = head.next.value;</span><br><span class="line">            head.next = <span class="keyword">null</span>;</span><br><span class="line">            rear = head;</span><br><span class="line">            <span class="keyword">return</span> val;</span><br><span class="line">        &#125;</span><br><span class="line">        size = size - <span class="number">1</span> &lt; <span class="number">0</span> ? <span class="number">0</span> : size - <span class="number">1</span>;</span><br><span class="line">        <span class="comment">// 两个元素以上</span></span><br><span class="line">        Node temp = head.next;</span><br><span class="line">        temp.next.prev = head;</span><br><span class="line">        head.next = temp.next;</span><br><span class="line">        <span class="keyword">return</span> temp.value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 队尾出队一个元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">removeLast</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (size == <span class="number">0</span>) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        size = size - <span class="number">1</span> &lt; <span class="number">0</span> ? <span class="number">0</span> : size - <span class="number">1</span>;</span><br><span class="line">        Node temp = rear.prev;</span><br><span class="line">        rear = temp;</span><br><span class="line">        rear.next = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">return</span> temp.value;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Node temp = head;</span><br><span class="line">        System.out.print(<span class="string">&quot;Arr[ &quot;</span>);</span><br><span class="line">        <span class="keyword">while</span> (temp.next != <span class="keyword">null</span>) &#123;</span><br><span class="line">            System.out.print(temp.next.value + <span class="string">&quot; &quot;</span>);</span><br><span class="line">            temp = temp.next;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">&quot;]&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Deque queue = <span class="keyword">new</span> Deque();</span><br><span class="line">        System.out.println(queue.peek());</span><br><span class="line">        queue.addFirst(<span class="number">1</span>);</span><br><span class="line">        queue.print();</span><br><span class="line">        queue.addLast(<span class="number">2</span>);</span><br><span class="line">        queue.addFirst(<span class="number">0</span>);</span><br><span class="line">        queue.print();</span><br><span class="line">        queue.removeFirst();</span><br><span class="line">        queue.print();</span><br><span class="line">        queue.removeLast();</span><br><span class="line">        queue.print();</span><br><span class="line">        queue.removeFirst();</span><br><span class="line">        queue.print();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+]]></content>
+      <categories>
+        <category>数据结构</category>
+      </categories>
+      <tags>
+        <tag>队列</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Git</title>
+    <url>/2021/02/20/Git/</url>
+    <content><![CDATA[<h1 id="1-Git介绍"><a href="#1-Git介绍" class="headerlink" title="1 Git介绍"></a>1 Git介绍</h1><h2 id="1-1-什么是git"><a href="#1-1-什么是git" class="headerlink" title="1.1 什么是git"></a>1.1 什么是git</h2><p>按官方的话说:世界上最先进的分布式版本控制工具</p>
+<p>如果不用版本控制工具我们怎么整合代码?</p>
+<p>这里讲述一个Git出生前的一些事:</p>
+<p>大家都知道Linux是一个开源操作系统,是一个举全世界之力创建的一个开源操作系统,大家都把自己写好的源码发给作者Linus Benedict Torvalds(林纳斯·托瓦兹),然后linus再自己一个人Ctrl C + Ctrl V,再取其精华去其糟粕,随着代码库的不断完善,工作量也越来越大,靠人工完成代码整合的难度也越来越大,这个时候版本控制工具就显得尤为重要,但是Linus不喜欢当时比较流行的开源版本控制工具CVS、SVN,因为他们需要联网才能工作,这个时候一个名叫BitMover的公司无偿提供公司旗下的分布式版本控制工具<strong>BitKeeper</strong>给Linux社区,这样问题也就算是解决了,并且也相安无事好长一段时间,后来因为社区大牛试图破解BitKeeper的协议,BitMover一生气,就把使用权回收了,然后Linus一人,扶大厦之将倾,挽狂澜于既倒,用了两周时间开发出了现如今闻名于世的Git</p>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225102018.jpeg" alt="download"></p>
+<h2 id="1-2-集中式与分布式"><a href="#1-2-集中式与分布式" class="headerlink" title="1.2 集中式与分布式"></a>1.2 集中式与分布式</h2><p>集中式:</p>
+<p>代码的版本库存放在中央服务器上,工作前从中央服务器上拉取下来,工作后再把代码上传回中央服务器,版本控制需要依赖网络</p>
+<p>分布式:</p>
+<p>每个人的电脑都是一个完整的版本库,大家可以直接把代码上传到本地仓库,如果需要和他人同步代码直接将代码推送给他人即可,但为了更好更方便的管理代码,一般还是会创建一个远端服务器,用来汇总所有人的代码,大部分提交都是对本地仓库而言的，版本控制不依赖网络</p>
+<h2 id="1-3-git安装"><a href="#1-3-git安装" class="headerlink" title="1.3 git安装"></a>1.3 git安装</h2><p>Linux:</p>
+<p>各发行版命令行安装方式: <a href="https://git-scm.com/download/linux">https://git-scm.com/download/linux</a></p>
+<p>Windows:</p>
+<p><a href="https://www.jianshu.com/p/414ccd423efc">https://www.jianshu.com/p/414ccd423efc</a></p>
+<p>MacOS:</p>
+<p>通过homebrew安装git</p>
+<ol>
+<li><p>若未安装homebrew,先安装homebrew,下方为推荐教程,换成国内源</p>
+<p> <a href="https://zhuanlan.zhihu.com/p/59805070">https://zhuanlan.zhihu.com/p/59805070</a></p>
+</li>
+<li><p>安装git</p>
+<p> brew install git</p>
+</li>
+</ol>
+<p>安装完成还需以下配置,向git自报家门:</p>
+<blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git config --global user.name <span class="string">&quot;Your Name&quot;</span></span><br><span class="line">git config --global user.email <span class="string">&quot;email@example.com&quot;</span></span><br></pre></td></tr></table></figure>
+<p>本系统使用版本为<strong>2.29.2</strong></p>
+</blockquote>
+<h2 id="1-4-git作用"><a href="#1-4-git作用" class="headerlink" title="1.4 git作用"></a>1.4 git作用</h2><ol>
+<li><p>代码汇总。项目开发往往会有很多个人参与,git的一个核心功能就是整合各个人员的代码</p>
+</li>
+<li><p>代码回滚。如果出现了项目事故,比如代码不小心删了,或者代码越改问题越大,那就可以通过git回滚到之前的版本</p>
+</li>
+<li><p>分支管理。开发人员可以创建自己的分支进行项目的开发,这样怎么样都只是影响自己的项目不会对他人造成影响</p>
+</li>
+</ol>
+<p>上班第一件事就是从远端仓库拉取代码到你本地,下班最后一件是就是需要把今天写完的代码上传到到公司的远端仓库(一般是Github或者Gitlab)<br>    (具体命令稍后会介绍)</p>
+<h2 id="1-5-git工作区域"><a href="#1-5-git工作区域" class="headerlink" title="1.5 git工作区域"></a>1.5 git工作区域</h2><p>在开始使用之前,得先说明一下git核心的四大区域:  </p>
+<p>见下图,从右至左分别是:远端仓库 本地仓库 暂存区  工作区    <img src="https://gitee.com/bean-chan/images/raw/master/img/20210220170942.png" alt="20200902160147674" style="zoom:67%;" /></p>
+<p>具体样子见下图:</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210223083908.png" alt="image-20210223083908082" style="zoom: 50%;" />
+
+<ol>
+<li>springboot-demo目录下,除.git目录外的所有内容都属于工作区</li>
+<li>.git文件夹下的index为暂存区,里面存放<strong>临时改动的内容</strong>,本质上是一个<strong>文件</strong></li>
+<li>.git文件夹下除index文件以外,其他的内容加起来统称为本地仓库也叫本地版本库</li>
+<li>远端仓库(Remote) 一般是GitHub或者Gitlab等</li>
+</ol>
+<h1 id="2-git基本命令"><a href="#2-git基本命令" class="headerlink" title="2 git基本命令"></a>2 git基本命令</h1><h2 id="2-1-本地命令"><a href="#2-1-本地命令" class="headerlink" title="2.1 本地命令"></a>2.1 本地命令</h2><h3 id="2-1-1-本地仓库搭建"><a href="#2-1-1-本地仓库搭建" class="headerlink" title="2.1.1 本地仓库搭建"></a>2.1.1 本地仓库搭建</h3><ol>
+<li><p>创建文件夹</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mkdir testgit</span><br><span class="line"><span class="built_in">cd</span> testgit</span><br></pre></td></tr></table></figure></li>
+<li><p>初始化文件夹</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git init</span><br></pre></td></tr></table></figure>
+<p>这里我们就创建了一个空的本地仓库,里面会自动生成一个.git的隐藏目录,用于跟踪管理版本库,由git自己维护,<strong>没事别碰他</strong>,不然可能会破坏git仓库</p>
+</li>
+</ol>
+<h3 id="2-1-2-本地仓库使用"><a href="#2-1-2-本地仓库使用" class="headerlink" title="2.1.2 本地仓库使用"></a>2.1.2 本地仓库使用</h3><p>首先在工作区(写代码的地方)创建一个文件 hello.md,内容如下:</p>
+<blockquote>
+<p>我铠他超,</p>
+<p>为希丝特莉亚献出心脏</p>
+</blockquote>
+<p>创建后,我们可以在,命令行通过以下命令将hello.md加入到暂存区</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git add hello.md </span><br></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git add .</span><br></pre></td></tr></table></figure>
+<p>前者是添加单个文件到暂存区,后者是添加所有文件到暂存区</p>
+<p>在通过以下命令将代码从暂存区提交到本地仓库</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git commit -m <span class="string">&quot;新增两行没啥用的数据&quot;</span></span><br></pre></td></tr></table></figure>
+<p>每次commit操作相当于创建一次快照, -m参数后面跟的是快照的备注内容,这项是必填项,为了回滚时更方便找到需要回滚的版本</p>
+<p><strong>只有先add到暂存区的文件才可以commit到本地仓库</strong></p>
+<p>可通过以下命令来查看文件状态,看看是否有文件还没加入到暂存区,是否暂存区还有文件还没提交到本地仓库</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git status</span><br></pre></td></tr></table></figure>
+<p>也可以在修改文件之后,通过<code>git diff 文件名</code>来查看有何变化</p>
+<p>例如:</p>
+<p>我将hello.md修改为:</p>
+<blockquote>
+<p>我铠他超,</p>
+<p>为希丝特莉亚献出心脏,</p>
+<p>重铸马莱荣光,我辈义不容辞</p>
+</blockquote>
+<p>之后通过以下命令查看更新了哪些内容</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git diff hello.md	</span><br></pre></td></tr></table></figure>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210222153013.png" alt="image-20210222153013346" style="zoom: 50%;" />
+
+<p>可以看出新加了一行内容</p>
+<p>之后再提交一次(今后版本回滚时用的上)</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">&quot;再加一行&quot;</span></span><br></pre></td></tr></table></figure>
+<p>这里我们在创建一个文件world.md</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210225095401.png" alt="image-20210225095401875" style="zoom: 67%;" />
+
+<p>之后再提交一下代码</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">&quot;创建一个新文件&quot;</span></span><br></pre></td></tr></table></figure>
+<p>此时我们在world.md里再加一行</p>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225095517.png" alt="image-20210225095517123"></p>
+<p>突然你意识到,第二句话可能对健康有所威胁,于是你想到了删除这句话,在这里我们可以直接进入文件删除最后一行,非常简单,但在代码的世界里,有时候东改一行西改一行,你根本不知道你改了哪些东西,于是你可以通过<code>git checkout -- 文件名</code>丢弃修改的内容,这里的 <strong>–</strong> 很重要,代表着撤销操作,如果省略了<code>git checkout</code>就会变成切换分支操作(有关分支操作后续会介绍)</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git checkout -- world.md</span><br></pre></td></tr></table></figure>
+<p>在查看文本内容</p>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225095612.png" alt="image-20210225095612838"></p>
+<p>发现内容已经撤销了,在这里有两种情况:</p>
+<ol>
+<li>文件还没添加到暂存库,那就撤销到最近一次版本库</li>
+<li>文件已经添加到版本库,那就撤销到添加到暂存区后的状态</li>
+</ol>
+<p>如果你写完之后,不小心<code>git add .</code>把内容添加到暂存区了,还是可以通过<code>git reset HEAD &lt;文件名&gt;</code>,可以把暂存区的内容撤销掉,可自行测试</p>
+<p><strong>reset</strong>不仅可以把暂存区的内容撤销掉,还可以实现版本回滚,详见下文</p>
+<p>如果你是个狠人,你想着干脆直接就给这个文件删了,在平时直接<code>rm -rf world.md</code>就结束了,但是我们是版本控制工具呀,能有那么简单吗?我们先删除文件,之后输入<code>git status</code>查看一下状态</p>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225101115.png" alt="image-20210225101115310"></p>
+<p>此时,工作区与版本库就不一致了,我们可以通过<code>git rm &lt;文件名&gt;</code>来将文件从版本库中彻底删除</p>
+<p>但你也可能突然意识到,男人就得敢作敢当,关键是身体好抗得住揍,于是可以通过<code>git resotre &lt;file&gt;</code>来恢复文件</p>
+<h2 id="2-2-远端命令"><a href="#2-2-远端命令" class="headerlink" title="2.2 远端命令"></a>2.2 远端命令</h2><p>前面说的都是在本地上的操作,而远端仓库如果自己一个人就搭建一个Git服务器,明显是没啥必要的,好在现在市面上有一个非常棒的网站:<strong>github.com</strong>,每个人仅需注册一个账户,就可以在这个网站上搭建远程仓库。</p>
+<h3 id="2-2-1-远程仓库搭建"><a href="#2-2-1-远程仓库搭建" class="headerlink" title="2.2.1 远程仓库搭建"></a>2.2.1 远程仓库搭建</h3><ol>
+<li><p>先查看主目录是否有.ssh目录,没有则在命令行输入以下内容创建SSH Key,用于github认证身份时使用</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa -C <span class="string">&quot;youremail@example.com&quot;</span></span><br></pre></td></tr></table></figure></li>
+<li><p>登录github -&gt; 点击右上角下拉菜单中的Settings -&gt; SSH and GPG keys -&gt; 把.ssh目录下的id_rsa.pub中的内容粘贴到Key里,目的是为了让当你上传或者拉取内容时,github能对身份进行认证</p>
+ <img src="https://gitee.com/bean-chan/images/raw/master/img/20210224152330.png" alt="image-20210224152330582" style="zoom:67%;" />
+</li>
+<li><p>创建新的repository</p>
+<ul>
+<li><p>创建页面如下:</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210224155102.png" alt="image-20210224155102012" style="zoom: 67%;" />
+</li>
+<li><p>创建后页面如下:<br><img src="https://gitee.com/bean-chan/images/raw/master/img/20210224155313.png" alt="image-20210224155313047">    </p>
+</li>
+</ul>
+</li>
+<li><p>将先创建的远程仓库与本地仓库绑定</p>
+<ul>
+<li><p>进入本地文件夹</p>
+</li>
+<li><p>输入以下命令,主要要替换成你自己的(可从上面创建后页面中找到)</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git remote add origin https://github.com/bean1006/testgit.git/</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ul>
+</li>
+</ol>
+<ol start="5">
+<li><p>通过以下命令将本地commit的内容推送的远程服务器(首次推送需要使用-u指定分支,这样git会将本地master与远端master分支绑定起来)</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure></li>
+<li><p>此时刷新页面就会发现远端仓库多了一个hello.md的文件,说明我们上传成功了</p>
+</li>
+<li><p>当我需要在另一台电脑快速克隆这个远程仓库的内容,则可以在另一台电脑上的命令行输入(快速克隆命令命令可在远程仓库页面看到)</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --depth=1 https://github.com.cnpmjs.org/bean1006/testgit.git</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>  <strong>–depth</strong>是克隆深度,–depth=1,表示只克隆最近一次commit</p>
+<ol start="8">
+<li>可以用<code>git remote</code>查看远程库信息 ,或<code>git remote -v</code>查看详细内容</li>
+</ol>
+<p>这样今后本电脑和另一台电脑都可以通过远程仓库来同步修改内容了</p>
+<h3 id="2-2-2-远程仓库使用"><a href="#2-2-2-远程仓库使用" class="headerlink" title="2.2.2 远程仓库使用"></a>2.2.2 远程仓库使用</h3><p>可参照此图(和上面的一样)</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210220170942.png" alt="20200902160147674" style="zoom: 67%;" />
+
+<p>当我们来到公司做的第一件事就是通过以下命令拉取代码</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git pull</span><br></pre></td></tr></table></figure>
+<p>当我们完成今天的代码任务后,就可以通过以下内容上传到服务器</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">&quot;xxx模块完成&quot;</span></span><br><span class="line">git push </span><br></pre></td></tr></table></figure>
+<p>其中pull是直接将代码从远程仓库下拉到工作区,我们也可以通过fetch将代码拉取到本地仓库,才通过checkout拉到工作区,这里涉及到分支内容了下面会介绍</p>
+<h2 id="2-3-命令汇总"><a href="#2-3-命令汇总" class="headerlink" title="2.3 命令汇总"></a>2.3 命令汇总</h2><p>本地:</p>
+<p>文件加入暂存区: <code>git add 文件名</code>或<code>git add .</code></p>
+<p>文件提交到本地仓库: <code>git commit -m &quot;备注内容&quot;</code></p>
+<p>查看文件状态: <code>git status</code></p>
+<p>查看文件修改内容: <code>git diff 文件名</code></p>
+<p>撤销文件内容: <code>git checkout -- 文件名</code></p>
+<p>从版本库删除文件: <code>git rm 文件名</code></p>
+<p>从版本库恢复文件: <code>git restore 文件名</code></p>
+<p>远端:</p>
+<p>将本地仓库与远程仓库绑定: <code>git remote add origin 远程仓库git地址</code></p>
+<p>首次推送代码: <code>git push -u origin master</code></p>
+<p>克隆远程仓库: <code>git clone --depth=1 远程仓库git地址</code></p>
+<p>拉取代码: <code>git pull</code></p>
+<p>上传代码(需先commit,上传到当前本地分支同名的远程分支上): <code>git push</code></p>
+<p>上传代码到指定分支: <code>git push origin 分支名</code></p>
+<h1 id="3-版本管理"><a href="#3-版本管理" class="headerlink" title="3 版本管理"></a>3 版本管理</h1><h2 id="3-1-版本回滚"><a href="#3-1-版本回滚" class="headerlink" title="3.1 版本回滚"></a>3.1 版本回滚</h2><p>首先查看以前的版本</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">log</span></span><br></pre></td></tr></table></figure>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210224162821.png" alt="image-20210224162821710" style="zoom:50%;" />
+
+<ol>
+<li><p>HEAD为指针,指向当前版本的master分支以及对应远端的master分支(origin默认对应远端仓库),git是通过HEAD来实现版本的切换</p>
+</li>
+<li><p>从<strong>2.2 git基本命令</strong>可知,一共提交了两次,展示结果中,git是按commit时间从近到远排列的</p>
+</li>
+</ol>
+<p>如果我们想回退到前一个版本,我们可以输入以下内容回到上个版本,其中一个<strong>^</strong>,是回退一个版本</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git reset --hard HEAD^</span><br></pre></td></tr></table></figure>
+<p>如果回退十个版本,写十个<strong>^</strong>明显是不现实的,所以可以写成<strong>HEAD~10</strong></p>
+<p>此时查看文本内容:</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210224172227.png" alt="image-20210224172227561" style="zoom: 50%;" />
+
+<p>发现已经回头到上一个版本了再查看日志</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">log</span></span><br></pre></td></tr></table></figure>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210224171711.png" alt="image-20210224171711768" style="zoom:50%;" />
+
+<p>发现最新版本已经不可查看了,那该如何回到最新版本呢,查看我们上上张图,发现commit后面会跟着一串码,而这个码就是我们的版本号,我们可以通过版本号使当前HEAD指针指向我们所需要的版本,版本号可不用写全,参考如下:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git reset --hard 5cd0</span><br></pre></td></tr></table></figure>
+<p>这个方法也可以回滚到任一版本(只要你能记住版本号)此时再看日志</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210224172120.png" alt="image-20210224172120424" style="zoom: 50%;" />
+
+<p>发现最新版本又出现了,再看看文本内容</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210224172210.png" alt="image-20210224172210067" style="zoom:50%;" />
+
+<p>一切尽在掌握</p>
+<h2 id="3-2-命令汇总"><a href="#3-2-命令汇总" class="headerlink" title="3.2 命令汇总"></a>3.2 命令汇总</h2><p>查看commit记录: <code>git log</code></p>
+<p>查看缩略版commit记录: <code>git log --graph --pretty=oneline --abbrev-commit</code></p>
+<p>回退到上一个版本: <code>git reset --hard HEAD^</code></p>
+<p>回退到上n个版本: <code>git reset --hard HEAD~n</code></p>
+<p>回退到某个版本: <code>git reset --hard commit号</code></p>
+<h1 id="4-分支管理"><a href="#4-分支管理" class="headerlink" title="4 分支管理"></a>4 分支管理</h1><h2 id="4-1-分支介绍"><a href="#4-1-分支介绍" class="headerlink" title="4.1 分支介绍"></a>4.1 分支介绍</h2><p>如果是一个人开发也就算了,但是往往一个项目是一群人一起开发,如果某人开发一个功能预计开发两天,第一天只开发了百分之五十,然后上传代码,那别人调用代码库就有可能会出错,但是如果等全部代码完成后再上传,那每天工作的进度就不好统计了,于是分支也就应运而生了,每个人可以创建自己的分支,每天完成任务后往自己的分支里提交代码,最后再将自己分支与总分支代码进行合并</p>
+<p><strong>git建议在开发时尽可能的使用分支</strong></p>
+<h2 id="4-2-分支的创建与合并"><a href="#4-2-分支的创建与合并" class="headerlink" title="4.2 分支的创建与合并"></a>4.2 分支的创建与合并</h2><p>当git创建时,都会默认有一个分支,也就是master分支,根据版本回滚模块,我们知道分支是这样线性运作的:</p>
+ <img src="https://gitee.com/bean-chan/images/raw/master/img/20210225141135.png" alt="image-20210225141135811" style="zoom:50%;" />
+
+<p>HEAD指针指向当前分支,当前分支(master)指向某一个版本(这里是版本二)</p>
+<p>随着我们不断地<strong>commit</strong>,慢慢会变成这样</p>
+ <img src="https://gitee.com/bean-chan/images/raw/master/img/20210225141356.png" alt="image-20210225141356928" style="zoom:50%;" />
+
+
+
+<p>当开发到版本二的时候我们可以创建一个个人的dev分支</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git checkout -b dev</span><br></pre></td></tr></table></figure>
+<p>上面等同于</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git branch dev</span><br><span class="line">git checkout dev</span><br></pre></td></tr></table></figure>
+<p>等同于</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git switch -c dev</span><br></pre></td></tr></table></figure>
+<p>该命令为创建一个叫dev的分支,并将HEAD指针指向该分支,具体情况如下图</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210225141619.png" alt="image-20210225141619693" style="zoom:50%;" />
+
+<p>通过<code>git branch</code>查看一下现在有哪些分支了</p>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225144211.png" alt="image-20210225144211601"></p>
+<p>一共有两个分支,*号表示当前所在分支</p>
+<p>之后在dev分支上上完成后续开发</p>
+<p>我们再在hello.md里添加一行,再add+commit</p>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225144529.png" alt="image-20210225144529126"></p>
+<p>此时我们的版本库变成了这样(一共提交了三次)</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210225144622.png" alt="image-20210225144622891" style="zoom:50%;" />
+
+<p>此时我们的master分支还停留在版本二上</p>
+<p>如果想把dev分支上的内容整合到master分支上,那么我们需要做以下两件事:</p>
+<p>第一步: 通过<code>git checkout master</code>切换到master分支,注意,因为checkout会与前面说的撤销操作混淆,所以新版的git可通过<code>git switch 分支名</code>来进行分支切换</p>
+<p>查看此刻分支与文件内容</p>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225145201.png" alt="image-20210225145201548"></p>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225145227.png" alt="image-20210225145227206"></p>
+<p>此时内容还停留在前一个版本上</p>
+<p>第二步: 在通过<code>git merge 分支名</code>来把dev的内容整合到master上,在查看内容</p>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225145404.png" alt="image-20210225145404615"></p>
+<p>现在就变成了这个情况</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210225151026.png" alt="image-20210225151026056" style="zoom:50%;" />
+
+
+
+<p>然后我们在卸磨杀驴,删除掉dev分支,具体命令为<code>git branch -d &lt;name&gt;</code></p>
+<p>在查看此时有哪些分支</p>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225145740.png" alt="image-20210225145740919"></p>
+<h2 id="4-3-合并冲突"><a href="#4-3-合并冲突" class="headerlink" title="4.3 合并冲突"></a>4.3 合并冲突</h2><p>项目不是一个人完成的,而针对同一个文件,就有可能出现两个人同时做出了修改,那么到合并的时候,git到底听谁的?谁来合并谁?</p>
+<p>秉承着人人平等的思想,git有着自己的解决冲突的方式</p>
+<p>首先我们先来制造点冲突</p>
+<p>当前我们在master分支上,我们修改一下hello.md</p>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225152852.png" alt="image-20210225152852663"></p>
+<p>add+commit后再切换到dev分支修改一下hello.md(我重情重义,决定创建回来了)</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git add . </span><br><span class="line">git commit -m <span class="string">&#x27;又加一行&#x27;</span></span><br><span class="line">git switch -c dev</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225153338.png" alt="image-20210225153338481"></p>
+<p>此时情况为</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210225153855.png" alt="image-20210225153855648" style="zoom:50%;" />
+
+<p>产生了两条分支,我们再回到master分支,用 <code>git merge dev</code> 对dev分支进行汇总</p>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225154455.png" alt="image-20210225154455792"></p>
+<p>当前我们已经创建好冲突了,那么该如何解决呢</p>
+<p>上图已经提示,冲突再hello.md这个文件里,那我们进入文件,发现此时文件已经变为</p>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225154608.png" alt="image-20210225154608307"></p>
+<p><strong>&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</strong> 表示当前分支也就是master</p>
+<p><strong>========</strong> 表示为分隔符</p>
+<p><strong>&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</strong> 表示为另一分支也就是dev</p>
+<p>此时我们可对冲突内容进行修改</p>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225154913.png" alt="image-20210225154913493"></p>
+<p>在进行提交操作</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">&#x27;冲突已解决&#x27;</span></span><br><span class="line">git merge dev</span><br></pre></td></tr></table></figure>
+<p>此时分支情况为</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210225155326.png" style="zoom:50%;" />
+
+<p>dev停留在了原处,master已经指向版本五了,此时已经完成冲突的解决了,再再次卸磨杀驴<code>git branch -d dev</code></p>
+<p>(为了后续分支策略图好看一点)</p>
+<h2 id="4-4-分支策略"><a href="#4-4-分支策略" class="headerlink" title="4.4 分支策略"></a>4.4 分支策略</h2><p>默认情况下git在合并时会采用<strong>Fast forward</strong>的分支管理策略,像在将分支之前所有的合并方式,都是<strong>Fast forward</strong>,这样做的后果就是,省略了合并步骤</p>
+<p>比如版本一到版本二,版本二到版本三就是用Fast forward,这样做的话,优点是简单明了,而缺点就是看不出合并痕迹</p>
+<p>打个比方,版本四到版本五我们知道提交了新的commit,但是我们不知道是不是从其他分支merge后得到的结果,还是自己修改后add+commit得到的结果</p>
+<p>(上图版本四到版本五是我根据逻辑画出来的,git在展示时,还是按照版本一到版本二那样展示可输入<code>git log</code>查看)</p>
+<p>而为了能看出合并痕迹,我们可以在merge时使用 <strong>–no-ff</strong>参数</p>
+<p>做个简单的对照测试</p>
+<p>我们创建并切换到dev分支,随便写一行</p>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225162240.png" alt="image-20210225162240887"></p>
+<p>add+commit后再切换回master,调用如下命令:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git merge</span><br><span class="line">git <span class="built_in">log</span> --graph --pretty=oneline --abbrev-commit</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225164855.png" alt="image-20210225164445547"></p>
+<p>上图只是出现新的commit,但是不知道是否进行了合并操作</p>
+<p>同样步骤只是命令不同,做个对照实验:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git merge  --no-ff -m <span class="string">&#x27;不用Fast forward&#x27;</span> dev</span><br><span class="line">git <span class="built_in">log</span> --graph --pretty=oneline --abbrev-commit</span><br></pre></td></tr></table></figure>
+<p>因为本次merge会创建一个新分支,所以加一个-m参数</p>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225163816.png" alt="image-20210225163816768"></p>
+<p>可以看出我们在ed6aa53到b152f62时处有一个合并操作(红色与绿色分支合并)</p>
+<h2 id="4-5-保存工作区"><a href="#4-5-保存工作区" class="headerlink" title="4.5 保存工作区"></a>4.5 保存工作区</h2><p>当前正在dev分支上写代码,突然来了个bug – <strong>bug01</strong>,正常情况下会在主分支基础上创建一个bug01的分支然后改bug,但是当前分支上的功能还没实现完,工作区内的文件还没法提交,所幸git提供了隐藏当前工作区修改内容的功能,在命令行输入以下命令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git stash</span><br><span class="line">git status</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225171809.png" alt="image-20210225171809382"></p>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225171819.png" alt="image-20210225171819689"></p>
+<p>发现dev分支上的内容已经给保存起来了,当前工作区已经回到了初始状态</p>
+<p>当我们修改完bug后,需要让工作区回退到一开始的状态,我们可以输入<code>git stash list</code>查看隐藏起来的内容</p>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225172113.png" alt="image-20210225172113449"></p>
+<p>此刻只有**stash@{0}**这一个stash,你可以输入多次<code>git stash</code>来保存多个stash</p>
+<p>此时我们只是查到了有一个stash,而恢复stash的方式有两个:</p>
+<ol>
+<li><p>先恢复stash,再手动删除stash</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git stash apply stash&#123;0&#125;</span><br><span class="line">git stash drop stash&#123;0&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>恢复并删除stash</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git stash pop</span><br></pre></td></tr></table></figure>
+<p>仔细想一想,如果有master上有bug的话,那建立在master分支只上的dev分支不也有相同的bug,那再同样的操作做一遍不就显得很麻烦了,git提供一个命令<code>git cherry-pick 版本号</code>可以克隆一个特定的commit到当前分支,这样就不需要再在当前分支修改一遍bug了</p>
+</li>
+</ol>
+<h2 id="4-6-多人协作"><a href="#4-6-多人协作" class="headerlink" title="4.6 多人协作"></a>4.6 多人协作</h2><p>一般公司远端仓库有一个master分支和若干个dev分支,我们完成任务后上传时,可以通过<code>git push origin 分支名</code>上传到指定分支,但并不是所有分支都需要上传到远端仓库的,比如改bug分支(你能告诉你老板你写了多少bug吗)</p>
+<p>当你首次克隆代码到本地时,默认只有master分支,你可以创建本地dev分支,并且绑定到远端dev分支上</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git checkout -b dev origin/dev</span><br></pre></td></tr></table></figure>
+<p>当你完成commit,打算push到dev分支上时,git可能会提示有冲突</p>
+<p>解决方法:</p>
+<p>使用<code>git pull</code>先将代码拉取到本地,合并后再推送,如果<code>git pull</code>也失败了,说明你没有将本地dev与远端dev做关联,可以使用以下命令做关联后,再推送</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git branch --set-upstream-to=origin/dev dev</span><br></pre></td></tr></table></figure>
+<p>解决冲突方式参考4.3</p>
+<h2 id="4-7-Rebase"><a href="#4-7-Rebase" class="headerlink" title="4.7 Rebase"></a>4.7 Rebase</h2><p>主要作用有二:</p>
+<ol>
+<li>分支合并</li>
+<li>commit改写</li>
+</ol>
+<h3 id="4-7-1-分支合并"><a href="#4-7-1-分支合并" class="headerlink" title="4.7.1 分支合并"></a>4.7.1 分支合并</h3><p>首先我们目前项目状态是这样的</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210226155045.png" alt="image-20210226155045018" style="zoom:50%;" />
+
+<p>当前HEAD指针指向master分支,且master分支指向当前版本,我们在这个版本的基础上,创建一个dev分支</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210226155621.png" alt="image-20210226155621661" style="zoom:50%;" />
+
+<p>而后我们在master分支上前进一个版本</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210226162745.png" alt="image-20210226162745375" style="zoom:50%;" />
+
+<p>dev分支再<code>git merge master</code>也前进了一个版本,那结果就变成这样</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210226162127.png" alt="image-20210226162127610" style="zoom:50%;" />
+
+<p>dev是从master分支分出来的,随后又同步了master分支的改动,可以说dev版本是没什么必要的</p>
+<p>为了整理分支</p>
+<p>首先先回到dev分支merge前的状态,也就是</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210226162845.png" alt="image-20210226162845516" style="zoom:50%;" />
+
+<p>然后再在dev分支上使用<code>git rebase master</code>,此刻就变成了</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210226162402.png" alt="image-20210226162401971" style="zoom:50%;" />
+
+
+
+<p>对比rebase与merge的结果可以发现简洁了不少</p>
+<h3 id="4-7-2-commit次数改写"><a href="#4-7-2-commit次数改写" class="headerlink" title="4.7.2 commit次数改写"></a>4.7.2 commit次数改写</h3><p>当前项目环境如下</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210226162402.png" alt="image-20210226162401971" style="zoom:50%;" />
+
+
+
+<p>此刻dev再向前commit3次,然后这3次commit都是修改了同样的一个接口</p>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210226171438.png" alt="image-20210226171438689"></p>
+<p>因为修改的是相同的内容所以说: <strong>master版本</strong> -&gt; <strong>版本A</strong> -&gt; <strong>版本B</strong>- &gt; <strong>版本C</strong></p>
+<p>其实等价于  <strong>master版本</strong> -&gt; <strong>版本C</strong></p>
+<p>如果3次还好,如果是30次,那整个分枝树就会特别的冗长</p>
+<p>做一个测试,我将hello.md添加了3次内容,并且commit了3次</p>
+<p>此时我们可以通过<code>git rebase -i HEAD~n</code>来指定合并多少次commit</p>
+<p><code>git log</code>查看commit记录</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210226175703.png" alt="image-20210226175703684" style="zoom:50%;" />
+
+<p>我们将最近三个版本合并,则可以输入</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git rebase -i HEAD~3</span><br></pre></td></tr></table></figure>
+<p>-i是进入交互模式,页面展示内容如下:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">1 p f07fc36 A</span><br><span class="line"> 2 s 8e65a18 B</span><br><span class="line"> 3 s bd26f6f C</span><br><span class="line"> 4</span><br><span class="line"> 5 <span class="comment"># Rebase 044f0cc..14c0a82 onto 044f0cc (3 commands)</span></span><br><span class="line"> 6 <span class="comment">#</span></span><br><span class="line"> 7 <span class="comment"># Commands:</span></span><br><span class="line"> 8 <span class="comment"># p, pick &lt;commit&gt; = use commit</span></span><br><span class="line"> 9 <span class="comment"># r, reword &lt;commit&gt; = use commit, but edit the commit message</span></span><br><span class="line">10 <span class="comment"># e, edit &lt;commit&gt; = use commit, but stop for amending</span></span><br><span class="line">11 <span class="comment"># s, squash &lt;commit&gt; = use commit, but meld into previous commit</span></span><br><span class="line">12 <span class="comment"># f, fixup &lt;commit&gt; = like &quot;squash&quot;, but discard this commit&#x27;s log message</span></span><br><span class="line">13 <span class="comment"># x, exec &lt;command&gt; = run command (the rest of the line) using shell</span></span><br><span class="line">14 <span class="comment"># b, break = stop here (continue rebase later with &#x27;git rebase --continue&#x27;)</span></span><br><span class="line">15 <span class="comment"># d, drop &lt;commit&gt; = remove commit</span></span><br><span class="line">16 <span class="comment"># l, label &lt;label&gt; = label current HEAD with a name</span></span><br><span class="line">17 <span class="comment"># t, reset &lt;label&gt; = reset HEAD to a label</span></span><br><span class="line">18 <span class="comment"># m, merge [-C &lt;commit&gt; | -c &lt;commit&gt;] &lt;label&gt; [# &lt;oneline&gt;]</span></span><br><span class="line">19 <span class="comment"># .       create a merge commit using the original merge commit&#x27;s</span></span><br><span class="line">20 <span class="comment"># .       message (or the oneline, if no original merge commit was</span></span><br><span class="line">21 <span class="comment"># .       specified). Use -c &lt;commit&gt; to reword the commit message.</span></span><br><span class="line">22 <span class="comment">#</span></span><br><span class="line">23 <span class="comment"># These lines can be re-ordered; they are executed from top to bottom.</span></span><br><span class="line">24 <span class="comment">#</span></span><br><span class="line">25 <span class="comment"># If you remove a line here THAT COMMIT WILL BE LOST.</span></span><br><span class="line">26 <span class="comment">#</span></span><br><span class="line">27 <span class="comment"># However, if you remove everything, the rebase will be aborted.</span></span><br></pre></td></tr></table></figure>
+<p>注:</p>
+<ol>
+<li>第一行到第三行为主要操作内容,从左至右分别是<strong>命令</strong>-&gt;  <strong>commit号</strong> -&gt; <strong>版本备注</strong></li>
+<li>后面都是备注,第七行到第十八行为命令说明</li>
+<li>我们选择需要执行的命令,我们选择了s与p,s的内容为合并前一个内容并提交</li>
+<li>保存提交后可能会报错<code>error: cannot &#39;squash&#39; without a previous commit</code>,原因是不能合并已提交到远端仓库的版本</li>
+</ol>
+<p>此时会保存退出后会展示以下内容</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210226182651.png" alt="image-20210226182651663" style="zoom:25%;" />
+
+<p>再次输入<code>git log</code></p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210226182754.png" alt="image-20210226182754589" style="zoom:50%;" />
+
+<p>发现ABC三个版本已经合并为一个了</p>
+<h2 id="4-8-命令汇总"><a href="#4-8-命令汇总" class="headerlink" title="4.8 命令汇总"></a>4.8 命令汇总</h2><p>查看分支: <code>git branch</code></p>
+<p>创建分支: <code>git branch 分支名</code> 或 <code>git checkout 分支名</code></p>
+<p>删除分支: <code>git branch -d 分支名</code></p>
+<p>强制删除分支(用于分支代码未整合到主分支时使用): <code>git branch -D 分支名</code></p>
+<p>切换分支: <code>git checkout 分支名</code> 或 <code>git switch 分支名</code></p>
+<p>创建并切换分支：<code>git checkout -b 分支名</code> 或 <code>git switch -c 分支名</code></p>
+<p>合并某分支内容到当前分支: <code>git merge 分支名</code> 或 <code>git rebase 分支名</code></p>
+<p>修改commit次数: <code>git rebase -i HEAD~n</code></p>
+<p>保存工作区: <code>git stash</code></p>
+<p>查看stash: <code>git stash list</code></p>
+<p>恢复stash: <code>git stash apply stash&#123;0&#125;</code></p>
+<p>删除stash: <code>git stash drop stash&#123;0&#125;</code></p>
+<p>恢复并删除stash: <code>git stash pop</code></p>
+<p>将将其他分支修改内容同步到本分支: <code>git cherry-pick 版本号</code></p>
+<p>本地分支关联远程分支: <code>git branch --set-upstream-to=origin/dev dev</code></p>
+<h1 id="5-标签管理"><a href="#5-标签管理" class="headerlink" title="5 标签管理"></a>5 标签管理</h1><h2 id="5-1-标签的创建"><a href="#5-1-标签的创建" class="headerlink" title="5.1 标签的创建"></a>5.1 标签的创建</h2><p>当我们提交一次commit后,会生成相应的commit号,不过都是一些无规则的数字字母,不方便记忆和查找,就比如我想回滚到某一个版本,我需要先<code>git log</code>查卡该版本的commit号,之后再通过<code>git reset --hard 版本号</code>回滚回去,随着commit次数的增多,查找难度也会越来越大,这个时候,为了能够方便记忆与查找,出现了一种打标签的技术</p>
+<p>下图是最新的一次提交记录</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210301112640.png" alt="image-20210301112640708" style="zoom:50%;" />
+
+<p>打标签还是十分简单的,我们可以通过下述方式给最新的版本打上标签</p>
+<ol>
+<li>切换到需要打标签的分支上</li>
+<li>使用命令<code>git tag 标签名</code></li>
+<li>打完标签后可以通过<code>git tag</code>来查看所有标签</li>
+</ol>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210301113229.png" alt="image-20210301113229558"></p>
+<p>但这只是给最新版打标签,如果我想要给上周的版本打标签得按照以下步骤:</p>
+<ol>
+<li><code>git log --pretty=oneline --abbrev-commit</code> 查出版本号</li>
+<li><code>git tag 版本号 commit 号</code> 给指定commit号的版本打上标签</li>
+</ol>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210301113755.png" alt="image-20210301113755640" style="zoom:50%;" />
+
+<p>注意项:标签排序是按照字符串顺序排序,与版本先后顺序无关</p>
+<p>还可以通过<code>git tag -a 标签名 -m &quot;备注内容&quot; commit号</code>给标签打上备注</p>
+<p>其中 <strong>-a</strong>指定标签名 <strong>-m</strong>指定备注内容,commit号跟在最后 <img src="https://gitee.com/bean-chan/images/raw/master/img/20210301114148.png" alt="image-20210301114148665"></p>
+<p>还可以通过<code>git show 标签名</code>来查看具体内容</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210301114236.png" alt="image-20210301114236681" style="zoom:50%;" />
+
+<h2 id="5-2-标签推送"><a href="#5-2-标签推送" class="headerlink" title="5.2 标签推送"></a>5.2 标签推送</h2><p>当标签创建完成后,可以通过<code>git push origin 标签名</code>将单个标签上传到远端仓库</p>
+<p>也可以通过 <code>git push origin --tags</code>将全部标签上传</p>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210301142141.png" alt="image-20210301142141496"></p>
+<h2 id="5-3-标签的删除"><a href="#5-3-标签的删除" class="headerlink" title="5.3 标签的删除"></a>5.3 标签的删除</h2><p>当然,人有失手,马有失蹄,如果不小心打错标签了也是可以删除的</p>
+<p>如果只是在本地,还没push到远端仓库,那可以使用<code>git tag -d 标签名</code>来删除标签</p>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210301142215.png" alt="image-20210301142215448"></p>
+<p>如果还需将标签推送到远端仓库的话,还需要使用<code>git push :refs/tags/标签名</code>来删除</p>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210301142332.png" alt="image-20210301142331928"></p>
+<h2 id="5-4-命令汇总"><a href="#5-4-命令汇总" class="headerlink" title="5.4 命令汇总"></a>5.4 命令汇总</h2><p>查看所有标签: <code>git tag</code></p>
+<p>给最新版本打标签: <code>git tag 标签名</code></p>
+<p>给指定版本打标签: <code>git tag 版本号 commit 号</code></p>
+<p>查看标签详情: <code>git show 标签名</code></p>
+<p>推送单个标签: <code>git push origin 标签名</code></p>
+<p>推送所有标签: <code>git push origin --tags</code></p>
+<p>删除本地仓库的标签: <code>git tag -d 标签名</code></p>
+<p>删除远端仓库的标签: <code>git push :refs/tags/标签名</code></p>
+]]></content>
+      <categories>
+        <category>运维</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+        <tag>版本控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Solr</title>
+    <url>/2021/02/07/Solr/</url>
+    <content><![CDATA[<h1 id="1-Solr基础介绍"><a href="#1-Solr基础介绍" class="headerlink" title="1 Solr基础介绍"></a>1 Solr基础介绍</h1><h2 id="1-1-什么是Solr"><a href="#1-1-什么是Solr" class="headerlink" title="1.1 什么是Solr"></a>1.1 什么是Solr</h2><p>Solr是Apache开源的、基于Lucene的Java Api的封装,是一款成熟稳定的搜索引擎。</p>
+<h2 id="1-2-Solr的优缺点"><a href="#1-2-Solr的优缺点" class="headerlink" title="1.2 Solr的优缺点"></a>1.2 Solr的优缺点</h2><p>优点: </p>
+<ol>
+<li><p>大量的用户群体与成熟的社区</p>
+</li>
+<li><p>支持多种格式索引,例如HTML、CSV、JSON、XML等</p>
+</li>
+<li><p>诞生于与2004年,多年的沉淀使得Solr成熟、稳定</p>
+</li>
+<li><p><strong>如果不考虑建索引的同时进行查询,查询速度更快</strong>,像我目前接手的法律查询软件,法律的录入不是十分频繁,那么用Solr就会比较合适</p>
+</li>
+</ol>
+<p>缺点:</p>
+<ol>
+<li>在建立索引时,搜索效率不高,例如淘宝热卖那种需要实时更新索引的项目,Solr就显得有点力不从心了</li>
+</ol>
+<h2 id="1-3-使用版本"><a href="#1-3-使用版本" class="headerlink" title="1.3 使用版本"></a>1.3 使用版本</h2><ol>
+<li>JDK-1.8</li>
+<li>Solr-7.7.3(未使用最新版是因为公司用的不是最新版,然后核心知识都大同小异,后续会再看8.x有什么更新)</li>
+<li>ik分词器-7.x</li>
+</ol>
+<h2 id="1-4-安装"><a href="#1-4-安装" class="headerlink" title="1.4 安装"></a>1.4 安装</h2><ol>
+<li><p>下载安装包 <a href="https://mirrors.bfsu.edu.cn/apache/lucene/solr/7.7.3/solr-7.7.3.tgz"><strong>https://mirrors.bfsu.edu.cn/apache/lucene/solr/7.7.3/solr-7.7.3.tgz</strong></a></p>
+</li>
+<li><p>到安装路径下解压 tar -zxvf solr-7.7.3.tgz(tgz相当于是tar.gz)</p>
+</li>
+</ol>
+<h2 id="1-5-目录布局"><a href="#1-5-目录布局" class="headerlink" title="1.5 目录布局"></a>1.5 目录布局</h2><table>
+<thead>
+<tr>
+<th align="center">目录</th>
+<th align="center">介绍</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">bin</td>
+<td align="center">包含启动等一些重要脚本</td>
+</tr>
+<tr>
+<td align="center">contrib</td>
+<td align="center">Solr的附加插件</td>
+</tr>
+<tr>
+<td align="center">dist</td>
+<td align="center">Solr的jar包</td>
+</tr>
+<tr>
+<td align="center">docs</td>
+<td align="center">Solr的在线文档</td>
+</tr>
+<tr>
+<td align="center">example</td>
+<td align="center">演示案例</td>
+</tr>
+<tr>
+<td align="center">licenses</td>
+<td align="center">Solr使用的第三方库的许可证</td>
+</tr>
+<tr>
+<td align="center">server</td>
+<td align="center">Solr的核心应用,包含管理UI界面等</td>
+</tr>
+</tbody></table>
+<h2 id="1-6-常用命令"><a href="#1-6-常用命令" class="headerlink" title="1.6 常用命令"></a>1.6 常用命令</h2><p> bin/solr start  启动(macOS与Linux均以下述方式启动,Windows需要在加个.cmd如:<strong>bin/solr.cmd start</strong>)</p>
+<p>bin/solr stop 关闭</p>
+<p>bin/solr restart 重启</p>
+<p>bin/solr status 查看状态</p>
+<p>Solr有单机运行与集群运行两种方式,本文主要以单机运行为主了,默认启动端口为8983,若想指定端口可以在后面加上 -p 参数,如 </p>
+<ul>
+<li>bin/solr start -p 端口号 </li>
+<li>bin/solr restart  -p 端口号 </li>
+</ul>
+<p>此时可以在浏览器输入 <a href="http://localhost:8983/">http://localhost:8983/</a> 来打开admin UI界面:</p>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210207140119.png" alt="WechatIMG3302"></p>
+<h1 id="2-core配置"><a href="#2-core配置" class="headerlink" title="2 core配置"></a>2 core配置</h1><h2 id="2-1-什么是core"><a href="#2-1-什么是core" class="headerlink" title="2.1 什么是core"></a>2.1 什么是core</h2><p>是一个Lucene实例,其中包含Solr所有的配置文件,我们需要创建一个core来完成索引与分析等操作</p>
+<p>一个Solr可以有多个core,如果需要core之间也是可以互相通信的</p>
+<h2 id="2-2-core的创建"><a href="#2-2-core的创建" class="headerlink" title="2.2 core的创建"></a>2.2 core的创建</h2><ol>
+<li><p>create命令创建</p>
+<p> ./solr create -c  new_core1</p>
+</li>
+<li><p>admin UI上直接创建</p>
+<p>   a. 此步执行之前,需要先将solr的默认配置文件夹复制到solr/server/solr/下,并重命名(下例中取名为new_core2),参考命令: cp -r ~/Library/solr-7.7.3/server/solr/configsets/_default/conf/  ~/Library/solr-7.7.3/server/solr/new_core2/<br> b. 重启<br> c. <img src="https://gitee.com/bean-chan/images/raw/master/img/20210207155125.png" alt="image-20210207155125070" style="zoom:50%;" /></p>
+</li>
+</ol>
+<p>注意项:</p>
+<ol>
+<li>用第一种方法创建,会自动在server/solr下创建一个名为new_core1的core文件夹,里面有着所需的配置文件(server/solr也称solr_home)</li>
+<li>第二种方式创建相当于我们手动创建了core文件夹</li>
+<li>core还有其他创建方式,但这两种比较常见</li>
+</ol>
+<h2 id="2-3-core的删除"><a href="#2-3-core的删除" class="headerlink" title="2.3 core的删除"></a>2.3 core的删除</h2><p>​    ./solr delete -c my_core</p>
+<h1 id="3-schema配置"><a href="#3-schema配置" class="headerlink" title="3 schema配置"></a>3 schema配置</h1><h2 id="3-1-什么是schema"><a href="#3-1-什么是schema" class="headerlink" title="3.1 什么是schema"></a>3.1 什么是schema</h2><p>在讲schema之前需要先了解一个概念   <strong>index(索引)</strong></p>
+<p>这里的索引和数据库中的索引不同,可以简单理解为Solr中的一张表,与Elasticsearch中的索引概念类似,举个例子:</p>
+<p>我有学生表和课程表,我有一条很频繁的查询是某某学生某某课程考了多少分,那我就需要从数据库把这两张表的内容查询出来处理完后再传回客户端,而solr会把这两张表中需要的字段提取出来,存放到solr中去,而存放的数据结构就是索引,这相当于是数据库里的一张表</p>
+<p>而schema就是Solr如何建立索引的说明书,例如字段的数据类型以及分词方式等</p>
+<h2 id="3-2-schema配置"><a href="#3-2-schema配置" class="headerlink" title="3.2 schema配置"></a>3.2 schema配置</h2><p>在Solr5.5之前的配置文件叫schema.xml,这些需要手动配置,密密麻麻的XML看着还挺头疼的,之后出现了的配置文件叫做managed-schema,他的配置方式是使用schemaAPI来实时配置,并且配置之后无须重启即可生效,更加适合生产环境,也更好操作</p>
+<p>常见的配置内容:</p>
+<ol>
+<li><p>field:  相当于Java类的属性字段,可以给他配上其他属性,比如是否需要显示,是否可以用做索引字段等,有明确的定义的普通字段<br> <img src="https://gitee.com/bean-chan/images/raw/master/img/20210207171043.png" alt="image-20210207171043365"><br> a. name: 查询时字段<br> b. type: 字段类型<br> c. indexed: 是否为索引字段<br> d. stored: 是否存储<br> e. multiValued: 是否允许多值</p>
+</li>
+<li><p>dynamicField: 与field类似,是未明确定义名字的字段,常用属性与field了类似</p>
+<p> <img src="https://gitee.com/bean-chan/images/raw/master/img/20210207172527.png" alt="image-20210207172527096"></p>
+</li>
+<li><p>copyField: </p>
+<ul>
+<li>可以将field字段拷贝到其他字段</li>
+<li>可以将dynamicField字段拷贝到其他字段</li>
+<li>可以将多个field字段拷贝到多值字段</li>
+<li>可以将多个dynamicField字段拷贝到多值字段</li>
+<li><img src="https://gitee.com/bean-chan/images/raw/master/img/20210207172637.png" alt="image-20210207172637955"></li>
+</ul>
+</li>
+<li><p>fieldType: 一般用来定义分词器,然后让field/dynamicField通过type引用</p>
+<p> <img src="https://gitee.com/bean-chan/images/raw/master/img/20210207172800.png" alt="image-20210207172800274"></p>
+</li>
+<li><p>analyzer: fieldType的子属性,常用于设置分词器</p>
+</li>
+</ol>
+<h2 id="3-3-ik分词器配置"><a href="#3-3-ik分词器配置" class="headerlink" title="3.3 ik分词器配置"></a>3.3 ik分词器配置</h2><p>步骤:</p>
+<ol>
+<li><p>下载jar包:<a href="https://search.maven.org/search?q=com.github.magese">https://search.maven.org/search?q=com.github.magese</a>    <img src="https://gitee.com/bean-chan/images/raw/master/img/20210219085443.png" alt="image-20210219085443741"></p>
+</li>
+<li><p>把jar包放置到(以我的为例)solr-7.7.3/server/solr-webapp/webapp/WEB-INF/lib下</p>
+</li>
+<li><p>到solr-7.7.3/server/solr/new_core/managed-schema下最底下粘贴以下内容:</p>
+ <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- ik分词器 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">fieldType</span> <span class="attr">name</span>=<span class="string">&quot;text_ik&quot;</span> <span class="attr">class</span>=<span class="string">&quot;solr.TextField&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">analyzer</span> <span class="attr">type</span>=<span class="string">&quot;index&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tokenizer</span> <span class="attr">class</span>=<span class="string">&quot;org.wltea.analyzer.lucene.IKTokenizerFactory&quot;</span> <span class="attr">useSmart</span>=<span class="string">&quot;false&quot;</span> <span class="attr">conf</span>=<span class="string">&quot;ik.conf&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">&quot;solr.LowerCaseFilterFactory&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">analyzer</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">analyzer</span> <span class="attr">type</span>=<span class="string">&quot;query&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tokenizer</span> <span class="attr">class</span>=<span class="string">&quot;org.wltea.analyzer.lucene.IKTokenizerFactory&quot;</span> <span class="attr">useSmart</span>=<span class="string">&quot;true&quot;</span> <span class="attr">conf</span>=<span class="string">&quot;ik.conf&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">&quot;solr.LowerCaseFilterFactory&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">analyzer</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">fieldType</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li><p>重启Solr</p>
+</li>
+<li><p>测试分词器    <img src="https://gitee.com/bean-chan/images/raw/master/img/20210219090639.png" alt="image-20210219090639925"></p>
+<p>Field Value(Index)与Field Value(Query)是Solr在索引时与在查询时会怎么处理数据,可以根据这两个来帮助设计分析器、分词器和过滤器(本文采用了ik分词器,上述三者ik分词器已经自己设计好了,关于这三者具体内容见下文)</p>
+</li>
+</ol>
+<h1 id="4-分析器、分词器、过滤器"><a href="#4-分析器、分词器、过滤器" class="headerlink" title="4 分析器、分词器、过滤器"></a>4 分析器、分词器、过滤器</h1><p>Solr主要通过分析器(Analyzer)、标记器(Tokenizers)、过滤器(Filter)来分解和处理文本。</p>
+<p>在介绍之前,先讲述一个概念文档(Document),之前说index相当于数据库里的一张表,而文档就可以理解为表里的一条数据。</p>
+<h2 id="4-1-概述"><a href="#4-1-概述" class="headerlink" title="4.1 概述"></a>4.1 概述</h2><p>当对一个文档进行索引时,每个field的数据都会经过分析,分词过滤等操作,例如,将一句话分词若干个单词和词组,然后去掉空格与语气词等多余的词以及进行同义词替换等,例如:</p>
+<p>what a beautiful girl,在这里what和a这样的词以及空格会被去掉,最终的处理结果为beautiful和girl或者是beautiful girl</p>
+<p>除了索引会做这些工作,查询时也会做这些工作,并且为了保证索引与查询可以正确匹配,二者的处理规则往往也是相同的,例如:</p>
+<p>ABCD索引分词为AB CD,查询时分词为A BCD,这样匹配的结果就为0</p>
+<p>analyzer包含着两个部分,Tokenizers与Filter。Tokenizers就是将句子拆分成单个词,而Filter就是对分词的结果中比如中文里的”的”、”呀”、”啊”,英文里的”am”、”is”、”are”这类对句子主体意思关系不大的词去掉</p>
+<p>solr有自带了一些分词器,如果你需要使用中文分词器就需要自己配置,参考3.3</p>
+<h2 id="4-2-使用方式"><a href="#4-2-使用方式" class="headerlink" title="4.2 使用方式"></a>4.2 使用方式</h2><p>analyzer为fieldType下的一个子元素,主要作用是检查字段的文本并生成令牌流</p>
+<p>最简单的使用方式如下:</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">fieldType</span> <span class="attr">name</span>=<span class="string">&quot;nametext&quot;</span> <span class="attr">class</span>=<span class="string">&quot;solr.TextField&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">analyzer</span> <span class="attr">class</span>=<span class="string">&quot;org.apache.lucene.analysis.core.WhitespaceAnalyzer&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">fieldType</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>其中analyzer通过一个全限定Java类名引入,且命名的类必须继承自org.apache.lucene.analysis.Analyzer</p>
+<p>对于简单的文章,这样一个分析器类就足够完成任务,但是通常情况下是需要更为复杂的分析</p>
+<p>Solr提供了大量的Tokenizers与Filter来协助分析,例如:</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">fieldType</span> <span class="attr">name</span>=<span class="string">&quot;nametext&quot;</span> <span class="attr">class</span>=<span class="string">&quot;solr.TextField&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">analyzer</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">tokenizer</span> <span class="attr">class</span>=<span class="string">&quot;solr.StandardTokenizerFactory&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">&quot;solr.StandardFilterFactory&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">&quot;solr.LowerCaseFilterFactory&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">&quot;solr.StopFilterFactory&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">&quot;solr.EnglishPorterFilterFactory&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">analyzer</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">fieldType</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>org.apache.solr.analysis 包中的类可以在这里用简写的 solr. 前缀来代替</p>
+<p>上述中,analyzer未使用指定的分析器类,而用许多类组合到一起,成为该字段的分析器,任何使用”nametext”fieldType字段进行索引或查询时,都会经过从StandardTokenizerFactory到EnglishPorterFilterFactory的过滤</p>
+<p>分析发生在两种情况下:分别是索引时与查询时</p>
+<p>在索引时:当一个字段被创建时，分析得到的令牌流将被添加到一个索引中，并为该字段定义一组术语（包括位置、大小等）。</p>
+<p>在查询时:分析正在搜索的值，并将结果的条件与存储在字段索引中的条件进行匹配。</p>
+<p>如果想要在不同阶段使用不同的分析器,可以指定type属性:如下:</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">fieldType</span> <span class="attr">name</span>=<span class="string">&quot;nametext&quot;</span> <span class="attr">class</span>=<span class="string">&quot;solr.TextField&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">analyzer</span> <span class="attr">type</span>=<span class="string">&quot;index&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">tokenizer</span> <span class="attr">class</span>=<span class="string">&quot;solr.StandardTokenizerFactory&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">&quot;solr.LowerCaseFilterFactory&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">&quot;solr.KeepWordFilterFactory&quot;</span> <span class="attr">words</span>=<span class="string">&quot;keepwords.txt&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">&quot;solr.SynonymFilterFactory&quot;</span> <span class="attr">synonyms</span>=<span class="string">&quot;syns.txt&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">analyzer</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">analyzer</span> <span class="attr">type</span>=<span class="string">&quot;query&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">tokenizer</span> <span class="attr">class</span>=<span class="string">&quot;solr.StandardTokenizerFactory&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">&quot;solr.LowerCaseFilterFactory&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">analyzer</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">fieldType</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在索引时,文本被标记化,并设置为小写,未列在keepwords.txt中的会被丢弃,保留下来的会根据syns.txt进行同义词替换</p>
+<p>在查询时,就只是将文本标记后设置为小写</p>
+<h1 id="5-Solr的使用"><a href="#5-Solr的使用" class="headerlink" title="5 Solr的使用"></a>5 Solr的使用</h1><h2 id="5-1-根据文件导入数据"><a href="#5-1-根据文件导入数据" class="headerlink" title="5.1 根据文件导入数据"></a>5.1 根据文件导入数据</h2><p>Solr可以导入多种格式的文件来作为index,在solr-7.7.3/example/exampledocs中有各个格式的测试案例,本文随机采用一种演示</p>
+<p>可以通过bin目录下的post命令导入index</p>
+<p>输入 bin/post -h 可查看具体使用方式</p>
+<p>示例: bin/post -c 导入的核心名 导入的文件(可多个)</p>
+<p>下面演示一下往new_core里导入book.csv与book.json文件:</p>
+<ol>
+<li>bin/post -c new_core example/exampledocs/books.csv example/exampledocs/books.json</li>
+<li>查看演示数据<br> <img src="https://gitee.com/bean-chan/images/raw/master/img/20210219095506.png" alt="image-20210219095506274"></li>
+</ol>
+<h2 id="5-2-添加-更新文档"><a href="#5-2-添加-更新文档" class="headerlink" title="5.2 添加/更新文档"></a>5.2 添加/更新文档</h2><p>添加/更新内容(根据是否有id判断为添加还是更新操作):    <img src="https://gitee.com/bean-chan/images/raw/master/img/20210219102710.png" alt="image-20210219102710466"></p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	<span class="attr">&quot;id&quot;</span>:<span class="string">&quot;1234567890&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;cat&quot;</span>:[<span class="string">&quot;book&quot;</span>],</span><br><span class="line">  <span class="attr">&quot;name&quot;</span>:[<span class="string">&quot;BeanChan is a handsome man&quot;</span>],</span><br><span class="line">  <span class="attr">&quot;price&quot;</span>:[<span class="number">799</span>],</span><br><span class="line">  <span class="attr">&quot;inStock&quot;</span>:[<span class="literal">true</span>],</span><br><span class="line">  <span class="attr">&quot;author&quot;</span>:[<span class="string">&quot;BeanChan&quot;</span>],</span><br><span class="line">  <span class="attr">&quot;series_t&quot;</span>:<span class="string">&quot;A man has a pretty face&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;sequence_i&quot;</span>:<span class="number">1</span>,</span><br><span class="line">  <span class="attr">&quot;genre_s&quot;</span>:<span class="string">&quot;fantasy&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="5-3-删除文档"><a href="#5-3-删除文档" class="headerlink" title="5.3 删除文档"></a>5.3 删除文档</h2><p>需基于XML方式<img src="https://gitee.com/bean-chan/images/raw/master/img/20210220093542.png" alt="image-20210220093541899"></p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--删除所有索引--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">delete</span>&gt;</span></span><br><span class="line">　　<span class="tag">&lt;<span class="name">query</span>&gt;</span>*:*<span class="tag">&lt;/<span class="name">query</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">delete</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">commit</span> /&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 根据 id 进行删除--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">delete</span>&gt;</span></span><br><span class="line">　　<span class="tag">&lt;<span class="name">id</span>&gt;</span>1<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">delete</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">commit</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="5-4-查询数据"><a href="#5-4-查询数据" class="headerlink" title="5.4 查询数据"></a>5.4 查询数据</h2><table>
+<thead>
+<tr>
+<th align="center">参数</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">q</td>
+<td align="center">主要查询参数</td>
+</tr>
+<tr>
+<td align="center">fq</td>
+<td align="center">过滤器查询参数</td>
+</tr>
+<tr>
+<td align="center">start</td>
+<td align="center">起始页</td>
+</tr>
+<tr>
+<td align="center">rows</td>
+<td align="center">查询行数</td>
+</tr>
+<tr>
+<td align="center">sort</td>
+<td align="center">排序方式</td>
+</tr>
+<tr>
+<td align="center">fl</td>
+<td align="center">结果集字段列表</td>
+</tr>
+<tr>
+<td align="center">wt</td>
+<td align="center">展示格式(下图以csv格式展示)</td>
+</tr>
+</tbody></table>
+<p>下图为例:<br><img src="https://gitee.com/bean-chan/images/raw/master/img/20210220101639.png" alt="image-20210220101639220"></p>
+<h1 id="6-整合springboot"><a href="#6-整合springboot" class="headerlink" title="6 整合springboot"></a>6 整合springboot</h1><ol>
+<li><p>引入pom依赖</p>
+ <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.data<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-data-solr<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li><p>配置yml</p>
+ <figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">data:</span></span><br><span class="line">    <span class="attr">solr:</span></span><br><span class="line">      <span class="attr">host:</span> <span class="string">http://127.0.0.1:8983/solr</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置entity</p>
+ <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> beanchan.cn.springbootdemo.entity;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"><span class="keyword">import</span> org.apache.solr.client.solrj.beans.Field;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.solr.core.mapping.SolrDocument;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Classname</span> SolrEntity</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> ChenBin</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@CreateDate</span> 2021/2/20 2:00 PM</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@SolrDocument(collection = &quot;new_core&quot;)</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SolrEntity</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Field</span></span><br><span class="line">    <span class="keyword">private</span> String id;</span><br><span class="line">    <span class="meta">@Field(&quot;name&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置dao</p>
+ <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> beanchan.cn.springbootdemo.dao;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> beanchan.cn.springbootdemo.entity.SolrEntity;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.solr.repository.SolrCrudRepository;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Repository;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Classname</span> solaDao</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> ChenBin</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@CreateDate</span> 2021/2/20 3:25 PM</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Repository</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">SolrDao</span> <span class="keyword">extends</span> <span class="title">SolrCrudRepository</span>&lt;<span class="title">SolrEntity</span>,<span class="title">String</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>配置service及其实现类</p>
+ <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> beanchan.cn.springbootdemo.service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> beanchan.cn.springbootdemo.entity.SolrEntity;</span><br><span class="line"><span class="keyword">import</span> org.apache.solr.client.solrj.SolrServerException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@InterfaceName</span> ISolrService</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> ChenBin</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@CreateDate</span> 2021/2/20 3:33 PM</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ISolrService</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">add</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">update</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">delete</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function">List&lt;SolrEntity&gt; <span class="title">quertList</span><span class="params">(String keyword)</span> <span class="keyword">throws</span> IOException, SolrServerException</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+ <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> beanchan.cn.springbootdemo.service.impl;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> beanchan.cn.springbootdemo.dao.SolrDao;</span><br><span class="line"><span class="keyword">import</span> beanchan.cn.springbootdemo.entity.SolrEntity;</span><br><span class="line"><span class="keyword">import</span> beanchan.cn.springbootdemo.service.ISolrService;</span><br><span class="line"><span class="keyword">import</span> org.apache.solr.client.solrj.SolrClient;</span><br><span class="line"><span class="keyword">import</span> org.apache.solr.client.solrj.SolrQuery;</span><br><span class="line"><span class="keyword">import</span> org.apache.solr.client.solrj.SolrServerException;</span><br><span class="line"><span class="keyword">import</span> org.apache.solr.client.solrj.response.QueryResponse;</span><br><span class="line"><span class="keyword">import</span> org.apache.solr.common.SolrDocument;</span><br><span class="line"><span class="keyword">import</span> org.apache.solr.common.SolrDocumentList;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.annotation.Resource;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Classname</span> ISolrServiceImpl</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> ChenBin</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@CreateDate</span> 2021/2/20 3:34 PM</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ISolrServiceImpl</span> <span class="keyword">implements</span> <span class="title">ISolrService</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    SolrDao solrDao;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> SolrClient solrClient;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        SolrEntity solrEntity = <span class="keyword">new</span> SolrEntity();</span><br><span class="line">        solrEntity.setId(<span class="string">&quot;001&quot;</span>);</span><br><span class="line">        solrEntity.setName(<span class="string">&quot;阿姆斯特朗回旋加速喷气式阿姆斯特朗炮制作图纸&quot;</span>);</span><br><span class="line">        solrDao.save(solrEntity);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        SolrEntity solrEntity = <span class="keyword">new</span> SolrEntity();</span><br><span class="line">        solrEntity.setId(<span class="string">&quot;001&quot;</span>);</span><br><span class="line">        solrEntity.setName(<span class="string">&quot;阿姆斯特朗回旋加速喷气式阿姆斯特朗炮使用手册&quot;</span>);</span><br><span class="line">        solrDao.save(solrEntity);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delete</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        solrDao.deleteById(<span class="string">&quot;001&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;SolrEntity&gt; <span class="title">quertList</span><span class="params">(String keyword)</span> <span class="keyword">throws</span> IOException, SolrServerException </span>&#123;</span><br><span class="line"></span><br><span class="line">        SolrQuery query = <span class="keyword">new</span> SolrQuery();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//设置查询条件</span></span><br><span class="line">        query.setQuery(<span class="string">&quot;name:阿姆斯特朗&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//按照时间排序</span></span><br><span class="line">        <span class="comment">// query.addSort(&quot;create_time&quot;, SolrQuery.ORDER.desc);</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//开始页</span></span><br><span class="line">        query.setStart(<span class="number">0</span>);</span><br><span class="line">        <span class="comment">//一页显示多少条</span></span><br><span class="line">        query.setRows(<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//开启高亮</span></span><br><span class="line">        <span class="comment">//query.setHighlight(true);</span></span><br><span class="line">        <span class="comment">//设置高亮字段</span></span><br><span class="line">        <span class="comment">//query.addHighlightField(&quot;demoName&quot;);</span></span><br><span class="line">        <span class="comment">//前缀</span></span><br><span class="line">        <span class="comment">//query.setHighlightSimplePre(&quot;&lt;font color=&#x27;red&#x27;&gt;&quot;);</span></span><br><span class="line">        <span class="comment">//后缀</span></span><br><span class="line">        <span class="comment">//query.setHighlightSimplePost(&quot;&lt;/font&gt;&quot;);</span></span><br><span class="line">        <span class="comment">//执行查找</span></span><br><span class="line">        QueryResponse response = solrClient.query(<span class="string">&quot;new_core&quot;</span>,query);</span><br><span class="line"></span><br><span class="line">        SolrDocumentList results = response.getResults();</span><br><span class="line">        <span class="comment">//获取查询到的数据总量</span></span><br><span class="line">        <span class="keyword">long</span> numFound = results.getNumFound();</span><br><span class="line">        <span class="keyword">if</span> (numFound &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="comment">//如果小于0，表示未查询到任何数据，返回null</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line"></span><br><span class="line">            List&lt;SolrEntity&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">            <span class="comment">//遍历结果集</span></span><br><span class="line">            <span class="keyword">for</span> (SolrDocument doc : results) &#123;</span><br><span class="line">                <span class="comment">//得到每条数据的map集合</span></span><br><span class="line">                Map&lt;String, Object&gt; map = doc.getFieldValueMap();</span><br><span class="line">                <span class="comment">//添加到list</span></span><br><span class="line">                <span class="keyword">for</span> (String key : map.keySet()) &#123;</span><br><span class="line">                    System.out.println(<span class="string">&quot;KEY:&quot;</span> + key + <span class="string">&quot;,VALUE:&quot;</span> + map.get(key).toString());</span><br><span class="line">                &#125;</span><br><span class="line">                SolrEntity demo = <span class="keyword">new</span> SolrEntity();</span><br><span class="line">                demo.setId(map.get(<span class="string">&quot;id&quot;</span>).toString());</span><br><span class="line">                demo.setName(map.get(<span class="string">&quot;name&quot;</span>).toString());</span><br><span class="line">                list.add(demo);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> list;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>配置Controller</p>
+ <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> beanchan.cn.springbootdemo.controller;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> beanchan.cn.springbootdemo.entity.SolrEntity;</span><br><span class="line"><span class="keyword">import</span> beanchan.cn.springbootdemo.service.ISolrService;</span><br><span class="line"><span class="keyword">import</span> org.apache.solr.client.solrj.SolrServerException;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RequestMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RestController;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.annotation.Resource;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Classname</span> searchController</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> ChenBin</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@CreateDate</span> 2021/2/20 10:57 AM</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SearchController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    ISolrService solrService;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 新增</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> flag</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@RequestMapping(&quot;add&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">add</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        solrService.add();</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;success&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping(&quot;update&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">update</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        solrService.update();</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;success&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping(&quot;delete&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">delete</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        solrService.delete();</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;success&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping(&quot;queryList&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">queryList</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        List&lt;SolrEntity&gt; solrEntities = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            solrEntities = solrService.quertList(<span class="string">&quot;&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException | SolrServerException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (solrEntities != <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">return</span> solrEntities.toString();</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;empty&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>测试还请自行实验,下图简单展示一下</p>
+<p> <img src="https://gitee.com/bean-chan/images/raw/master/img/20210220164722.png" alt="image-20210220164722459"></p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>框架</category>
+      </categories>
+      <tags>
+        <tag>Solr</tag>
+        <tag>搜索引擎</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Jenkins</title>
     <url>/2021/02/02/Jenkins/</url>
     <content><![CDATA[<h1 id="1-什么是Jenkins"><a href="#1-什么是Jenkins" class="headerlink" title="1. 什么是Jenkins"></a>1. 什么是Jenkins</h1><h2 id="1-1-我们为啥需要jenkins"><a href="#1-1-我们为啥需要jenkins" class="headerlink" title="1.1 我们为啥需要jenkins"></a>1.1 我们为啥需要jenkins</h2><p>在一次系统开发中,往往需要如下几步:</p>
@@ -214,698 +978,6 @@ nohup java -jar springboot-demo-0.0.1-SNAPSHOT.jar &amp;
       </categories>
       <tags>
         <tag>Jenkins</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Git</title>
-    <url>/2021/02/20/Git/</url>
-    <content><![CDATA[<h1 id="1-Git介绍"><a href="#1-Git介绍" class="headerlink" title="1 Git介绍"></a>1 Git介绍</h1><h2 id="1-1-什么是git"><a href="#1-1-什么是git" class="headerlink" title="1.1 什么是git"></a>1.1 什么是git</h2><p>按官方的话说:世界上最先进的分布式版本控制工具</p>
-<p>如果不用版本控制工具我们怎么整合代码?</p>
-<p>这里讲述一个Git出生前的一些事:</p>
-<p>大家都知道Linux是一个开源操作系统,是一个举全世界之力创建的一个开源操作系统,大家都把自己写好的源码发给作者Linus Benedict Torvalds(林纳斯·托瓦兹),然后linus再自己一个人Ctrl C + Ctrl V,再取其精华去其糟粕,随着代码库的不断完善,工作量也越来越大,靠人工完成代码整合的难度也越来越大,这个时候版本控制工具就显得尤为重要,但是Linus不喜欢当时比较流行的开源版本控制工具CVS、SVN,因为他们需要联网才能工作,这个时候一个名叫BitMover的公司无偿提供公司旗下的分布式版本控制工具<strong>BitKeeper</strong>给Linux社区,这样问题也就算是解决了,并且也相安无事好长一段时间,后来因为社区大牛试图破解BitKeeper的协议,BitMover一生气,就把使用权回收了,然后Linus一人,扶大厦之将倾,挽狂澜于既倒,用了两周时间开发出了现如今闻名于世的Git</p>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225102018.jpeg" alt="download"></p>
-<h2 id="1-2-集中式与分布式"><a href="#1-2-集中式与分布式" class="headerlink" title="1.2 集中式与分布式"></a>1.2 集中式与分布式</h2><p>集中式:</p>
-<p>代码的版本库存放在中央服务器上,工作前从中央服务器上拉取下来,工作后再把代码上传回中央服务器,版本控制需要依赖网络</p>
-<p>分布式:</p>
-<p>每个人的电脑都是一个完整的版本库,大家可以直接把代码上传到本地仓库,如果需要和他人同步代码直接将代码推送给他人即可,但为了更好更方便的管理代码,一般还是会创建一个远端服务器,用来汇总所有人的代码,大部分提交都是对本地仓库而言的，版本控制不依赖网络</p>
-<h2 id="1-3-git安装"><a href="#1-3-git安装" class="headerlink" title="1.3 git安装"></a>1.3 git安装</h2><p>Linux:</p>
-<p>各发行版命令行安装方式: <a href="https://git-scm.com/download/linux">https://git-scm.com/download/linux</a></p>
-<p>Windows:</p>
-<p><a href="https://www.jianshu.com/p/414ccd423efc">https://www.jianshu.com/p/414ccd423efc</a></p>
-<p>MacOS:</p>
-<p>通过homebrew安装git</p>
-<ol>
-<li><p>若未安装homebrew,先安装homebrew,下方为推荐教程,换成国内源</p>
-<p> <a href="https://zhuanlan.zhihu.com/p/59805070">https://zhuanlan.zhihu.com/p/59805070</a></p>
-</li>
-<li><p>安装git</p>
-<p> brew install git</p>
-</li>
-</ol>
-<p>安装完成还需以下配置,向git自报家门:</p>
-<blockquote>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git config --global user.name <span class="string">&quot;Your Name&quot;</span></span><br><span class="line">git config --global user.email <span class="string">&quot;email@example.com&quot;</span></span><br></pre></td></tr></table></figure>
-<p>本系统使用版本为==2.29.2==</p>
-</blockquote>
-<h2 id="1-4-git作用"><a href="#1-4-git作用" class="headerlink" title="1.4 git作用"></a>1.4 git作用</h2><ol>
-<li><p>代码汇总。项目开发往往会有很多个人参与,git的一个核心功能就是整合各个人员的代码</p>
-</li>
-<li><p>代码回滚。如果出现了项目事故,比如代码不小心删了,或者代码越改问题越大,那就可以通过git回滚到之前的版本</p>
-</li>
-<li><p>分支管理。开发人员可以创建自己的分支进行项目的开发,这样怎么样都只是影响自己的项目不会对他人造成影响</p>
-</li>
-</ol>
-<p>上班第一件事就是从远端仓库拉取代码到你本地,下班最后一件是就是需要把今天写完的代码上传到到公司的远端仓库(一般是Github或者Gitlab)<br>    (具体命令稍后会介绍)</p>
-<h2 id="1-5-git工作区域"><a href="#1-5-git工作区域" class="headerlink" title="1.5 git工作区域"></a>1.5 git工作区域</h2><p>在开始使用之前,得先说明一下git核心的四大区域:  </p>
-<p>见下图,从右至左分别是:远端仓库 本地仓库 暂存区  工作区    <img src="https://gitee.com/bean-chan/images/raw/master/img/20210220170942.png" alt="20200902160147674" style="zoom:67%;" /></p>
-<p>具体样子见下图:</p>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210223083908.png" alt="image-20210223083908082" style="zoom: 50%;" />
-
-<ol>
-<li>springboot-demo目录下,除.git目录外的所有内容都属于工作区</li>
-<li>.git文件夹下的index为暂存区,里面存放==临时改动的内容==,本质上是一个==文件==</li>
-<li>.git文件夹下除index文件以外,其他的内容加起来统称为本地仓库也叫本地版本库</li>
-<li>远端仓库(Remote) 一般是GitHub或者Gitlab等</li>
-</ol>
-<h1 id="2-git基本命令"><a href="#2-git基本命令" class="headerlink" title="2 git基本命令"></a>2 git基本命令</h1><h2 id="2-1-本地命令"><a href="#2-1-本地命令" class="headerlink" title="2.1 本地命令"></a>2.1 本地命令</h2><h3 id="2-1-1-本地仓库搭建"><a href="#2-1-1-本地仓库搭建" class="headerlink" title="2.1.1 本地仓库搭建"></a>2.1.1 本地仓库搭建</h3><ol>
-<li><p>创建文件夹</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mkdir testgit</span><br><span class="line"><span class="built_in">cd</span> testgit</span><br></pre></td></tr></table></figure></li>
-<li><p>初始化文件夹</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git init</span><br></pre></td></tr></table></figure>
-<p>这里我们就创建了一个空的本地仓库,里面会自动生成一个.git的隐藏目录,用于跟踪管理版本库,由git自己维护,<strong>没事别碰他</strong>,不然可能会破坏git仓库</p>
-</li>
-</ol>
-<h3 id="2-1-2-本地仓库使用"><a href="#2-1-2-本地仓库使用" class="headerlink" title="2.1.2 本地仓库使用"></a>2.1.2 本地仓库使用</h3><p>首先在工作区(写代码的地方)创建一个文件 hello.md,内容如下:</p>
-<blockquote>
-<p>我铠他超,</p>
-<p>为希丝特莉亚献出心脏</p>
-</blockquote>
-<p>创建后,我们可以在,命令行通过以下命令将hello.md加入到暂存区</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git add hello.md </span><br></pre></td></tr></table></figure>
-<p>或者</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git add .</span><br></pre></td></tr></table></figure>
-<p>前者是添加单个文件到暂存区,后者是添加所有文件到暂存区</p>
-<p>在通过以下命令将代码从暂存区提交到本地仓库</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git commit -m <span class="string">&quot;新增两行没啥用的数据&quot;</span></span><br></pre></td></tr></table></figure>
-<p>每次commit操作相当于创建一次快照, -m参数后面跟的是快照的备注内容,这项是必填项,为了回滚时更方便找到需要回滚的版本</p>
-<p>==只有先add到暂存区的文件才可以commit到本地仓库==</p>
-<p>可通过以下命令来查看文件状态,看看是否有文件还没加入到暂存区,是否暂存区还有文件还没提交到本地仓库</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git status</span><br></pre></td></tr></table></figure>
-<p>也可以在修改文件之后,通过<code>git diff 文件名</code>来查看有何变化</p>
-<p>例如:</p>
-<p>我将hello.md修改为:</p>
-<blockquote>
-<p>我铠他超,</p>
-<p>为希丝特莉亚献出心脏,</p>
-<p>重铸马莱荣光,我辈义不容辞</p>
-</blockquote>
-<p>之后通过以下命令查看更新了哪些内容</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git diff hello.md	</span><br></pre></td></tr></table></figure>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210222153013.png" alt="image-20210222153013346" style="zoom: 50%;" />
-
-<p>可以看出新加了一行内容</p>
-<p>之后再提交一次(今后版本回滚时用的上)</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">&quot;再加一行&quot;</span></span><br></pre></td></tr></table></figure>
-<p>这里我们在创建一个文件world.md</p>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210225095401.png" alt="image-20210225095401875" style="zoom: 67%;" />
-
-<p>之后再提交一下代码</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">&quot;创建一个新文件&quot;</span></span><br></pre></td></tr></table></figure>
-<p>此时我们在world.md里再加一行</p>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225095517.png" alt="image-20210225095517123"></p>
-<p>突然你意识到,第二句话可能对健康有所威胁,于是你想到了删除这句话,在这里我们可以直接进入文件删除最后一行,非常简单,但在代码的世界里,有时候东改一行西改一行,你根本不知道你改了哪些东西,于是你可以通过<code>git checkout -- 文件名</code>丢弃修改的内容,这里的 ==–== 很重要,代表着撤销操作,如果省略了<code>git checkout</code>就会变成切换分支操作(有关分支操作后续会介绍)</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git checkout -- world.md</span><br></pre></td></tr></table></figure>
-<p>在查看文本内容</p>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225095612.png" alt="image-20210225095612838"></p>
-<p>发现内容已经撤销了,在这里有两种情况:</p>
-<ol>
-<li>文件还没添加到暂存库,那就撤销到最近一次版本库</li>
-<li>文件已经添加到版本库,那就撤销到添加到暂存区后的状态</li>
-</ol>
-<p>如果你写完之后,不小心<code>git add .</code>把内容添加到暂存区了,还是可以通过<code>git reset HEAD &lt;文件名&gt;</code>,可以把暂存区的内容撤销掉,可自行测试</p>
-<p><strong>reset</strong>不仅可以把暂存区的内容撤销掉,还可以实现版本回滚,详见下文</p>
-<p>如果你是个狠人,你想着干脆直接就给这个文件删了,在平时直接<code>rm -rf world.md</code>就结束了,但是我们是版本控制工具呀,能有那么简单吗?我们先删除文件,之后输入<code>git status</code>查看一下状态</p>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225101115.png" alt="image-20210225101115310"></p>
-<p>此时,工作区与版本库就不一致了,我们可以通过<code>git rm &lt;文件名&gt;</code>来将文件从版本库中彻底删除</p>
-<p>但你也可能突然意识到,男人就得敢作敢当,关键是身体好抗得住揍,于是可以通过<code>git resotre &lt;file&gt;</code>来恢复文件</p>
-<h2 id="2-2-远端命令"><a href="#2-2-远端命令" class="headerlink" title="2.2 远端命令"></a>2.2 远端命令</h2><p>前面说的都是在本地上的操作,而远端仓库如果自己一个人就搭建一个Git服务器,明显是没啥必要的,好在现在市面上有一个非常棒的网站:<strong>github.com</strong>,每个人仅需注册一个账户,就可以在这个网站上搭建远程仓库。</p>
-<h3 id="2-2-1-远程仓库搭建"><a href="#2-2-1-远程仓库搭建" class="headerlink" title="2.2.1 远程仓库搭建"></a>2.2.1 远程仓库搭建</h3><ol>
-<li><p>先查看主目录是否有.ssh目录,没有则在命令行输入以下内容创建SSH Key,用于github认证身份时使用</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa -C <span class="string">&quot;youremail@example.com&quot;</span></span><br></pre></td></tr></table></figure></li>
-<li><p>登录github -&gt; 点击右上角下拉菜单中的Settings -&gt; SSH and GPG keys -&gt; 把.ssh目录下的id_rsa.pub中的内容粘贴到Key里,目的是为了让当你上传或者拉取内容时,github能对身份进行认证</p>
- <img src="https://gitee.com/bean-chan/images/raw/master/img/20210224152330.png" alt="image-20210224152330582" style="zoom:67%;" />
-</li>
-<li><p>创建新的repository</p>
-<ul>
-<li><p>创建页面如下:</p>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210224155102.png" alt="image-20210224155102012" style="zoom: 67%;" />
-</li>
-<li><p>创建后页面如下:<br><img src="https://gitee.com/bean-chan/images/raw/master/img/20210224155313.png" alt="image-20210224155313047">    </p>
-</li>
-</ul>
-</li>
-<li><p>将先创建的远程仓库与本地仓库绑定</p>
-<ul>
-<li><p>进入本地文件夹</p>
-</li>
-<li><p>输入以下命令,主要要替换成你自己的(可从上面创建后页面中找到)</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git remote add origin https://github.com/bean1006/testgit.git/</span><br></pre></td></tr></table></figure>
-
-
-</li>
-</ul>
-</li>
-</ol>
-<ol start="5">
-<li><p>通过以下命令将本地commit的内容推送的远程服务器(首次推送需要使用-u指定分支,这样git会将本地master与远端master分支绑定起来)</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure></li>
-<li><p>此时刷新页面就会发现远端仓库多了一个hello.md的文件,说明我们上传成功了</p>
-</li>
-<li><p>当我需要在另一台电脑快速克隆这个远程仓库的内容,则可以在另一台电脑上的命令行输入(快速克隆命令命令可在远程仓库页面看到)</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --depth=1 https://github.com.cnpmjs.org/bean1006/testgit.git</span><br></pre></td></tr></table></figure></li>
-</ol>
-<p>  <strong>–depth</strong>是克隆深度,–depth=1,表示只克隆最近一次commit</p>
-<ol start="8">
-<li>可以用<code>git remote</code>查看远程库信息 ,或<code>git remote -v</code>查看详细内容</li>
-</ol>
-<p>这样今后本电脑和另一台电脑都可以通过远程仓库来同步修改内容了</p>
-<h3 id="2-2-2-远程仓库使用"><a href="#2-2-2-远程仓库使用" class="headerlink" title="2.2.2 远程仓库使用"></a>2.2.2 远程仓库使用</h3><p>可参照此图(和上面的一样)</p>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210220170942.png" alt="20200902160147674" style="zoom: 67%;" />
-
-<p>当我们来到公司做的第一件事就是通过以下命令拉取代码</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git pull</span><br></pre></td></tr></table></figure>
-<p>当我们完成今天的代码任务后,就可以通过以下内容上传到服务器</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">&quot;xxx模块完成&quot;</span></span><br><span class="line">git push </span><br></pre></td></tr></table></figure>
-<p>其中pull是直接将代码从远程仓库下拉到工作区,我们也可以通过fetch将代码拉取到本地仓库,才通过checkout拉到工作区,这里涉及到分支内容了下面会介绍</p>
-<h2 id="2-3-命令汇总"><a href="#2-3-命令汇总" class="headerlink" title="2.3 命令汇总"></a>2.3 命令汇总</h2><p>本地:</p>
-<p>文件加入暂存区: <code>git add 文件名</code>或<code>git add .</code></p>
-<p>文件提交到本地仓库: <code>git commit -m &quot;备注内容&quot;</code></p>
-<p>查看文件状态: <code>git status</code></p>
-<p>查看文件修改内容: <code>git diff 文件名</code></p>
-<p>撤销文件内容: <code>git checkout -- 文件名</code></p>
-<p>从版本库删除文件: <code>git rm 文件名</code></p>
-<p>从版本库恢复文件: <code>git restore 文件名</code></p>
-<p>远端:</p>
-<p>将本地仓库与远程仓库绑定: <code>git remote add origin 远程仓库git地址</code></p>
-<p>首次推送代码: <code>git push -u origin master</code></p>
-<p>克隆远程仓库: <code>git clone --depth=1 远程仓库git地址</code></p>
-<p>拉取代码: <code>git pull</code></p>
-<p>上传代码(需先commit,上传到当前本地分支同名的远程分支上): <code>git push</code></p>
-<p>上传代码到指定分支: <code>git push origin 分支名</code></p>
-<h1 id="3-版本管理"><a href="#3-版本管理" class="headerlink" title="3 版本管理"></a>3 版本管理</h1><h2 id="3-1-版本回滚"><a href="#3-1-版本回滚" class="headerlink" title="3.1 版本回滚"></a>3.1 版本回滚</h2><p>首先查看以前的版本</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">log</span></span><br></pre></td></tr></table></figure>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210224162821.png" alt="image-20210224162821710" style="zoom:50%;" />
-
-<ol>
-<li><p>HEAD为指针,指向当前版本的master分支以及对应远端的master分支(origin默认对应远端仓库),git是通过HEAD来实现版本的切换</p>
-</li>
-<li><p>从<strong>2.2 git基本命令</strong>可知,一共提交了两次,展示结果中,git是按commit时间从近到远排列的</p>
-</li>
-</ol>
-<p>如果我们想回退到前一个版本,我们可以输入以下内容回到上个版本,其中一个==^==,是回退一个版本</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git reset --hard HEAD^</span><br></pre></td></tr></table></figure>
-<p>如果回退十个版本,写十个==^==明显是不现实的,所以可以写成==HEAD~10==</p>
-<p>此时查看文本内容:</p>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210224172227.png" alt="image-20210224172227561" style="zoom: 50%;" />
-
-<p>发现已经回头到上一个版本了再查看日志</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">log</span></span><br></pre></td></tr></table></figure>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210224171711.png" alt="image-20210224171711768" style="zoom:50%;" />
-
-<p>发现最新版本已经不可查看了,那该如何回到最新版本呢,查看我们上上张图,发现commit后面会跟着一串码,而这个码就是我们的版本号,我们可以通过版本号使当前HEAD指针指向我们所需要的版本,版本号可不用写全,参考如下:</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git reset --hard 5cd0</span><br></pre></td></tr></table></figure>
-<p>这个方法也可以回滚到任一版本(只要你能记住版本号)此时再看日志</p>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210224172120.png" alt="image-20210224172120424" style="zoom: 50%;" />
-
-<p>发现最新版本又出现了,再看看文本内容</p>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210224172210.png" alt="image-20210224172210067" style="zoom:50%;" />
-
-<p>一切尽在掌握</p>
-<h2 id="3-2-命令汇总"><a href="#3-2-命令汇总" class="headerlink" title="3.2 命令汇总"></a>3.2 命令汇总</h2><p>查看commit记录: <code>git log</code></p>
-<p>查看缩略版commit记录: <code>git log --graph --pretty=oneline --abbrev-commit</code></p>
-<p>回退到上一个版本: <code>git reset --hard HEAD^</code></p>
-<p>回退到上n个版本: <code>git reset --hard HEAD~n</code></p>
-<p>回退到某个版本: <code>git reset --hard commit号</code></p>
-<h1 id="4-分支管理"><a href="#4-分支管理" class="headerlink" title="4 分支管理"></a>4 分支管理</h1><h2 id="4-1-分支介绍"><a href="#4-1-分支介绍" class="headerlink" title="4.1 分支介绍"></a>4.1 分支介绍</h2><p>如果是一个人开发也就算了,但是往往一个项目是一群人一起开发,如果某人开发一个功能预计开发两天,第一天只开发了百分之五十,然后上传代码,那别人调用代码库就有可能会出错,但是如果等全部代码完成后再上传,那每天工作的进度就不好统计了,于是分支也就应运而生了,每个人可以创建自己的分支,每天完成任务后往自己的分支里提交代码,最后再将自己分支与总分支代码进行合并</p>
-<p>==git建议在开发时尽可能的使用分支==</p>
-<h2 id="4-2-分支的创建与合并"><a href="#4-2-分支的创建与合并" class="headerlink" title="4.2 分支的创建与合并"></a>4.2 分支的创建与合并</h2><p>当git创建时,都会默认有一个分支,也就是master分支,根据版本回滚模块,我们知道分支是这样线性运作的:</p>
- <img src="https://gitee.com/bean-chan/images/raw/master/img/20210225141135.png" alt="image-20210225141135811" style="zoom:50%;" />
-
-<p>HEAD指针指向当前分支,当前分支(master)指向某一个版本(这里是版本二)</p>
-<p>随着我们不断地<strong>commit</strong>,慢慢会变成这样</p>
- <img src="https://gitee.com/bean-chan/images/raw/master/img/20210225141356.png" alt="image-20210225141356928" style="zoom:50%;" />
-
-
-
-<p>当开发到版本二的时候我们可以创建一个个人的dev分支</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git checkout -b dev</span><br></pre></td></tr></table></figure>
-<p>上面等同于</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git branch dev</span><br><span class="line">git checkout dev</span><br></pre></td></tr></table></figure>
-<p>等同于</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git switch -c dev</span><br></pre></td></tr></table></figure>
-<p>该命令为创建一个叫dev的分支,并将HEAD指针指向该分支,具体情况如下图</p>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210225141619.png" alt="image-20210225141619693" style="zoom:50%;" />
-
-<p>通过<code>git branch</code>查看一下现在有哪些分支了</p>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225144211.png" alt="image-20210225144211601"></p>
-<p>一共有两个分支,*号表示当前所在分支</p>
-<p>之后在dev分支上上完成后续开发</p>
-<p>我们再在hello.md里添加一行,再add+commit</p>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225144529.png" alt="image-20210225144529126"></p>
-<p>此时我们的版本库变成了这样(一共提交了三次)</p>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210225144622.png" alt="image-20210225144622891" style="zoom:50%;" />
-
-<p>此时我们的master分支还停留在版本二上</p>
-<p>如果想把dev分支上的内容整合到master分支上,那么我们需要做以下两件事:</p>
-<p>第一步: 通过<code>git checkout master</code>切换到master分支,注意,因为checkout会与前面说的撤销操作混淆,所以新版的git可通过<code>git switch 分支名</code>来进行分支切换</p>
-<p>查看此刻分支与文件内容</p>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225145201.png" alt="image-20210225145201548"></p>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225145227.png" alt="image-20210225145227206"></p>
-<p>此时内容还停留在前一个版本上</p>
-<p>第二步: 在通过<code>git merge 分支名</code>来把dev的内容整合到master上,在查看内容</p>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225145404.png" alt="image-20210225145404615"></p>
-<p>现在就变成了这个情况</p>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210225151026.png" alt="image-20210225151026056" style="zoom:50%;" />
-
-
-
-<p>然后我们在卸磨杀驴,删除掉dev分支,具体命令为<code>git branch -d &lt;name&gt;</code></p>
-<p>在查看此时有哪些分支</p>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225145740.png" alt="image-20210225145740919"></p>
-<h2 id="4-3-合并冲突"><a href="#4-3-合并冲突" class="headerlink" title="4.3 合并冲突"></a>4.3 合并冲突</h2><p>项目不是一个人完成的,而针对同一个文件,就有可能出现两个人同时做出了修改,那么到合并的时候,git到底听谁的?谁来合并谁?</p>
-<p>秉承着人人平等的思想,git有着自己的解决冲突的方式</p>
-<p>首先我们先来制造点冲突</p>
-<p>当前我们在master分支上,我们修改一下hello.md</p>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225152852.png" alt="image-20210225152852663"></p>
-<p>add+commit后再切换到dev分支修改一下hello.md(我重情重义,决定创建回来了)</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git add . </span><br><span class="line">git commit -m <span class="string">&#x27;又加一行&#x27;</span></span><br><span class="line">git switch -c dev</span><br></pre></td></tr></table></figure>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225153338.png" alt="image-20210225153338481"></p>
-<p>此时情况为</p>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210225153855.png" alt="image-20210225153855648" style="zoom:50%;" />
-
-<p>产生了两条分支,我们再回到master分支,用 <code>git merge dev</code> 对dev分支进行汇总</p>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225154455.png" alt="image-20210225154455792"></p>
-<p>当前我们已经创建好冲突了,那么该如何解决呢</p>
-<p>上图已经提示,冲突再hello.md这个文件里,那我们进入文件,发现此时文件已经变为</p>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225154608.png" alt="image-20210225154608307"></p>
-<p>==&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;== 表示当前分支也就是master</p>
-<p>======================================== 表示为分隔符</p>
-<p>==&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;== 表示为另一分支也就是dev</p>
-<p>此时我们可对冲突内容进行修改</p>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225154913.png" alt="image-20210225154913493"></p>
-<p>在进行提交操作</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">&#x27;冲突已解决&#x27;</span></span><br><span class="line">git merge dev</span><br></pre></td></tr></table></figure>
-<p>此时分支情况为</p>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210225155326.png" style="zoom:50%;" />
-
-<p>dev停留在了原处,master已经指向版本五了,此时已经完成冲突的解决了,再再次卸磨杀驴<code>git branch -d dev</code></p>
-<p>(为了后续分支策略图好看一点)</p>
-<h2 id="4-4-分支策略"><a href="#4-4-分支策略" class="headerlink" title="4.4 分支策略"></a>4.4 分支策略</h2><p>默认情况下git在合并时会采用==Fast forward==的分支管理策略,像在将分支之前所有的合并方式,都是==Fast forward==,这样做的后果就是,省略了合并步骤</p>
-<p>比如版本一到版本二,版本二到版本三就是用Fast forward,这样做的话,优点是简单明了,而缺点就是看不出合并痕迹</p>
-<p>打个比方,版本四到版本五我们知道提交了新的commit,但是我们不知道是不是从其他分支merge后得到的结果,还是自己修改后add+commit得到的结果</p>
-<p>(上图版本四到版本五是我根据逻辑画出来的,git在展示时,还是按照版本一到版本二那样展示可输入<code>git log</code>查看)</p>
-<p>而为了能看出合并痕迹,我们可以在merge时使用 ==–no-ff==参数</p>
-<p>做个简单的对照测试</p>
-<p>我们创建并切换到dev分支,随便写一行</p>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225162240.png" alt="image-20210225162240887"></p>
-<p>add+commit后再切换回master,调用如下命令:</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git merge</span><br><span class="line">git <span class="built_in">log</span> --graph --pretty=oneline --abbrev-commit</span><br></pre></td></tr></table></figure>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225164855.png" alt="image-20210225164445547"></p>
-<p>上图只是出现新的commit,但是不知道是否进行了合并操作</p>
-<p>同样步骤只是命令不同,做个对照实验:</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git merge  --no-ff -m <span class="string">&#x27;不用Fast forward&#x27;</span> dev</span><br><span class="line">git <span class="built_in">log</span> --graph --pretty=oneline --abbrev-commit</span><br></pre></td></tr></table></figure>
-<p>因为本次merge会创建一个新分支,所以加一个-m参数</p>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225163816.png" alt="image-20210225163816768"></p>
-<p>可以看出我们在ed6aa53到b152f62时处有一个合并操作(红色与绿色分支合并)</p>
-<h2 id="4-5-保存工作区"><a href="#4-5-保存工作区" class="headerlink" title="4.5 保存工作区"></a>4.5 保存工作区</h2><p>当前正在dev分支上写代码,突然来了个bug – ==bug01==,正常情况下会在主分支基础上创建一个bug01的分支然后改bug,但是当前分支上的功能还没实现完,工作区内的文件还没法提交,所幸git提供了隐藏当前工作区修改内容的功能,在命令行输入以下命令</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git stash</span><br><span class="line">git status</span><br></pre></td></tr></table></figure>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225171809.png" alt="image-20210225171809382"></p>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225171819.png" alt="image-20210225171819689"></p>
-<p>发现dev分支上的内容已经给保存起来了,当前工作区已经回到了初始状态</p>
-<p>当我们修改完bug后,需要让工作区回退到一开始的状态,我们可以输入<code>git stash list</code>查看隐藏起来的内容</p>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225172113.png" alt="image-20210225172113449"></p>
-<p>此刻只有**stash@{0}**这一个stash,你可以输入多次<code>git stash</code>来保存多个stash</p>
-<p>此时我们只是查到了有一个stash,而恢复stash的方式有两个:</p>
-<ol>
-<li><p>先恢复stash,再手动删除stash</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git stash apply stash&#123;0&#125;</span><br><span class="line">git stash drop stash&#123;0&#125;</span><br></pre></td></tr></table></figure></li>
-<li><p>恢复并删除stash</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git stash pop</span><br></pre></td></tr></table></figure>
-<p>仔细想一想,如果有master上有bug的话,那建立在master分支只上的dev分支不也有相同的bug,那再同样的操作做一遍不就显得很麻烦了,git提供一个命令<code>git cherry-pick 版本号</code>可以克隆一个特定的commit到当前分支,这样就不需要再在当前分支修改一遍bug了</p>
-</li>
-</ol>
-<h2 id="4-6-多人协作"><a href="#4-6-多人协作" class="headerlink" title="4.6 多人协作"></a>4.6 多人协作</h2><p>一般公司远端仓库有一个master分支和若干个dev分支,我们完成任务后上传时,可以通过<code>git push origin 分支名</code>上传到指定分支,但并不是所有分支都需要上传到远端仓库的,比如改bug分支(你能告诉你老板你写了多少bug吗)</p>
-<p>当你首次克隆代码到本地时,默认只有master分支,你可以创建本地dev分支,并且绑定到远端dev分支上</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git checkout -b dev origin/dev</span><br></pre></td></tr></table></figure>
-<p>当你完成commit,打算push到dev分支上时,git可能会提示有冲突</p>
-<p>解决方法:</p>
-<p>使用<code>git pull</code>先将代码拉取到本地,合并后再推送,如果<code>git pull</code>也失败了,说明你没有将本地dev与远端dev做关联,可以使用以下命令做关联后,再推送</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git branch --set-upstream-to=origin/dev dev</span><br></pre></td></tr></table></figure>
-<p>解决冲突方式参考4.3</p>
-<h2 id="4-7-Rebase"><a href="#4-7-Rebase" class="headerlink" title="4.7 Rebase"></a>4.7 Rebase</h2><p>主要作用有二:</p>
-<ol>
-<li>分支合并</li>
-<li>commit改写</li>
-</ol>
-<h3 id="4-7-1-分支合并"><a href="#4-7-1-分支合并" class="headerlink" title="4.7.1 分支合并"></a>4.7.1 分支合并</h3><p>首先我们目前项目状态是这样的</p>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210226155045.png" alt="image-20210226155045018" style="zoom:50%;" />
-
-<p>当前HEAD指针指向master分支,且master分支指向当前版本,我们在这个版本的基础上,创建一个dev分支</p>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210226155621.png" alt="image-20210226155621661" style="zoom:50%;" />
-
-<p>而后我们在master分支上前进一个版本</p>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210226162745.png" alt="image-20210226162745375" style="zoom:50%;" />
-
-<p>dev分支再<code>git merge master</code>也前进了一个版本,那结果就变成这样</p>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210226162127.png" alt="image-20210226162127610" style="zoom:50%;" />
-
-<p>dev是从master分支分出来的,随后又同步了master分支的改动,可以说dev版本是没什么必要的</p>
-<p>为了整理分支</p>
-<p>首先先回到dev分支merge前的状态,也就是</p>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210226162845.png" alt="image-20210226162845516" style="zoom:50%;" />
-
-<p>然后再在dev分支上使用<code>git rebase master</code>,此刻就变成了</p>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210226162402.png" alt="image-20210226162401971" style="zoom:50%;" />
-
-
-
-<p>对比rebase与merge的结果可以发现简洁了不少</p>
-<h3 id="4-7-2-commit次数改写"><a href="#4-7-2-commit次数改写" class="headerlink" title="4.7.2 commit次数改写"></a>4.7.2 commit次数改写</h3><p>当前项目环境如下</p>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210226162402.png" alt="image-20210226162401971" style="zoom:50%;" />
-
-
-
-<p>此刻dev再向前commit3次,然后这3次commit都是修改了同样的一个接口</p>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210226171438.png" alt="image-20210226171438689"></p>
-<p>因为修改的是相同的内容所以说: <strong>master版本</strong> -&gt; <strong>版本A</strong> -&gt; <strong>版本B</strong>- &gt; <strong>版本C</strong></p>
-<p>其实等价于  <strong>master版本</strong> -&gt; <strong>版本C</strong></p>
-<p>如果3次还好,如果是30次,那整个分枝树就会特别的冗长</p>
-<p>做一个测试,我将hello.md添加了3次内容,并且commit了3次</p>
-<p>此时我们可以通过<code>git rebase -i HEAD~n</code>来指定合并多少次commit</p>
-<p><code>git log</code>查看commit记录</p>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210226175703.png" alt="image-20210226175703684" style="zoom:50%;" />
-
-<p>我们将最近三个版本合并,则可以输入</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git rebase -i HEAD~3</span><br></pre></td></tr></table></figure>
-<p>-i是进入交互模式,页面展示内容如下:</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">1 p f07fc36 A</span><br><span class="line"> 2 s 8e65a18 B</span><br><span class="line"> 3 s bd26f6f C</span><br><span class="line"> 4</span><br><span class="line"> 5 <span class="comment"># Rebase 044f0cc..14c0a82 onto 044f0cc (3 commands)</span></span><br><span class="line"> 6 <span class="comment">#</span></span><br><span class="line"> 7 <span class="comment"># Commands:</span></span><br><span class="line"> 8 <span class="comment"># p, pick &lt;commit&gt; = use commit</span></span><br><span class="line"> 9 <span class="comment"># r, reword &lt;commit&gt; = use commit, but edit the commit message</span></span><br><span class="line">10 <span class="comment"># e, edit &lt;commit&gt; = use commit, but stop for amending</span></span><br><span class="line">11 <span class="comment"># s, squash &lt;commit&gt; = use commit, but meld into previous commit</span></span><br><span class="line">12 <span class="comment"># f, fixup &lt;commit&gt; = like &quot;squash&quot;, but discard this commit&#x27;s log message</span></span><br><span class="line">13 <span class="comment"># x, exec &lt;command&gt; = run command (the rest of the line) using shell</span></span><br><span class="line">14 <span class="comment"># b, break = stop here (continue rebase later with &#x27;git rebase --continue&#x27;)</span></span><br><span class="line">15 <span class="comment"># d, drop &lt;commit&gt; = remove commit</span></span><br><span class="line">16 <span class="comment"># l, label &lt;label&gt; = label current HEAD with a name</span></span><br><span class="line">17 <span class="comment"># t, reset &lt;label&gt; = reset HEAD to a label</span></span><br><span class="line">18 <span class="comment"># m, merge [-C &lt;commit&gt; | -c &lt;commit&gt;] &lt;label&gt; [# &lt;oneline&gt;]</span></span><br><span class="line">19 <span class="comment"># .       create a merge commit using the original merge commit&#x27;s</span></span><br><span class="line">20 <span class="comment"># .       message (or the oneline, if no original merge commit was</span></span><br><span class="line">21 <span class="comment"># .       specified). Use -c &lt;commit&gt; to reword the commit message.</span></span><br><span class="line">22 <span class="comment">#</span></span><br><span class="line">23 <span class="comment"># These lines can be re-ordered; they are executed from top to bottom.</span></span><br><span class="line">24 <span class="comment">#</span></span><br><span class="line">25 <span class="comment"># If you remove a line here THAT COMMIT WILL BE LOST.</span></span><br><span class="line">26 <span class="comment">#</span></span><br><span class="line">27 <span class="comment"># However, if you remove everything, the rebase will be aborted.</span></span><br></pre></td></tr></table></figure>
-<p>注:</p>
-<ol>
-<li>第一行到第三行为主要操作内容,从左至右分别是==命令==-&gt;  ==commit号== -&gt; ==版本备注==</li>
-<li>后面都是备注,第七行到第十八行为命令说明</li>
-<li>我们选择需要执行的命令,我们选择了s与p,s的内容为合并前一个内容并提交</li>
-<li>保存提交后可能会报错<code>error: cannot &#39;squash&#39; without a previous commit</code>,原因是不能合并已提交到远端仓库的版本</li>
-</ol>
-<p>此时会保存退出后会展示以下内容</p>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210226182651.png" alt="image-20210226182651663" style="zoom:25%;" />
-
-<p>再次输入<code>git log</code></p>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210226182754.png" alt="image-20210226182754589" style="zoom:50%;" />
-
-<p>发现ABC三个版本已经合并为一个了</p>
-<h2 id="4-8-命令汇总"><a href="#4-8-命令汇总" class="headerlink" title="4.8 命令汇总"></a>4.8 命令汇总</h2><p>查看分支: <code>git branch</code></p>
-<p>创建分支: <code>git branch 分支名</code> 或 <code>git checkout 分支名</code></p>
-<p>删除分支: <code>git branch -d 分支名</code></p>
-<p>强制删除分支(用于分支代码未整合到主分支时使用): <code>git branch -D 分支名</code></p>
-<p>切换分支: <code>git checkout 分支名</code> 或 <code>git switch 分支名</code></p>
-<p>创建并切换分支：<code>git checkout -b 分支名</code> 或 <code>git switch -c 分支名</code></p>
-<p>合并某分支内容到当前分支: <code>git merge 分支名</code> 或 <code>git rebase 分支名</code></p>
-<p>修改commit次数: <code>git rebase -i HEAD~n</code></p>
-<p>保存工作区: <code>git stash</code></p>
-<p>查看stash: <code>git stash list</code></p>
-<p>恢复stash: <code>git stash apply stash&#123;0&#125;</code></p>
-<p>删除stash: <code>git stash drop stash&#123;0&#125;</code></p>
-<p>恢复并删除stash: <code>git stash pop</code></p>
-<p>将将其他分支修改内容同步到本分支: <code>git cherry-pick 版本号</code></p>
-<p>本地分支关联远程分支: <code>git branch --set-upstream-to=origin/dev dev</code></p>
-<h1 id="5-标签管理"><a href="#5-标签管理" class="headerlink" title="5 标签管理"></a>5 标签管理</h1><h2 id="5-1-标签的创建"><a href="#5-1-标签的创建" class="headerlink" title="5.1 标签的创建"></a>5.1 标签的创建</h2><p>当我们提交一次commit后,会生成相应的commit号,不过都是一些无规则的数字字母,不方便记忆和查找,就比如我想回滚到某一个版本,我需要先<code>git log</code>查卡该版本的commit号,之后再通过<code>git reset --hard 版本号</code>回滚回去,随着commit次数的增多,查找难度也会越来越大,这个时候,为了能够方便记忆与查找,出现了一种打标签的技术</p>
-<p>下图是最新的一次提交记录</p>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210301112640.png" alt="image-20210301112640708" style="zoom:50%;" />
-
-<p>打标签还是十分简单的,我们可以通过下述方式给最新的版本打上标签</p>
-<ol>
-<li>切换到需要打标签的分支上</li>
-<li>使用命令<code>git tag 标签名</code></li>
-<li>打完标签后可以通过<code>git tag</code>来查看所有标签</li>
-</ol>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210301113229.png" alt="image-20210301113229558"></p>
-<p>但这只是给最新版打标签,如果我想要给上周的版本打标签得按照以下步骤:</p>
-<ol>
-<li><code>git log --pretty=oneline --abbrev-commit</code> 查出版本号</li>
-<li><code>git tag 版本号 commit 号</code> 给指定commit号的版本打上标签</li>
-</ol>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210301113755.png" alt="image-20210301113755640" style="zoom:50%;" />
-
-<p>注意项:标签排序是按照字符串顺序排序,与版本先后顺序无关</p>
-<p>还可以通过<code>git tag -a 标签名 -m &quot;备注内容&quot; commit号</code>给标签打上备注</p>
-<p>其中 ==-a==指定标签名 ==-m==指定备注内容,commit号跟在最后 <img src="https://gitee.com/bean-chan/images/raw/master/img/20210301114148.png" alt="image-20210301114148665"></p>
-<p>还可以通过<code>git show 标签名</code>来查看具体内容</p>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210301114236.png" alt="image-20210301114236681" style="zoom:50%;" />
-
-<h2 id="5-2-标签推送"><a href="#5-2-标签推送" class="headerlink" title="5.2 标签推送"></a>5.2 标签推送</h2><p>当标签创建完成后,可以通过<code>git push origin 标签名</code>将单个标签上传到远端仓库</p>
-<p>也可以通过 <code>git push origin --tags</code>将全部标签上传</p>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210301142141.png" alt="image-20210301142141496"></p>
-<h2 id="5-3-标签的删除"><a href="#5-3-标签的删除" class="headerlink" title="5.3 标签的删除"></a>5.3 标签的删除</h2><p>当然,人有失手,马有失蹄,如果不小心打错标签了也是可以删除的</p>
-<p>如果只是在本地,还没push到远端仓库,那可以使用<code>git tag -d 标签名</code>来删除标签</p>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210301142215.png" alt="image-20210301142215448"></p>
-<p>如果还将标签推送到远端仓库的话,还需要使用<code>git push :refs/tags/标签名</code>来删除</p>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210301142332.png" alt="image-20210301142331928"></p>
-<h2 id="5-4-命令汇总"><a href="#5-4-命令汇总" class="headerlink" title="5.4 命令汇总"></a>5.4 命令汇总</h2><p>查看所有标签: <code>git tag</code></p>
-<p>给最新版本打标签: <code>git tag 标签名</code></p>
-<p>给指定版本打标签: <code>git tag 版本号 commit 号</code></p>
-<p>查看标签详情: <code>git show 标签名</code></p>
-<p>推送单个标签: <code>git push origin 标签名</code></p>
-<p>推送所有标签: <code>git push origin --tags</code></p>
-<p>删除本地仓库的标签: <code>git tag -d 标签名</code></p>
-<p>删除远端仓库的标签: <code>git push :refs/tags/标签名</code></p>
-]]></content>
-      <categories>
-        <category>运维</category>
-      </categories>
-      <tags>
-        <tag>git</tag>
-        <tag>版本控制</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Solr</title>
-    <url>/2021/02/07/Solr/</url>
-    <content><![CDATA[<h1 id="1-Solr基础介绍"><a href="#1-Solr基础介绍" class="headerlink" title="1 Solr基础介绍"></a>1 Solr基础介绍</h1><h2 id="1-1-什么是Solr"><a href="#1-1-什么是Solr" class="headerlink" title="1.1 什么是Solr"></a>1.1 什么是Solr</h2><p>Solr是Apache开源的、基于Lucene的Java Api的封装,是一款成熟稳定的搜索引擎。</p>
-<h2 id="1-2-Solr的优缺点"><a href="#1-2-Solr的优缺点" class="headerlink" title="1.2 Solr的优缺点"></a>1.2 Solr的优缺点</h2><p>优点: </p>
-<ol>
-<li><p>大量的用户群体与成熟的社区</p>
-</li>
-<li><p>支持多种格式索引,例如HTML、CSV、JSON、XML等</p>
-</li>
-<li><p>诞生于与2004年,多年的沉淀使得Solr成熟、稳定</p>
-</li>
-<li><p><strong>如果不考虑建索引的同时进行查询,查询速度更快</strong>,像我目前接手的法律查询软件,法律的录入不是十分频繁,那么用Solr就会比较合适</p>
-</li>
-</ol>
-<p>缺点:</p>
-<ol>
-<li>在建立索引时,搜索效率不高,例如淘宝热卖那种需要实时更新索引的项目,Solr就显得有点力不从心了</li>
-</ol>
-<h2 id="1-3-使用版本"><a href="#1-3-使用版本" class="headerlink" title="1.3 使用版本"></a>1.3 使用版本</h2><ol>
-<li>JDK-1.8</li>
-<li>Solr-7.7.3(未使用最新版是因为公司用的不是最新版,然后核心知识都大同小异,后续会再看8.x有什么更新)</li>
-<li>ik分词器-7.x</li>
-</ol>
-<h2 id="1-4-安装"><a href="#1-4-安装" class="headerlink" title="1.4 安装"></a>1.4 安装</h2><ol>
-<li><p>下载安装包 <a href="https://mirrors.bfsu.edu.cn/apache/lucene/solr/7.7.3/solr-7.7.3.tgz"><strong>https://mirrors.bfsu.edu.cn/apache/lucene/solr/7.7.3/solr-7.7.3.tgz</strong></a></p>
-</li>
-<li><p>到安装路径下解压 tar -zxvf solr-7.7.3.tgz(tgz相当于是tar.gz)</p>
-</li>
-</ol>
-<h2 id="1-5-目录布局"><a href="#1-5-目录布局" class="headerlink" title="1.5 目录布局"></a>1.5 目录布局</h2><table>
-<thead>
-<tr>
-<th align="center">目录</th>
-<th align="center">介绍</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">bin</td>
-<td align="center">包含启动等一些重要脚本</td>
-</tr>
-<tr>
-<td align="center">contrib</td>
-<td align="center">Solr的附加插件</td>
-</tr>
-<tr>
-<td align="center">dist</td>
-<td align="center">Solr的jar包</td>
-</tr>
-<tr>
-<td align="center">docs</td>
-<td align="center">Solr的在线文档</td>
-</tr>
-<tr>
-<td align="center">example</td>
-<td align="center">演示案例</td>
-</tr>
-<tr>
-<td align="center">licenses</td>
-<td align="center">Solr使用的第三方库的许可证</td>
-</tr>
-<tr>
-<td align="center">server</td>
-<td align="center">Solr的核心应用,包含管理UI界面等</td>
-</tr>
-</tbody></table>
-<h2 id="1-6-常用命令"><a href="#1-6-常用命令" class="headerlink" title="1.6 常用命令"></a>1.6 常用命令</h2><p> bin/solr start  启动(macOS与Linux均以下述方式启动,Windows需要在加个.cmd如:<strong>bin/solr.cmd start</strong>)</p>
-<p>bin/solr stop 关闭</p>
-<p>bin/solr restart 重启</p>
-<p>bin/solr status 查看状态</p>
-<p>Solr有单机运行与集群运行两种方式,本文主要以单机运行为主了,默认启动端口为8983,若想指定端口可以在后面加上 -p 参数,如 </p>
-<ul>
-<li>bin/solr start -p 端口号 </li>
-<li>bin/solr restart  -p 端口号 </li>
-</ul>
-<p>此时可以在浏览器输入 <a href="http://localhost:8983/">http://localhost:8983/</a> 来打开admin UI界面:</p>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210207140119.png" alt="WechatIMG3302"></p>
-<h1 id="2-core配置"><a href="#2-core配置" class="headerlink" title="2 core配置"></a>2 core配置</h1><h2 id="2-1-什么是core"><a href="#2-1-什么是core" class="headerlink" title="2.1 什么是core"></a>2.1 什么是core</h2><p>是一个Lucene实例,其中包含Solr所有的配置文件,我们需要创建一个core来完成索引与分析等操作</p>
-<p>一个Solr可以有多个core,如果需要core之间也是可以互相通信的</p>
-<h2 id="2-2-core的创建"><a href="#2-2-core的创建" class="headerlink" title="2.2 core的创建"></a>2.2 core的创建</h2><ol>
-<li><p>create命令创建</p>
-<p> ./solr create -c  new_core1</p>
-</li>
-<li><p>admin UI上直接创建</p>
-<p>   a. 此步执行之前,需要先将solr的默认配置文件夹复制到solr/server/solr/下,并重命名(下例中取名为new_core2),参考命令: cp -r ~/Library/solr-7.7.3/server/solr/configsets/_default/conf/  ~/Library/solr-7.7.3/server/solr/new_core2/<br>   b. 重启<br>   c. <img src="https://gitee.com/bean-chan/images/raw/master/img/20210207155125.png" alt="image-20210207155125070"></p>
-</li>
-</ol>
-<p>注意项:</p>
-<ol>
-<li>用第一种方法创建,会自动在server/solr下创建一个名为new_core1的core文件夹,里面有着所需的配置文件(server/solr也称solr_home)</li>
-<li>第二种方式创建相当于我们手动创建了core文件夹</li>
-<li>core还有其他创建方式,但这两种比较常见</li>
-</ol>
-<h2 id="2-3-core的删除"><a href="#2-3-core的删除" class="headerlink" title="2.3 core的删除"></a>2.3 core的删除</h2><p>​    ./solr delete -c my_core</p>
-<h1 id="3-schema配置"><a href="#3-schema配置" class="headerlink" title="3 schema配置"></a>3 schema配置</h1><h2 id="3-1-什么是schema"><a href="#3-1-什么是schema" class="headerlink" title="3.1 什么是schema"></a>3.1 什么是schema</h2><p>在讲schema之前需要先了解一个概念   <strong>index(索引)</strong></p>
-<p>这里的索引和数据库中的索引不同,可以简单理解为Solr中的一张表,与Elasticsearch中的索引概念类似,举个例子:</p>
-<p>我有学生表和课程表,我有一条很频繁的查询是某某学生某某课程考了多少分,那我就需要从数据库把这两张表的内容查询出来处理完后再传回客户端,而solr会把这两张表中需要的字段提取出来,存放到solr中去,而存放的数据结构就是索引,这相当于是数据库里的一张表</p>
-<p>而schema就是Solr如何建立索引的说明书,例如字段的数据类型以及分词方式等</p>
-<h2 id="3-2-schema配置"><a href="#3-2-schema配置" class="headerlink" title="3.2 schema配置"></a>3.2 schema配置</h2><p>在Solr5.5之前的配置文件叫schema.xml,这些需要手动配置,密密麻麻的XML看着还挺头疼的,之后出现了的配置文件叫做managed-schema,他的配置方式是使用schemaAPI来实时配置,并且配置之后无须重启即可生效,更加适合生产环境,也更好操作</p>
-<p>常见的配置内容:</p>
-<ol>
-<li><p>field:  相当于Java类的属性字段,可以给他配上其他属性,比如是否需要显示,是否可以用做索引字段等,有明确的定义的普通字段<br> <img src="https://gitee.com/bean-chan/images/raw/master/img/20210207171043.png" alt="image-20210207171043365"><br> a. name: 查询时字段<br> b. type: 字段类型<br> c. indexed: 是否为索引字段<br> d. stored: 是否存储<br> e. multiValued: 是否允许多值</p>
-</li>
-<li><p>dynamicField: 与field类似,是未明确定义名字的字段,常用属性与field了类似</p>
-<p> <img src="https://gitee.com/bean-chan/images/raw/master/img/20210207172527.png" alt="image-20210207172527096"></p>
-</li>
-<li><p>copyField: </p>
-<ul>
-<li>可以将field字段拷贝到其他字段</li>
-<li>可以将dynamicField字段拷贝到其他字段</li>
-<li>可以将多个field字段拷贝到多值字段</li>
-<li>可以将多个dynamicField字段拷贝到多值字段</li>
-<li><img src="https://gitee.com/bean-chan/images/raw/master/img/20210207172637.png" alt="image-20210207172637955"></li>
-</ul>
-</li>
-<li><p>fieldType: 一般用来定义分词器,然后让field/dynamicField通过type引用</p>
-<p> <img src="https://gitee.com/bean-chan/images/raw/master/img/20210207172800.png" alt="image-20210207172800274"></p>
-</li>
-<li><p>analyzer: fieldType的子属性,常用于设置分词器</p>
-</li>
-</ol>
-<h2 id="3-3-ik分词器配置"><a href="#3-3-ik分词器配置" class="headerlink" title="3.3 ik分词器配置"></a>3.3 ik分词器配置</h2><p>步骤:</p>
-<ol>
-<li><p>下载jar包:<a href="https://search.maven.org/search?q=com.github.magese">https://search.maven.org/search?q=com.github.magese</a>    <img src="https://gitee.com/bean-chan/images/raw/master/img/20210219085443.png" alt="image-20210219085443741"></p>
-</li>
-<li><p>把jar包放置到(以我的为例)solr-7.7.3/server/solr-webapp/webapp/WEB-INF/lib下</p>
-</li>
-<li><p>到solr-7.7.3/server/solr/new_core/managed-schema下最底下粘贴以下内容:</p>
- <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- ik分词器 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">fieldType</span> <span class="attr">name</span>=<span class="string">&quot;text_ik&quot;</span> <span class="attr">class</span>=<span class="string">&quot;solr.TextField&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">analyzer</span> <span class="attr">type</span>=<span class="string">&quot;index&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tokenizer</span> <span class="attr">class</span>=<span class="string">&quot;org.wltea.analyzer.lucene.IKTokenizerFactory&quot;</span> <span class="attr">useSmart</span>=<span class="string">&quot;false&quot;</span> <span class="attr">conf</span>=<span class="string">&quot;ik.conf&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">&quot;solr.LowerCaseFilterFactory&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">analyzer</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">analyzer</span> <span class="attr">type</span>=<span class="string">&quot;query&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tokenizer</span> <span class="attr">class</span>=<span class="string">&quot;org.wltea.analyzer.lucene.IKTokenizerFactory&quot;</span> <span class="attr">useSmart</span>=<span class="string">&quot;true&quot;</span> <span class="attr">conf</span>=<span class="string">&quot;ik.conf&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">&quot;solr.LowerCaseFilterFactory&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">analyzer</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">fieldType</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
-<li><p>重启Solr</p>
-</li>
-<li><p>测试分词器    <img src="https://gitee.com/bean-chan/images/raw/master/img/20210219090639.png" alt="image-20210219090639925"></p>
-<p>Field Value(Index)与Field Value(Query)是Solr在索引时与在查询时会怎么处理数据,可以根据这两个来帮助设计分析器、分词器和过滤器(本文采用了ik分词器,上述三者ik分词器已经自己设计好了,关于这三者具体内容见下文)</p>
-</li>
-</ol>
-<h1 id="4-分析器、分词器、过滤器"><a href="#4-分析器、分词器、过滤器" class="headerlink" title="4 分析器、分词器、过滤器"></a>4 分析器、分词器、过滤器</h1><p>Solr主要通过分析器(Analyzer)、标记器(Tokenizers)、过滤器(Filter)来分解和处理文本。</p>
-<p>在介绍之前,先讲述一个概念文档(Document),之前说index相当于数据库里的一张表,而文档就可以理解为表里的一条数据。</p>
-<h2 id="4-1-概述"><a href="#4-1-概述" class="headerlink" title="4.1 概述"></a>4.1 概述</h2><p>当对一个文档进行索引时,每个field的数据都会经过分析,分词过滤等操作,例如,将一句话分词若干个单词和词组,然后去掉空格与语气词等多余的词以及进行同义词替换等,例如:</p>
-<p>what a beautiful girl,在这里what和a这样的词以及空格会被去掉,最终的处理结果为beautiful和girl或者是beautiful girl</p>
-<p>除了索引会做这些工作,查询时也会做这些工作,并且为了保证索引与查询可以正确匹配,二者的处理规则往往也是相同的,例如:</p>
-<p>ABCD索引分词为AB CD,查询时分词为A BCD,这样匹配的结果就为0</p>
-<p>analyzer包含着两个部分,Tokenizers与Filter。Tokenizers就是将句子拆分成单个词,而Filter就是对分词的结果中比如中文里的”的”、”呀”、”啊”,英文里的”am”、”is”、”are”这类对句子主体意思关系不大的词去掉</p>
-<p>solr有自带了一些分词器,如果你需要使用中文分词器就需要自己配置,参考3.3</p>
-<h2 id="4-2-使用方式"><a href="#4-2-使用方式" class="headerlink" title="4.2 使用方式"></a>4.2 使用方式</h2><p>analyzer为fieldType下的一个子元素,主要作用是检查字段的文本并生成令牌流</p>
-<p>最简单的使用方式如下:</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">fieldType</span> <span class="attr">name</span>=<span class="string">&quot;nametext&quot;</span> <span class="attr">class</span>=<span class="string">&quot;solr.TextField&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">analyzer</span> <span class="attr">class</span>=<span class="string">&quot;org.apache.lucene.analysis.core.WhitespaceAnalyzer&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">fieldType</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>其中analyzer通过一个全限定Java类名引入,且命名的类必须继承自org.apache.lucene.analysis.Analyzer</p>
-<p>对于简单的文章,这样一个分析器类就足够完成任务,但是通常情况下是需要更为复杂的分析</p>
-<p>Solr提供了大量的Tokenizers与Filter来协助分析,例如:</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">fieldType</span> <span class="attr">name</span>=<span class="string">&quot;nametext&quot;</span> <span class="attr">class</span>=<span class="string">&quot;solr.TextField&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">analyzer</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">tokenizer</span> <span class="attr">class</span>=<span class="string">&quot;solr.StandardTokenizerFactory&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">&quot;solr.StandardFilterFactory&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">&quot;solr.LowerCaseFilterFactory&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">&quot;solr.StopFilterFactory&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">&quot;solr.EnglishPorterFilterFactory&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">analyzer</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">fieldType</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>org.apache.solr.analysis 包中的类可以在这里用简写的 solr. 前缀来代替</p>
-<p>上述中,analyzer未使用指定的分析器类,而用许多类组合到一起,成为该字段的分析器,任何使用”nametext”fieldType字段进行索引或查询时,都会经过从StandardTokenizerFactory到EnglishPorterFilterFactory的过滤</p>
-<p>分析发生在两种情况下:分别是索引时与查询时</p>
-<p>在索引时:当一个字段被创建时，分析得到的令牌流将被添加到一个索引中，并为该字段定义一组术语（包括位置、大小等）。</p>
-<p>在查询时:分析正在搜索的值，并将结果的条件与存储在字段索引中的条件进行匹配。</p>
-<p>如果想要在不同阶段使用不同的分析器,可以指定type属性:如下:</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">fieldType</span> <span class="attr">name</span>=<span class="string">&quot;nametext&quot;</span> <span class="attr">class</span>=<span class="string">&quot;solr.TextField&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">analyzer</span> <span class="attr">type</span>=<span class="string">&quot;index&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">tokenizer</span> <span class="attr">class</span>=<span class="string">&quot;solr.StandardTokenizerFactory&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">&quot;solr.LowerCaseFilterFactory&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">&quot;solr.KeepWordFilterFactory&quot;</span> <span class="attr">words</span>=<span class="string">&quot;keepwords.txt&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">&quot;solr.SynonymFilterFactory&quot;</span> <span class="attr">synonyms</span>=<span class="string">&quot;syns.txt&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">analyzer</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">analyzer</span> <span class="attr">type</span>=<span class="string">&quot;query&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">tokenizer</span> <span class="attr">class</span>=<span class="string">&quot;solr.StandardTokenizerFactory&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">&quot;solr.LowerCaseFilterFactory&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">analyzer</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">fieldType</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>在索引时,文本被标记化,并设置为小写,未列在keepwords.txt中的会被丢弃,保留下来的会根据syns.txt进行同义词替换</p>
-<p>在查询时,就只是将文本标记后设置为小写</p>
-<h1 id="5-Solr的使用"><a href="#5-Solr的使用" class="headerlink" title="5 Solr的使用"></a>5 Solr的使用</h1><h2 id="5-1-根据文件导入数据"><a href="#5-1-根据文件导入数据" class="headerlink" title="5.1 根据文件导入数据"></a>5.1 根据文件导入数据</h2><p>Solr可以导入多种格式的文件来作为index,在solr-7.7.3/example/exampledocs中有各个格式的测试案例,本文随机采用一种演示</p>
-<p>可以通过bin目录下的post命令导入index</p>
-<p>输入 bin/post -h 可查看具体使用方式</p>
-<p>示例: bin/post -c 导入的核心名 导入的文件(可多个)</p>
-<p>下面演示一下往new_core里导入book.csv与book.json文件:</p>
-<ol>
-<li>bin/post -c new_core example/exampledocs/books.csv example/exampledocs/books.json</li>
-<li>查看演示数据<br> <img src="https://gitee.com/bean-chan/images/raw/master/img/20210219095506.png" alt="image-20210219095506274"></li>
-</ol>
-<h2 id="5-2-添加-更新文档"><a href="#5-2-添加-更新文档" class="headerlink" title="5.2 添加/更新文档"></a>5.2 添加/更新文档</h2><p>添加/更新内容(根据是否有id判断为添加还是更新操作):    <img src="https://gitee.com/bean-chan/images/raw/master/img/20210219102710.png" alt="image-20210219102710466"></p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	<span class="attr">&quot;id&quot;</span>:<span class="string">&quot;1234567890&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;cat&quot;</span>:[<span class="string">&quot;book&quot;</span>],</span><br><span class="line">  <span class="attr">&quot;name&quot;</span>:[<span class="string">&quot;BeanChan is a handsome man&quot;</span>],</span><br><span class="line">  <span class="attr">&quot;price&quot;</span>:[<span class="number">799</span>],</span><br><span class="line">  <span class="attr">&quot;inStock&quot;</span>:[<span class="literal">true</span>],</span><br><span class="line">  <span class="attr">&quot;author&quot;</span>:[<span class="string">&quot;BeanChan&quot;</span>],</span><br><span class="line">  <span class="attr">&quot;series_t&quot;</span>:<span class="string">&quot;A man has a pretty face&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;sequence_i&quot;</span>:<span class="number">1</span>,</span><br><span class="line">  <span class="attr">&quot;genre_s&quot;</span>:<span class="string">&quot;fantasy&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="5-3-删除文档"><a href="#5-3-删除文档" class="headerlink" title="5.3 删除文档"></a>5.3 删除文档</h2><p>需基于XML方式<img src="https://gitee.com/bean-chan/images/raw/master/img/20210220093542.png" alt="image-20210220093541899"></p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--删除所有索引--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">delete</span>&gt;</span></span><br><span class="line">　　<span class="tag">&lt;<span class="name">query</span>&gt;</span>*:*<span class="tag">&lt;/<span class="name">query</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">delete</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">commit</span> /&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 根据 id 进行删除--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">delete</span>&gt;</span></span><br><span class="line">　　<span class="tag">&lt;<span class="name">id</span>&gt;</span>1<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">delete</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">commit</span> /&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="5-4-查询数据"><a href="#5-4-查询数据" class="headerlink" title="5.4 查询数据"></a>5.4 查询数据</h2><table>
-<thead>
-<tr>
-<th align="center">参数</th>
-<th align="center">描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">q</td>
-<td align="center">主要查询参数</td>
-</tr>
-<tr>
-<td align="center">fq</td>
-<td align="center">过滤器查询参数</td>
-</tr>
-<tr>
-<td align="center">start</td>
-<td align="center">起始页</td>
-</tr>
-<tr>
-<td align="center">rows</td>
-<td align="center">查询行数</td>
-</tr>
-<tr>
-<td align="center">sort</td>
-<td align="center">排序方式</td>
-</tr>
-<tr>
-<td align="center">fl</td>
-<td align="center">结果集字段列表</td>
-</tr>
-<tr>
-<td align="center">wt</td>
-<td align="center">展示格式(下图以csv格式展示)</td>
-</tr>
-</tbody></table>
-<p>下图为例:<br><img src="https://gitee.com/bean-chan/images/raw/master/img/20210220101639.png" alt="image-20210220101639220"></p>
-<h1 id="6-整合springboot"><a href="#6-整合springboot" class="headerlink" title="6 整合springboot"></a>6 整合springboot</h1><ol>
-<li><p>引入pom依赖</p>
- <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.data<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-data-solr<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
-<li><p>配置yml</p>
- <figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">data:</span></span><br><span class="line">    <span class="attr">solr:</span></span><br><span class="line">      <span class="attr">host:</span> <span class="string">http://127.0.0.1:8983/solr</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>配置entity</p>
- <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> beanchan.cn.springbootdemo.entity;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"><span class="keyword">import</span> org.apache.solr.client.solrj.beans.Field;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.solr.core.mapping.SolrDocument;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Classname</span> SolrEntity</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> ChenBin</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@CreateDate</span> 2021/2/20 2:00 PM</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@SolrDocument(collection = &quot;new_core&quot;)</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SolrEntity</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Field</span></span><br><span class="line">    <span class="keyword">private</span> String id;</span><br><span class="line">    <span class="meta">@Field(&quot;name&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>配置dao</p>
- <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> beanchan.cn.springbootdemo.dao;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> beanchan.cn.springbootdemo.entity.SolrEntity;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.solr.repository.SolrCrudRepository;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Repository;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Classname</span> solaDao</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> ChenBin</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@CreateDate</span> 2021/2/20 3:25 PM</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Repository</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">SolrDao</span> <span class="keyword">extends</span> <span class="title">SolrCrudRepository</span>&lt;<span class="title">SolrEntity</span>,<span class="title">String</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li><p>配置service及其实现类</p>
- <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> beanchan.cn.springbootdemo.service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> beanchan.cn.springbootdemo.entity.SolrEntity;</span><br><span class="line"><span class="keyword">import</span> org.apache.solr.client.solrj.SolrServerException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@InterfaceName</span> ISolrService</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> ChenBin</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@CreateDate</span> 2021/2/20 3:33 PM</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ISolrService</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">add</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">update</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">delete</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function">List&lt;SolrEntity&gt; <span class="title">quertList</span><span class="params">(String keyword)</span> <span class="keyword">throws</span> IOException, SolrServerException</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
- <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> beanchan.cn.springbootdemo.service.impl;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> beanchan.cn.springbootdemo.dao.SolrDao;</span><br><span class="line"><span class="keyword">import</span> beanchan.cn.springbootdemo.entity.SolrEntity;</span><br><span class="line"><span class="keyword">import</span> beanchan.cn.springbootdemo.service.ISolrService;</span><br><span class="line"><span class="keyword">import</span> org.apache.solr.client.solrj.SolrClient;</span><br><span class="line"><span class="keyword">import</span> org.apache.solr.client.solrj.SolrQuery;</span><br><span class="line"><span class="keyword">import</span> org.apache.solr.client.solrj.SolrServerException;</span><br><span class="line"><span class="keyword">import</span> org.apache.solr.client.solrj.response.QueryResponse;</span><br><span class="line"><span class="keyword">import</span> org.apache.solr.common.SolrDocument;</span><br><span class="line"><span class="keyword">import</span> org.apache.solr.common.SolrDocumentList;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.annotation.Resource;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Classname</span> ISolrServiceImpl</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> ChenBin</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@CreateDate</span> 2021/2/20 3:34 PM</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ISolrServiceImpl</span> <span class="keyword">implements</span> <span class="title">ISolrService</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    SolrDao solrDao;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> SolrClient solrClient;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        SolrEntity solrEntity = <span class="keyword">new</span> SolrEntity();</span><br><span class="line">        solrEntity.setId(<span class="string">&quot;001&quot;</span>);</span><br><span class="line">        solrEntity.setName(<span class="string">&quot;阿姆斯特朗回旋加速喷气式阿姆斯特朗炮制作图纸&quot;</span>);</span><br><span class="line">        solrDao.save(solrEntity);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        SolrEntity solrEntity = <span class="keyword">new</span> SolrEntity();</span><br><span class="line">        solrEntity.setId(<span class="string">&quot;001&quot;</span>);</span><br><span class="line">        solrEntity.setName(<span class="string">&quot;阿姆斯特朗回旋加速喷气式阿姆斯特朗炮使用手册&quot;</span>);</span><br><span class="line">        solrDao.save(solrEntity);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delete</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        solrDao.deleteById(<span class="string">&quot;001&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;SolrEntity&gt; <span class="title">quertList</span><span class="params">(String keyword)</span> <span class="keyword">throws</span> IOException, SolrServerException </span>&#123;</span><br><span class="line"></span><br><span class="line">        SolrQuery query = <span class="keyword">new</span> SolrQuery();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//设置查询条件</span></span><br><span class="line">        query.setQuery(<span class="string">&quot;name:阿姆斯特朗&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//按照时间排序</span></span><br><span class="line">        <span class="comment">// query.addSort(&quot;create_time&quot;, SolrQuery.ORDER.desc);</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//开始页</span></span><br><span class="line">        query.setStart(<span class="number">0</span>);</span><br><span class="line">        <span class="comment">//一页显示多少条</span></span><br><span class="line">        query.setRows(<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//开启高亮</span></span><br><span class="line">        <span class="comment">//query.setHighlight(true);</span></span><br><span class="line">        <span class="comment">//设置高亮字段</span></span><br><span class="line">        <span class="comment">//query.addHighlightField(&quot;demoName&quot;);</span></span><br><span class="line">        <span class="comment">//前缀</span></span><br><span class="line">        <span class="comment">//query.setHighlightSimplePre(&quot;&lt;font color=&#x27;red&#x27;&gt;&quot;);</span></span><br><span class="line">        <span class="comment">//后缀</span></span><br><span class="line">        <span class="comment">//query.setHighlightSimplePost(&quot;&lt;/font&gt;&quot;);</span></span><br><span class="line">        <span class="comment">//执行查找</span></span><br><span class="line">        QueryResponse response = solrClient.query(<span class="string">&quot;new_core&quot;</span>,query);</span><br><span class="line"></span><br><span class="line">        SolrDocumentList results = response.getResults();</span><br><span class="line">        <span class="comment">//获取查询到的数据总量</span></span><br><span class="line">        <span class="keyword">long</span> numFound = results.getNumFound();</span><br><span class="line">        <span class="keyword">if</span> (numFound &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="comment">//如果小于0，表示未查询到任何数据，返回null</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line"></span><br><span class="line">            List&lt;SolrEntity&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">            <span class="comment">//遍历结果集</span></span><br><span class="line">            <span class="keyword">for</span> (SolrDocument doc : results) &#123;</span><br><span class="line">                <span class="comment">//得到每条数据的map集合</span></span><br><span class="line">                Map&lt;String, Object&gt; map = doc.getFieldValueMap();</span><br><span class="line">                <span class="comment">//添加到list</span></span><br><span class="line">                <span class="keyword">for</span> (String key : map.keySet()) &#123;</span><br><span class="line">                    System.out.println(<span class="string">&quot;KEY:&quot;</span> + key + <span class="string">&quot;,VALUE:&quot;</span> + map.get(key).toString());</span><br><span class="line">                &#125;</span><br><span class="line">                SolrEntity demo = <span class="keyword">new</span> SolrEntity();</span><br><span class="line">                demo.setId(map.get(<span class="string">&quot;id&quot;</span>).toString());</span><br><span class="line">                demo.setName(map.get(<span class="string">&quot;name&quot;</span>).toString());</span><br><span class="line">                list.add(demo);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> list;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li><p>配置Controller</p>
- <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> beanchan.cn.springbootdemo.controller;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> beanchan.cn.springbootdemo.entity.SolrEntity;</span><br><span class="line"><span class="keyword">import</span> beanchan.cn.springbootdemo.service.ISolrService;</span><br><span class="line"><span class="keyword">import</span> org.apache.solr.client.solrj.SolrServerException;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RequestMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RestController;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.annotation.Resource;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Classname</span> searchController</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> ChenBin</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@CreateDate</span> 2021/2/20 10:57 AM</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SearchController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    ISolrService solrService;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 新增</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> flag</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@RequestMapping(&quot;add&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">add</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        solrService.add();</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;success&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping(&quot;update&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">update</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        solrService.update();</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;success&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping(&quot;delete&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">delete</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        solrService.delete();</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;success&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping(&quot;queryList&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">queryList</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        List&lt;SolrEntity&gt; solrEntities = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            solrEntities = solrService.quertList(<span class="string">&quot;&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException | SolrServerException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (solrEntities != <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">return</span> solrEntities.toString();</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;empty&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li><p>测试还请自行实验,下图简单展示一下</p>
-<p> <img src="https://gitee.com/bean-chan/images/raw/master/img/20210220164722.png" alt="image-20210220164722459"></p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>框架</category>
-      </categories>
-      <tags>
-        <tag>Solr</tag>
-        <tag>搜索引擎</tag>
       </tags>
   </entry>
 </search>
