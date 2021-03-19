@@ -6,7 +6,7 @@
   <link href="https://chenb.in/atom.xml" rel="self"/>
   
   <link href="https://chenb.in/"/>
-  <updated>2021-03-19T01:54:51.093Z</updated>
+  <updated>2021-03-19T02:04:41.008Z</updated>
   <id>https://chenb.in/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://chenb.in/2021/03/08/maven%E4%BE%9D%E8%B5%96%E5%86%B2%E7%AA%81/"/>
     <id>https://chenb.in/2021/03/08/maven%E4%BE%9D%E8%B5%96%E5%86%B2%E7%AA%81/</id>
     <published>2021-03-08T03:06:50.000Z</published>
-    <updated>2021-03-19T01:54:51.093Z</updated>
+    <updated>2021-03-19T02:04:41.008Z</updated>
     
     
     <summary type="html">因升级swagger而遇到的maven依赖问题</summary>
