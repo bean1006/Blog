@@ -6,7 +6,7 @@
   <link href="https://chenb.in/atom.xml" rel="self"/>
   
   <link href="https://chenb.in/"/>
-  <updated>2021-03-19T02:04:41.008Z</updated>
+  <updated>2021-03-19T02:15:47.115Z</updated>
   <id>https://chenb.in/</id>
   
   <author>
@@ -21,10 +21,15 @@
     <link href="https://chenb.in/2021/03/08/maven%E4%BE%9D%E8%B5%96%E5%86%B2%E7%AA%81/"/>
     <id>https://chenb.in/2021/03/08/maven%E4%BE%9D%E8%B5%96%E5%86%B2%E7%AA%81/</id>
     <published>2021-03-08T03:06:50.000Z</published>
-    <updated>2021-03-19T02:04:41.008Z</updated>
+    <updated>2021-03-19T02:15:47.115Z</updated>
     
     
-    <summary type="html">因升级swagger而遇到的maven依赖问题</summary>
+    <summary type="html">&lt;h1 id=&quot;起因&quot;&gt;&lt;a href=&quot;#起因&quot; class=&quot;headerlink&quot; title=&quot;起因&quot;&gt;&lt;/a&gt;起因&lt;/h1&gt;&lt;p&gt;因将swagger升级到了2.9.2,再次启动项目时,爆出&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The following method did not exist:&lt;/p&gt;
+&lt;p&gt;com.google.common.collect.FluentIterable.concat(Ljava/lang/Iterable;Ljava/lang/Iterable;)Lcom/google/common/collect/FluentIterable;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;升级完依赖遇到这种什么方法找不到的,十有八九就是发生依赖冲突了&lt;/p&gt;</summary>
     
     
     
@@ -42,10 +47,10 @@
     <link href="https://chenb.in/2021/03/04/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E9%98%9F%E5%88%97/"/>
     <id>https://chenb.in/2021/03/04/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E9%98%9F%E5%88%97/</id>
     <published>2021-03-04T02:45:34.000Z</published>
-    <updated>2021-03-08T06:47:37.607Z</updated>
+    <updated>2021-03-19T02:14:40.152Z</updated>
     
     
-    <summary type="html">基于Java数组实现各个队列</summary>
+    <summary type="html">&lt;h1 id=&quot;1-队列介绍&quot;&gt;&lt;a href=&quot;#1-队列介绍&quot; class=&quot;headerlink&quot; title=&quot;1 队列介绍&quot;&gt;&lt;/a&gt;1 队列介绍&lt;/h1&gt;&lt;h2 id=&quot;1-1-定义&quot;&gt;&lt;a href=&quot;#1-1-定义&quot; class=&quot;headerlink&quot; title=&quot;1.1 定义&quot;&gt;&lt;/a&gt;1.1 定义&lt;/h2&gt;&lt;p&gt;队列是一种特殊的线性表,遵循FIFO(first in first out)先进先出原则,整个队列由一个线性表构成,可以是数组或者链表,同时由队头(font)来表示第一个元素、队尾(rear)最后一个元素,并且队列只允许在队头删除元素,队尾添加元素&lt;/p&gt;</summary>
     
     
     
@@ -61,10 +66,13 @@
     <link href="https://chenb.in/2021/02/20/Git/"/>
     <id>https://chenb.in/2021/02/20/Git/</id>
     <published>2021-02-20T08:52:25.000Z</published>
-    <updated>2021-03-04T09:04:06.645Z</updated>
+    <updated>2021-03-19T02:15:26.446Z</updated>
     
     
-    <summary type="html">非常流行的版本控制工具,工作必备</summary>
+    <summary type="html">&lt;h1 id=&quot;1-Git介绍&quot;&gt;&lt;a href=&quot;#1-Git介绍&quot; class=&quot;headerlink&quot; title=&quot;1 Git介绍&quot;&gt;&lt;/a&gt;1 Git介绍&lt;/h1&gt;&lt;h2 id=&quot;1-1-什么是git&quot;&gt;&lt;a href=&quot;#1-1-什么是git&quot; class=&quot;headerlink&quot; title=&quot;1.1 什么是git&quot;&gt;&lt;/a&gt;1.1 什么是git&lt;/h2&gt;&lt;p&gt;按官方的话说:世界上最先进的分布式版本控制工具&lt;/p&gt;
+&lt;p&gt;如果不用版本控制工具我们怎么整合代码?&lt;/p&gt;
+&lt;p&gt;这里讲述一个Git出生前的一些事:&lt;/p&gt;
+&lt;p&gt;大家都知道Linux是一个开源操作系统,是一个举全世界之力创建的一个开源操作系统,大家都把自己写好的源码发给作者Linus Benedict Torvalds(林纳斯·托瓦兹),然后linus再自己一个人Ctrl C + Ctrl V,再取其精华去其糟粕,随着代码库的不断完善,工作量也越来越大,靠人工完成代码整合的难度也越来越大,这个时候版本控制工具就显得尤为重要,但是Linus不喜欢当时比较流行的开源版本控制工具CVS、SVN,因为他们需要联网才能工作,这个时候一个名叫BitMover的公司无偿提供公司旗下的分布式版本控制工具&lt;strong&gt;BitKeeper&lt;/strong&gt;给Linux社区,这样问题也就算是解决了,并且也相安无事好长一段时间,后来因为社区大牛试图破解BitKeeper的协议,BitMover一生气,就把使用权回收了,然后Linus一人,扶大厦之将倾,挽狂澜于既倒,用了两周时间开发出了现如今闻名于世的Git&lt;/p&gt;</summary>
     
     
     
@@ -82,10 +90,24 @@
     <link href="https://chenb.in/2021/02/07/Solr/"/>
     <id>https://chenb.in/2021/02/07/Solr/</id>
     <published>2021-02-07T01:00:37.000Z</published>
-    <updated>2021-03-04T02:28:38.569Z</updated>
+    <updated>2021-03-19T02:15:40.032Z</updated>
     
     
-    <summary type="html">成熟的开源搜索引擎</summary>
+    <summary type="html">&lt;h1 id=&quot;1-Solr基础介绍&quot;&gt;&lt;a href=&quot;#1-Solr基础介绍&quot; class=&quot;headerlink&quot; title=&quot;1 Solr基础介绍&quot;&gt;&lt;/a&gt;1 Solr基础介绍&lt;/h1&gt;&lt;h2 id=&quot;1-1-什么是Solr&quot;&gt;&lt;a href=&quot;#1-1-什么是Solr&quot; class=&quot;headerlink&quot; title=&quot;1.1 什么是Solr&quot;&gt;&lt;/a&gt;1.1 什么是Solr&lt;/h2&gt;&lt;p&gt;Solr是Apache开源的、基于Lucene的Java Api的封装,是一款成熟稳定的搜索引擎。&lt;/p&gt;
+&lt;h2 id=&quot;1-2-Solr的优缺点&quot;&gt;&lt;a href=&quot;#1-2-Solr的优缺点&quot; class=&quot;headerlink&quot; title=&quot;1.2 Solr的优缺点&quot;&gt;&lt;/a&gt;1.2 Solr的优缺点&lt;/h2&gt;&lt;p&gt;优点: &lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;大量的用户群体与成熟的社区&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;支持多种格式索引,例如HTML、CSV、JSON、XML等&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;诞生于与2004年,多年的沉淀使得Solr成熟、稳定&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;如果不考虑建索引的同时进行查询,查询速度更快&lt;/strong&gt;,像我目前接手的法律查询软件,法律的录入不是十分频繁,那么用Solr就会比较合适&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;缺点:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;在建立索引时,搜索效率不高,例如淘宝热卖那种需要实时更新索引的项目,Solr就显得有点力不从心了&lt;/p&gt;</summary>
     
     
     
@@ -103,10 +125,26 @@
     <link href="https://chenb.in/2021/02/02/Jenkins/"/>
     <id>https://chenb.in/2021/02/02/Jenkins/</id>
     <published>2021-02-02T09:48:30.000Z</published>
-    <updated>2021-03-02T08:27:58.616Z</updated>
+    <updated>2021-03-19T02:15:28.657Z</updated>
     
     
-    <summary type="html">自动化打包部署的好帮手</summary>
+    <summary type="html">&lt;h1 id=&quot;1-什么是Jenkins&quot;&gt;&lt;a href=&quot;#1-什么是Jenkins&quot; class=&quot;headerlink&quot; title=&quot;1. 什么是Jenkins&quot;&gt;&lt;/a&gt;1. 什么是Jenkins&lt;/h1&gt;&lt;h2 id=&quot;1-1-我们为啥需要jenkins&quot;&gt;&lt;a href=&quot;#1-1-我们为啥需要jenkins&quot; class=&quot;headerlink&quot; title=&quot;1.1 我们为啥需要jenkins&quot;&gt;&lt;/a&gt;1.1 我们为啥需要jenkins&lt;/h2&gt;&lt;p&gt;在一次系统开发中,往往需要如下几步:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;写代码&lt;/li&gt;
+&lt;li&gt;代码提交&lt;/li&gt;
+&lt;li&gt;四处打听有没有人没提交代码&lt;/li&gt;
+&lt;li&gt;项目打包(通常是jar包和war包)&lt;/li&gt;
+&lt;li&gt;上传到Linux服务器上&lt;/li&gt;
+&lt;li&gt;如果项目正在运行,关闭它&lt;/li&gt;
+&lt;li&gt;启动刚刚部署的项目&lt;/li&gt;
+&lt;li&gt;如果有人突然举手说我代码好像有点问题!重复步骤1-7,可以说是相等的折磨人了&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这时有人就会问了,&lt;strong&gt;有没有那种可以自动打包部署的工具呢&lt;/strong&gt;?&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://imgchr.com/i/sz9gQ1&quot;&gt;&lt;img src=&quot;https://img-blog.csdnimg.cn/img_convert/80ef6c5703529b4af9c1ab9dc92f150a.png&quot; alt=&quot;sz9gQ1.jpg&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;正确答案:&lt;strong&gt;Jenkins&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Jenkins是一个基于Java构筑的一个&lt;strong&gt;持续集成&lt;/strong&gt;工具,可以帮助用户更好地实现持续集成&lt;/p&gt;</summary>
     
     
     

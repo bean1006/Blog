@@ -9,6 +9,8 @@
 <p>com.google.common.collect.FluentIterable.concat(Ljava/lang/Iterable;Ljava/lang/Iterable;)Lcom/google/common/collect/FluentIterable;</p>
 </blockquote>
 <p>升级完依赖遇到这种什么方法找不到的,十有八九就是发生依赖冲突了</p>
+<a id="more"></a>
+
 <h1 id="解决方式"><a href="#解决方式" class="headerlink" title="解决方式"></a>解决方式</h1><p>在同事推荐下,下载来IDEA插件<code>MavenHelper</code>来解决问题</p>
 <p>项目情况如下:</p>
 <p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210319095327.png" alt="image-20210319092655363"></p>
@@ -35,6 +37,8 @@
     <title>数据结构-队列</title>
     <url>/2021/03/04/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E9%98%9F%E5%88%97/</url>
     <content><![CDATA[<h1 id="1-队列介绍"><a href="#1-队列介绍" class="headerlink" title="1 队列介绍"></a>1 队列介绍</h1><h2 id="1-1-定义"><a href="#1-1-定义" class="headerlink" title="1.1 定义"></a>1.1 定义</h2><p>队列是一种特殊的线性表,遵循FIFO(first in first out)先进先出原则,整个队列由一个线性表构成,可以是数组或者链表,同时由队头(font)来表示第一个元素、队尾(rear)最后一个元素,并且队列只允许在队头删除元素,队尾添加元素</p>
+<a id="more"></a>
+
 <h2 id="1-2-本例仓库地址"><a href="#1-2-本例仓库地址" class="headerlink" title="1.2 本例仓库地址"></a>1.2 本例仓库地址</h2><p>仓库地址:<a href="https://gitee.com/bean-chan/data-structure.git">https://gitee.com/bean-chan/data-structure.git</a></p>
 <h1 id="2-三种队列"><a href="#2-三种队列" class="headerlink" title="2 三种队列"></a>2 三种队列</h1><h2 id="2-1-普通队列"><a href="#2-1-普通队列" class="headerlink" title="2.1 普通队列"></a>2.1 普通队列</h2><h3 id="2-1-1-实现原理"><a href="#2-1-1-实现原理" class="headerlink" title="2.1.1 实现原理"></a>2.1.1 实现原理</h3><p>创建之初,队头与队尾处在第一个位置上</p>
 <img src="https://gitee.com/bean-chan/images/raw/master/img/20210304111620.png" alt="image-20210304111620056" style="zoom:50%;" />
@@ -110,6 +114,8 @@
 <p>如果不用版本控制工具我们怎么整合代码?</p>
 <p>这里讲述一个Git出生前的一些事:</p>
 <p>大家都知道Linux是一个开源操作系统,是一个举全世界之力创建的一个开源操作系统,大家都把自己写好的源码发给作者Linus Benedict Torvalds(林纳斯·托瓦兹),然后linus再自己一个人Ctrl C + Ctrl V,再取其精华去其糟粕,随着代码库的不断完善,工作量也越来越大,靠人工完成代码整合的难度也越来越大,这个时候版本控制工具就显得尤为重要,但是Linus不喜欢当时比较流行的开源版本控制工具CVS、SVN,因为他们需要联网才能工作,这个时候一个名叫BitMover的公司无偿提供公司旗下的分布式版本控制工具<strong>BitKeeper</strong>给Linux社区,这样问题也就算是解决了,并且也相安无事好长一段时间,后来因为社区大牛试图破解BitKeeper的协议,BitMover一生气,就把使用权回收了,然后Linus一人,扶大厦之将倾,挽狂澜于既倒,用了两周时间开发出了现如今闻名于世的Git</p>
+<a id="more"></a>
+
 <p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210225102018.jpeg" alt="download"></p>
 <h2 id="1-2-集中式与分布式"><a href="#1-2-集中式与分布式" class="headerlink" title="1.2 集中式与分布式"></a>1.2 集中式与分布式</h2><p>集中式:</p>
 <p>代码的版本库存放在中央服务器上,工作前从中央服务器上拉取下来,工作后再把代码上传回中央服务器,版本控制需要依赖网络</p>
@@ -571,7 +577,10 @@
 </ol>
 <p>缺点:</p>
 <ol>
-<li>在建立索引时,搜索效率不高,例如淘宝热卖那种需要实时更新索引的项目,Solr就显得有点力不从心了</li>
+<li><p>在建立索引时,搜索效率不高,例如淘宝热卖那种需要实时更新索引的项目,Solr就显得有点力不从心了</p>
+ <a id="more"></a>
+
+</li>
 </ol>
 <h2 id="1-3-使用版本"><a href="#1-3-使用版本" class="headerlink" title="1.3 使用版本"></a>1.3 使用版本</h2><ol>
 <li>JDK-1.8</li>
