@@ -1,219 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Jenkins</title>
-    <url>/2021/02/02/Jenkins/</url>
-    <content><![CDATA[<h1 id="1-什么是Jenkins"><a href="#1-什么是Jenkins" class="headerlink" title="1. 什么是Jenkins"></a>1. 什么是Jenkins</h1><h2 id="1-1-我们为啥需要jenkins"><a href="#1-1-我们为啥需要jenkins" class="headerlink" title="1.1 我们为啥需要jenkins"></a>1.1 我们为啥需要jenkins</h2><p>在一次系统开发中,往往需要如下几步:</p>
-<ol>
-<li>写代码</li>
-<li>代码提交</li>
-<li>四处打听有没有人没提交代码</li>
-<li>项目打包(通常是jar包和war包)</li>
-<li>上传到Linux服务器上</li>
-<li>如果项目正在运行,关闭它</li>
-<li>启动刚刚部署的项目</li>
-<li>如果有人突然举手说我代码好像有点问题!重复步骤1-7,可以说是相等的折磨人了</li>
-</ol>
-<p>这时有人就会问了,<strong>有没有那种可以自动打包部署的工具呢</strong>?</p>
-<p><a href="https://imgchr.com/i/sz9gQ1"><img src="https://img-blog.csdnimg.cn/img_convert/80ef6c5703529b4af9c1ab9dc92f150a.png" alt="sz9gQ1.jpg"></a></p>
+    <title>maven依赖冲突</title>
+    <url>/2021/03/08/maven%E4%BE%9D%E8%B5%96%E5%86%B2%E7%AA%81/</url>
+    <content><![CDATA[<h1 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h1><p>因将swagger从2.7.0升级到了2.9.2,再次启动项目时,爆出</p>
 <blockquote>
-<p>正确答案:<strong>Jenkins</strong></p>
+<p>The following method did not exist:</p>
+<p>com.google.common.collect.FluentIterable.concat(Ljava/lang/Iterable;Ljava/lang/Iterable;)Lcom/google/common/collect/FluentIterable;</p>
 </blockquote>
-<p>Jenkins是一个基于Java构筑的一个<strong>持续集成</strong>工具,可以帮助用户更好地实现持续集成</p>
-<a id="more"></a>
-
-<h2 id="1-2-Jenkin实现原理"><a href="#1-2-Jenkin实现原理" class="headerlink" title="1.2. Jenkin实现原理"></a>1.2. Jenkin实现原理</h2><ol>
-<li><p>程序员们提交代码</p>
-</li>
-<li><p>版本控制服务器(git、svm)整合代码库</p>
-</li>
-<li><p>版本控制服务器通知Jenkins自动化部署</p>
-</li>
-<li><p>Jenkins调用git/svn插件获取源码</p>
-</li>
-<li><p>Jenkins调用maven插件打包成war包或者是jar包</p>
-</li>
-<li><p>Jenkins调用命令将项目部署到服务器</p>
-</li>
-<li><p>使用人员:测试/前端</p>
-</li>
-</ol>
-<hr>
-<h1 id="2-Jenkins搭建"><a href="#2-Jenkins搭建" class="headerlink" title="2. Jenkins搭建"></a>2. Jenkins搭建</h1><h2 id="2-1-Jenkins环境搭建-以CentOS7-5为例"><a href="#2-1-Jenkins环境搭建-以CentOS7-5为例" class="headerlink" title="2.1. Jenkins环境搭建(以CentOS7.5为例)"></a>2.1. Jenkins环境搭建(以CentOS7.5为例)</h2><ol>
-<li>jdk</li>
-<li>maven/gradle</li>
-<li>git/svm</li>
-</ol>
-<p>以上为部署java项目的基本环境,请先行搭建好</p>
-<h2 id="2-2-安装Jenkins"><a href="#2-2-安装Jenkins" class="headerlink" title="2.2. 安装Jenkins"></a>2.2. 安装Jenkins</h2><ol>
-<li>安装包下载,Jenkins官网下载较慢,这里提供国内下载地址:<a href="https://mirrors.aliyun.com/jenkins/war/latest/jenkins.war">Jenkins</a></li>
-<li>在安装包根路径下输入:<br> <strong>nohup java -jar -      Dhudson.security.csrf.GlobalCrumbIssuerConfiguration.DISABLE_CSRF_PROTECTION=true  jenkins.war –httpPort=8080 &amp;</strong> <ul>
-<li>nohup …………. &amp; 后台启动</li>
-<li>Dhudson.security.csrf.GlobalCrumbIssuerConfiguration.DISABLE_CSRF_PROTECTION=true 为了关闭CSRF,Jenkins2.2版本之后无法关闭CSRF,会导致项目拉取失败</li>
-<li>jenkins.war 下载下来的war包</li>
-<li>–httpPort=8080 指定jenkins管理页面的端口</li>
-</ul>
-</li>
-<li>安装结束后会有一个很长的初始密码,如果忘了可以在~/.jenkins/secrets/initialAdminPassword文件中查看</li>
-<li>在浏览器输入 <a href="http://localhost:8080/">http://localhost:8080</a></li>
-<li>输入密码后,建议点击安装推荐的插件,保证基本功能可用</li>
-<li>安装完成后设置首个管理员用户和密码</li>
-</ol>
-<h2 id="2-3-Jenkins初始化配置"><a href="#2-3-Jenkins初始化配置" class="headerlink" title="2.3. Jenkins初始化配置"></a>2.3. Jenkins初始化配置</h2><h3 id="2-3-1-汉化插件-可选"><a href="#2-3-1-汉化插件-可选" class="headerlink" title="2.3.1. 汉化插件(可选)"></a>2.3.1. 汉化插件(可选)</h3><p>Linux安装完成后,第一次打开发现内部全都是英文的    <img src="https://tva1.sinaimg.cn/large/008eGmZEly1gnb7mh7zrqj31ov0u0tcf.jpg" alt="yVxkP1.png"></p>
-<p>汉化步骤:</p>
-<ol>
-<li><p>点击Manage Jenkins</p>
-</li>
-<li><p>点击Mange Plugins</p>
-</li>
-<li><p>点击Advanced,设置Update Sites的URL为:<a href="https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/update-center.json">https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/update-center.json</a> 用国内镜像源安装插件速度会很快</p>
-</li>
-<li><p>插件安装(新老版本二选一) </p>
-<ul>
-<li><p>老版的安装<strong>Locale</strong>插件,随后依次点击Manage Jenkins -&gt; Configure System,找到Locale输入<strong>zh_CN</strong>,并在下面打钩</p>
-</li>
-<li><p>新版的安装Localization:Chinese(Simplified)插件即可(笔者自用,Jenkins版本2.277)</p>
-</li>
-</ul>
-</li>
-<li><p>拉到最下方点击save</p>
-</li>
-<li><p>重启( 推荐方式: <a href="http://localhost:8080/restart">http://localhost:8080/restart</a> )真的很省事</p>
-</li>
-</ol>
-<h3 id="2-3-2-全局工具配置-系统管理底下"><a href="#2-3-2-全局工具配置-系统管理底下" class="headerlink" title="2.3.2. 全局工具配置(系统管理底下)"></a>2.3.2. 全局工具配置(系统管理底下)</h3><p>JDK、Git、Maven配置:</p>
-<p><img src="https://tva1.sinaimg.cn/large/008eGmZEly1gnb7rj9camj31180g6405.jpg" alt="y9nACn.png"></p>
-<p><img src="https://tva1.sinaimg.cn/large/008eGmZEgy1gn9c7o1qpej30o018ktb0.jpg" alt="ypAMdI.png"><br>注意项: </p>
-<ol>
-<li>如果没有git的配置项,先在插件里安装一下git插件,具体安装方式参照上面汉化步骤</li>
-<li>是否自动安装自行考虑,网上看别人的建议是用自己的(自己的才是最好的)</li>
-<li>记得拉到最底下点保存</li>
-<li>换上你<strong>自己</strong>的目录配置项</li>
-<li>记得把Maven的settings.xml里的mrror换成阿里源</li>
-<li>上图git记得配置成git<strong>可执行文件</strong>的全路径</li>
-</ol>
-<h3 id="2-3-3-安装远程服务器插件以及其余插件"><a href="#2-3-3-安装远程服务器插件以及其余插件" class="headerlink" title="2.3.3. 安装远程服务器插件以及其余插件"></a>2.3.3. 安装远程服务器插件以及其余插件</h3><p>一共需要安装三个插件(安装步骤参考上面汉化步骤):</p>
-<ol>
-<li>Publish Over SSH 用于连接远程服务器</li>
-<li>Deploy to container 用于把打包的应用发布到远程服务器</li>
-<li>Maven Integration 用于构建Maven项目</li>
-</ol>
-<h2 id="2-4-配置连接远程服务器的SSH"><a href="#2-4-配置连接远程服务器的SSH" class="headerlink" title="2.4. 配置连接远程服务器的SSH"></a>2.4. 配置连接远程服务器的SSH</h2><ol>
-<li>依次点击 系统管理 -&gt; 系统配置</li>
-<li>拉到最底下找到Publish over SSH,参考下图填写完毕<br><img src="https://tva1.sinaimg.cn/large/008eGmZEgy1gn9c7kjjz6j30dk0mxaaz.jpg" alt="在这里插入图片描述"></li>
-</ol>
-<p>参考值:</p>
-<table>
-<thead>
-<tr>
-<th>名字</th>
-<th>对应内容</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Passphrase</td>
-<td>服务器的密码</td>
-</tr>
-<tr>
-<td>Path to key</td>
-<td>连接远程服务器密钥文件的路径</td>
-</tr>
-<tr>
-<td>Key</td>
-<td>SSH Key (具体内容看下面注意项)</td>
-</tr>
-<tr>
-<td>Name</td>
-<td>自定义服务器名</td>
-</tr>
-<tr>
-<td>HostName</td>
-<td>服务器IP地址</td>
-</tr>
-<tr>
-<td>UserName</td>
-<td>服务器用户名</td>
-</tr>
-<tr>
-<td>Remote Directory</td>
-<td>传输文件的目录</td>
-</tr>
-</tbody></table>
-<p>注意项:</p>
-<ol>
-<li><p>如果找不到Publish over SSH,说明该插件未安装,请参考汉化步骤自行安装</p>
-</li>
-<li><p>登录方式:</p>
-<ul>
-<li>如果是用户名密码登录,输入Passphrase即可</li>
-<li>如果是SSH秘钥登录则输入Path to Key以及Key</li>
-</ul>
-</li>
-<li><p>Key在~/.ssh/id_rsa.pub文件里,若无此文件则命令行输入<strong>ssh-keygen</strong>,然后一路回车自动生成(Windows系统还请自行百度)</p>
-</li>
-<li><p>Remote Directory是你打包后的项目(jar包/war包)存放的地方,请先记住后续需要使用</p>
-</li>
-<li><p>右下角有个Test Configuration可以点一下看看有没有Success</p>
-</li>
-</ol>
-<hr>
-<h1 id="3-守护程序员的笑容—自动化集成部署-来了来了-他来了"><a href="#3-守护程序员的笑容—自动化集成部署-来了来了-他来了" class="headerlink" title="3. 守护程序员的笑容—自动化集成部署(来了来了,他来了)"></a>3. 守护程序员的笑容—自动化集成部署(来了来了,他来了)</h1><h2 id="3-1-项目构建"><a href="#3-1-项目构建" class="headerlink" title="3.1 项目构建"></a>3.1 项目构建</h2><p>以构建maven项目为例,构建步骤如下:</p>
-<ol>
-<li><p>新建任务<br> <img src="https://tva1.sinaimg.cn/large/008eGmZEgy1gn9c7m1759j307z09nt96.jpg" alt="yPMZK1.png"></p>
-</li>
-<li><p>构建maven项目<br><a href="https://imgchr.com/i/ySdOpT"><img src="https://tva1.sinaimg.cn/large/008eGmZEgy1gn9c7pry4uj30lm0f4wg8.jpg" alt="ySdOpT.png"></a></p>
-</li>
-<li><p>源码管理配置(选择github上的项目)</p>
-<p>  <img src="https://tva1.sinaimg.cn/large/008eGmZEly1gnb7tw5j3uj30if0i9wfp.jpg" alt="yVX5JP.png"></p>
-<p> <img src="https://tva1.sinaimg.cn/large/008eGmZEly1gnb7ub1e8vj30d9092jrn.jpg" alt="yVbyH1.png"></p>
-</li>
-<li><p>触发器配置(github稍后会配置)<br> <img src="https://tva1.sinaimg.cn/large/008eGmZEly1gnb7tgo8agj31020j177a.jpg">    </p>
-</li>
-<li><p>构建后操作</p>
-<p><img src="https://tva1.sinaimg.cn/large/008eGmZEly1gnb7unh2zbj30ze0ijdit.jpg" alt="yVbyH1.png"></p>
-</li>
-</ol>
-<h2 id="3-2-github配置"><a href="#3-2-github配置" class="headerlink" title="3.2. github配置"></a>3.2. github配置</h2><p><img src="https://tva1.sinaimg.cn/large/008eGmZEly1gnb7v0p9exj30o70l3n0a.jpg" alt="yVxkP1.png"></p>
-<h2 id="3-3-服务器添加脚本"><a href="#3-3-服务器添加脚本" class="headerlink" title="3.3 服务器添加脚本"></a>3.3 服务器添加脚本</h2><p>进入到2.4配置的Remote Directory里,创建两个脚本(请根据自己的情况修改脚本)</p>
-<p>stop.sh:</p>
-<pre><code>#!/bin/bash
-pid=ps -ef |grep springboot-demo-0.0.1-SNAPSHOT.jar|awk &#39;&#123;print $2&#125;&#39;
-if [ -n &quot;$pid&quot; ]
-then
-kill -9 $pid
-fi
-</code></pre>
-<p>start.sh:</p>
-<pre><code>#!/bin/bash
-chmod 777 /usr/local/java-projects/springboot-demo-0.0.1-SNAPSHOT.jar
-cd /usr/local/java-projects
-nohup java -jar springboot-demo-0.0.1-SNAPSHOT.jar &amp;
-</code></pre>
-<h2 id="3-4-测试"><a href="#3-4-测试" class="headerlink" title="3.4  测试"></a>3.4  测试</h2><ol>
-<li>编写一个HelloController</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">		<span class="meta">@RestController</span></span><br><span class="line">		<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloController</span> </span>&#123;</span><br><span class="line">		    <span class="meta">@GetMapping(&quot;/hello&quot;)</span></span><br><span class="line">		    <span class="function"><span class="keyword">public</span> String <span class="title">hello</span><span class="params">()</span></span>&#123;</span><br><span class="line">		        <span class="keyword">return</span> <span class="string">&quot;Hello World!!!!!!!!!!!!&quot;</span>;</span><br><span class="line">		    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ol start="2">
-<li>push项目</li>
-<li>jenkins开始自动部署项目<img src="https://s3.ax1x.com/2021/02/01/yZPeMt.png"/>
-
-
-</li>
-</ol>
-<ol start="4">
-<li>点击进项目,可查看控制台<br><img src="https://tva1.sinaimg.cn/large/008eGmZEgy1gn9c7ozkpqj30wb0e0ae4.jpg" alt="在这里插入图片描述"></li>
-</ol>
-<ol start="5">
-<li>访问项目路径 <a href="http://beanchan.cn/hello">http://beanchan.cn/hello</a> (我的,给你偷偷看一眼)</li>
-</ol>
-<hr>
-<p>&emsp;&emsp;至此我的处女作也算是小小的完结了,内容也只是入门,后续部分会慢慢完善,在哪里如有存在着问题,或者这篇哪里还可以改进的,又或者你在通篇按照我的指示完成后还是无法正常使用欢迎与我探讨探讨,感谢你的观看。</p>
+<p>升级完依赖遇到这种什么方法找不到的,十有八九就是发生依赖冲突了</p>
+<p>在同事推荐下,下载来IDEA插件<code>MavenHelper</code>来解决问题</p>
+<p>项目情况如下:</p>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210319095327.png" alt="image-20210319092655363"></p>
+<p>我在模块A引入了Swagger,在admin模块下的pom.xml下,此时通过MavenHelper发现,冲突包为guava,此时需要20版本的guava包,但是maven找到的只有18.0</p>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210319095333.png" alt="image-20210319094335639"></p>
+<p>因为maven肯定是会下载swagger所需要的包,但此时却找不到包,只有一种可能</p>
+<p>整个项目使用了别的有着guava-18.0的jar包,而忽略了有着guava-20.0的这个包</p>
+<p>因为项目自己选择了18.0但我们需要20.0,所以我选择直接排除guava-18.0这个依赖,再点击reimport</p>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210319095337.png" alt="image-20210319094616954"></p>
+<p>此时在看其他模块,发现有个模块已经排除了guava-18这个依赖</p>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210319095346.png" alt="image-20210319094725485"></p>
+<p>此时再启动项目,项目运行成功,但是上面这个模块原先运行着guava-18的依赖,现在强制给他升级到20.0,可能会有着别的问题</p>
+<p>如果有问题的话还是可以使用那个万金油方法,回滚swagger依赖版本到2.7.0,能用就行,还要啥自行车</p>
 ]]></content>
       <categories>
-        <category>运维</category>
+        <category>技术杂谈</category>
       </categories>
       <tags>
-        <tag>Jenkins</tag>
+        <tag>maven</tag>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据结构-队列</title>
+    <url>/2021/03/04/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E9%98%9F%E5%88%97/</url>
+    <content><![CDATA[<h1 id="1-队列介绍"><a href="#1-队列介绍" class="headerlink" title="1 队列介绍"></a>1 队列介绍</h1><h2 id="1-1-定义"><a href="#1-1-定义" class="headerlink" title="1.1 定义"></a>1.1 定义</h2><p>队列是一种特殊的线性表,遵循FIFO(first in first out)先进先出原则,整个队列由一个线性表构成,可以是数组或者链表,同时由队头(font)来表示第一个元素、队尾(rear)最后一个元素,并且队列只允许在队头删除元素,队尾添加元素</p>
+<h2 id="1-2-本例仓库地址"><a href="#1-2-本例仓库地址" class="headerlink" title="1.2 本例仓库地址"></a>1.2 本例仓库地址</h2><p>仓库地址:<a href="https://gitee.com/bean-chan/data-structure.git">https://gitee.com/bean-chan/data-structure.git</a></p>
+<h1 id="2-三种队列"><a href="#2-三种队列" class="headerlink" title="2 三种队列"></a>2 三种队列</h1><h2 id="2-1-普通队列"><a href="#2-1-普通队列" class="headerlink" title="2.1 普通队列"></a>2.1 普通队列</h2><h3 id="2-1-1-实现原理"><a href="#2-1-1-实现原理" class="headerlink" title="2.1.1 实现原理"></a>2.1.1 实现原理</h3><p>创建之初,队头与队尾处在第一个位置上</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210304111620.png" alt="image-20210304111620056" style="zoom:50%;" />
+
+<p>随后往队伍里连续先后添加两个元素A与B后</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210304112336.png" alt="image-20210304112336248" style="zoom:50%;" />
+
+<p>队尾向后连续位移两个位置,并且每添加一次元素,队尾就会向后位移一个位置,直到整个线性表最末端为止,此时则队列不再允许添加元素</p>
+<p>我们进行删除操作时,队头会向后位移一个位置,例如我们将A出队</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210304112748.png" alt="image-20210304112748369" style="zoom:50%;" />
+
+<p>之后再将B出队</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210304112838.png" alt="image-20210304112838312" style="zoom:50%;" />
+
+<p>当队头与队尾指向同一位置时,说明此刻队列为空</p>
+<h3 id="2-1-2-基于数组实现"><a href="#2-1-2-基于数组实现" class="headerlink" title="2.1.2 基于数组实现"></a>2.1.2 基于数组实现</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Classname</span> NormalQueue</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> ChenBin</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@CreateDate</span> 2021/3/4 1:35 PM</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NormalQueue</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Integer[] dataArr; <span class="comment">// 存放元素的数组</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> capacity; <span class="comment">// 容量</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> font; <span class="comment">// 队头指针</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> rear; <span class="comment">// 队尾指针</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_SIZE = <span class="number">6</span>; <span class="comment">// 默认容量</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 构造器</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">NormalQueue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.dataArr = <span class="keyword">new</span> Integer[DEFAULT_SIZE];</span><br><span class="line">        <span class="keyword">this</span>.capacity = DEFAULT_SIZE;</span><br><span class="line">        <span class="keyword">this</span>.font = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">this</span>.rear = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 队列是否为空</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> rear - font == <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 查看队首元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">peek</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (isEmpty()) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">return</span> dataArr[rear - <span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 入队一个元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">push</span><span class="params">(Integer val)</span> </span>&#123;</span><br><span class="line">        checkCapacity();</span><br><span class="line">        dataArr[rear] = val;</span><br><span class="line">        rear++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 出队一个元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">pop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (isEmpty()) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        checkCapacity();</span><br><span class="line">        Integer temp = dataArr[font];</span><br><span class="line">        dataArr[font++] = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">return</span> temp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 容量检查</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">checkCapacity</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (rear &gt;= capacity) &#123;</span><br><span class="line">            <span class="comment">// 空间不足,扩容</span></span><br><span class="line">            capacity = capacity * <span class="number">2</span>;</span><br><span class="line">            Integer[] tempArr = <span class="keyword">new</span> Integer[capacity];</span><br><span class="line">            System.arraycopy(dataArr, <span class="number">0</span>, tempArr, <span class="number">0</span>, rear - font);</span><br><span class="line">            <span class="keyword">this</span>.dataArr = tempArr;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(</span><br><span class="line">                <span class="string">&quot;NormalQueue&#123;&quot;</span> +</span><br><span class="line">                        <span class="string">&quot;dataArr=&quot;</span> + Arrays.toString(dataArr) +</span><br><span class="line">                        <span class="string">&quot;, capacity=&quot;</span> + capacity +</span><br><span class="line">                        <span class="string">&quot;, font=&quot;</span> + font +</span><br><span class="line">                        <span class="string">&quot;, rear=&quot;</span> + rear +</span><br><span class="line">                        <span class="string">&#x27;&#125;&#x27;</span></span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        NormalQueue queue = <span class="keyword">new</span> NormalQueue();</span><br><span class="line">        System.out.println(queue.peek());</span><br><span class="line">        queue.print();</span><br><span class="line">        queue.push(<span class="number">1</span>);</span><br><span class="line">        queue.push(<span class="number">2</span>);</span><br><span class="line">        queue.push(<span class="number">3</span>);</span><br><span class="line">        queue.push(<span class="number">4</span>);</span><br><span class="line">        queue.push(<span class="number">5</span>);</span><br><span class="line">        queue.push(<span class="number">6</span>);</span><br><span class="line">        queue.push(<span class="number">7</span>);</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        queue.print();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="2-2-循环队列"><a href="#2-2-循环队列" class="headerlink" title="2.2 循环队列"></a>2.2 循环队列</h2><h3 id="2-2-1-实现原理"><a href="#2-2-1-实现原理" class="headerlink" title="2.2.1 实现原理"></a>2.2.1 实现原理</h3><p>普通队列最大的缺点就是出队后空出来的位置无法复用,而循环队列很好的解决了这个问题</p>
+<p>跟普通队列一样,一开始,队头队尾指向第一个位置</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210304111620.png" alt="image-20210304111620056" style="zoom:50%;" />
+
+<p>连续添加五个元素</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210304150530.png" alt="image-20210304150529969" style="zoom:50%;" />
+
+<p>此时,再添加一个元素时,队尾指针就会超出最大容量,此时队尾指针就成了空指针,而循环队列为了避免这种情况,采用对最大值取模的方式,让队尾指针重新指向队头</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210304150818.png" alt="image-20210304150818589" style="zoom:50%;" />
+
+<p>由普通队列得知,当队头与队尾指针指向同一位置时,内容为空,但此时内容满了发现队头与队尾也指向相同位置</p>
+<p>此处解决方案有二:</p>
+<ol>
+<li><p>添加一个size属性代表元素容量,当队头与队尾指向同一元素时,如果size&gt;0,则代表队满,如果size=0,则代表队空</p>
+</li>
+<li><p>让队头的前一个位置为空置位,不得塞元素,如下图,此时最大容量为5,即元素F无法入队,当前队列已满,只有出队一个元素才可以再入队</p>
+ <img src="https://gitee.com/bean-chan/images/raw/master/img/20210304151404.png" alt="image-20210304151404743" style="zoom:50%;" />
+
+</li>
+</ol>
+<p>基于方案二,此时再删除一个元素A、添加一个F,则此时队列情况如下</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210304152420.png" alt="image-20210304152420838" style="zoom:50%;" />
+
+
+
+
+
+<h3 id="2-2-2-基于数组实现-方案二"><a href="#2-2-2-基于数组实现-方案二" class="headerlink" title="2.2.2 基于数组实现(方案二)"></a>2.2.2 基于数组实现(方案二)</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Classname</span> NormalQueue</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> ChenBin</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@CreateDate</span> 2021/3/4 1:35 PM</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CircularQueue</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Integer[] dataArr;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> capacity;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> font;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> rear;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_SIZE = <span class="number">6</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 构造器</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CircularQueue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.dataArr = <span class="keyword">new</span> Integer[DEFAULT_SIZE];</span><br><span class="line">        <span class="keyword">this</span>.capacity = DEFAULT_SIZE;</span><br><span class="line">        <span class="keyword">this</span>.font = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">this</span>.rear = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 队列是否为空</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> rear - font == <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 查看队首元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">peek</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (isEmpty()) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        <span class="comment">// rear先加capacity,再对capacity取模</span></span><br><span class="line">        <span class="keyword">return</span> dataArr[(rear + capacity - <span class="number">1</span>) % capacity];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 入队一个元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">push</span><span class="params">(Integer val)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 队满</span></span><br><span class="line">        <span class="keyword">if</span> ((rear + <span class="number">1</span>) % capacity == font) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;队满,无法添加&quot;</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        dataArr[(rear) % capacity] = val;</span><br><span class="line">        rear = (rear + <span class="number">1</span>) % capacity;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 出队一个元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">pop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (isEmpty()) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        Integer temp = dataArr[(font + capacity) % capacity];</span><br><span class="line">        dataArr[(font + capacity) % capacity] = <span class="keyword">null</span>;</span><br><span class="line">        font++;</span><br><span class="line">        <span class="keyword">return</span> temp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(</span><br><span class="line">                <span class="string">&quot;NormalQueue&#123;&quot;</span> +</span><br><span class="line">                        <span class="string">&quot;dataArr=&quot;</span> + Arrays.toString(dataArr) +</span><br><span class="line">                        <span class="string">&quot;, capacity=&quot;</span> + capacity +</span><br><span class="line">                        <span class="string">&quot;, font=&quot;</span> + font +</span><br><span class="line">                        <span class="string">&quot;, rear=&quot;</span> + rear +</span><br><span class="line">                        <span class="string">&#x27;&#125;&#x27;</span></span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        CircularQueue queue = <span class="keyword">new</span> CircularQueue();</span><br><span class="line"><span class="comment">//        System.out.println(queue.peek());</span></span><br><span class="line">        queue.print();</span><br><span class="line">        queue.push(<span class="number">1</span>);</span><br><span class="line">        queue.print();</span><br><span class="line">        queue.push(<span class="number">2</span>);</span><br><span class="line">        queue.push(<span class="number">3</span>);</span><br><span class="line">        queue.push(<span class="number">4</span>);</span><br><span class="line">        queue.push(<span class="number">5</span>);</span><br><span class="line">        queue.print();</span><br><span class="line">        queue.push(<span class="number">6</span>);</span><br><span class="line">        queue.print();</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        queue.print();</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        queue.print();</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        queue.print();</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        queue.print();</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        queue.print();</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        queue.push(<span class="number">6</span>);</span><br><span class="line">        queue.push(<span class="number">7</span>);</span><br><span class="line">        queue.print();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="2-3-双端队列"><a href="#2-3-双端队列" class="headerlink" title="2.3 双端队列"></a>2.3 双端队列</h2><h3 id="2-3-1-实现原理"><a href="#2-3-1-实现原理" class="headerlink" title="2.3.1 实现原理"></a>2.3.1 实现原理</h3><p>前两种队列都只能做到队头出,队尾进,尽管这也是队列设计出来的初衷,但是有些情况就是需要既可以队头进出元素,又可以队尾进出元素,而这就是双端队列</p>
+<p>具体原理与普通队列相似,只是首尾都可以进出元素,除了有后继指针外,还需要前驱指针,否则队尾弹出元素后无法指定队尾</p>
+<img src="https://gitee.com/bean-chan/images/raw/master/img/20210305162405.png" alt="image-20210305162405642" style="zoom:50%;" />
+
+<h3 id="2-3-2-基于链表实现"><a href="#2-3-2-基于链表实现" class="headerlink" title="2.3.2 基于链表实现"></a>2.3.2 基于链表实现</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Classname</span> Node</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> ChenBin</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@CreateDate</span> 2021/3/4 4:27 PM</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 节点值</span></span><br><span class="line">    Integer value;</span><br><span class="line">    <span class="comment">// 后继</span></span><br><span class="line">    Node next;</span><br><span class="line">    <span class="comment">// 前驱</span></span><br><span class="line">    Node prev;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(Integer value)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.value = value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">getValue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setValue</span><span class="params">(Integer value)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.value = value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Node <span class="title">getNext</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setNext</span><span class="params">(Node next)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.next = next;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Classname</span> NormalQueue</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> ChenBin</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@CreateDate</span> 2021/3/4 1:35 PM</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Deque</span> </span>&#123;</span><br><span class="line">  </span><br><span class="line">    <span class="comment">// 队头</span></span><br><span class="line">    Node head;</span><br><span class="line">    <span class="comment">// 队尾</span></span><br><span class="line">    Node rear;</span><br><span class="line">    <span class="keyword">int</span> size;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Deque</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        head = <span class="keyword">new</span> Node();</span><br><span class="line">        rear = head;</span><br><span class="line">        size = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 队列是否为空</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> size == <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 查看队首元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">peek</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (isEmpty()) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">return</span> head.next.value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 队头入队一个元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addFirst</span><span class="params">(Integer val)</span> </span>&#123;</span><br><span class="line">        size++;</span><br><span class="line">        Node node = <span class="keyword">new</span> Node(val);</span><br><span class="line">        node.next = head.next;</span><br><span class="line">        <span class="keyword">if</span> (head.next != <span class="keyword">null</span>)</span><br><span class="line">            head.next.prev = node;</span><br><span class="line">        head.next = node;</span><br><span class="line">        node.prev = head;</span><br><span class="line">        <span class="keyword">if</span> (size == <span class="number">1</span>) &#123;</span><br><span class="line">            rear = node;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 队尾入队一个元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addLast</span><span class="params">(Integer val)</span> </span>&#123;</span><br><span class="line">        size++;</span><br><span class="line">        Node newNode = <span class="keyword">new</span> Node(val);</span><br><span class="line">        newNode.prev = rear;</span><br><span class="line">        rear.next = newNode;</span><br><span class="line">        rear = newNode;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 队头出队一个元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">removeFirst</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (size == <span class="number">0</span>) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (size == <span class="number">1</span>) &#123;</span><br><span class="line">            Integer val = head.next.value;</span><br><span class="line">            head.next = <span class="keyword">null</span>;</span><br><span class="line">            rear = head;</span><br><span class="line">            <span class="keyword">return</span> val;</span><br><span class="line">        &#125;</span><br><span class="line">        size = size - <span class="number">1</span> &lt; <span class="number">0</span> ? <span class="number">0</span> : size - <span class="number">1</span>;</span><br><span class="line">        <span class="comment">// 两个元素以上</span></span><br><span class="line">        Node temp = head.next;</span><br><span class="line">        temp.next.prev = head;</span><br><span class="line">        head.next = temp.next;</span><br><span class="line">        <span class="keyword">return</span> temp.value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 队尾出队一个元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">removeLast</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (size == <span class="number">0</span>) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        size = size - <span class="number">1</span> &lt; <span class="number">0</span> ? <span class="number">0</span> : size - <span class="number">1</span>;</span><br><span class="line">        Node temp = rear.prev;</span><br><span class="line">        rear = temp;</span><br><span class="line">        rear.next = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">return</span> temp.value;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Node temp = head;</span><br><span class="line">        System.out.print(<span class="string">&quot;Arr[ &quot;</span>);</span><br><span class="line">        <span class="keyword">while</span> (temp.next != <span class="keyword">null</span>) &#123;</span><br><span class="line">            System.out.print(temp.next.value + <span class="string">&quot; &quot;</span>);</span><br><span class="line">            temp = temp.next;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">&quot;]&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Deque queue = <span class="keyword">new</span> Deque();</span><br><span class="line">        System.out.println(queue.peek());</span><br><span class="line">        queue.addFirst(<span class="number">1</span>);</span><br><span class="line">        queue.print();</span><br><span class="line">        queue.addLast(<span class="number">2</span>);</span><br><span class="line">        queue.addFirst(<span class="number">0</span>);</span><br><span class="line">        queue.print();</span><br><span class="line">        queue.removeFirst();</span><br><span class="line">        queue.print();</span><br><span class="line">        queue.removeLast();</span><br><span class="line">        queue.print();</span><br><span class="line">        queue.removeFirst();</span><br><span class="line">        queue.print();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+]]></content>
+      <categories>
+        <category>数据结构</category>
+      </categories>
+      <tags>
+        <tag>队列</tag>
       </tags>
   </entry>
   <entry>
@@ -909,106 +796,219 @@ nohup java -jar springboot-demo-0.0.1-SNAPSHOT.jar &amp;
       </tags>
   </entry>
   <entry>
-    <title>数据结构-队列</title>
-    <url>/2021/03/04/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E9%98%9F%E5%88%97/</url>
-    <content><![CDATA[<h1 id="1-队列介绍"><a href="#1-队列介绍" class="headerlink" title="1 队列介绍"></a>1 队列介绍</h1><h2 id="1-1-定义"><a href="#1-1-定义" class="headerlink" title="1.1 定义"></a>1.1 定义</h2><p>队列是一种特殊的线性表,遵循FIFO(first in first out)先进先出原则,整个队列由一个线性表构成,可以是数组或者链表,同时由队头(font)来表示第一个元素、队尾(rear)最后一个元素,并且队列只允许在队头删除元素,队尾添加元素</p>
-<h2 id="1-2-本例仓库地址"><a href="#1-2-本例仓库地址" class="headerlink" title="1.2 本例仓库地址"></a>1.2 本例仓库地址</h2><p>仓库地址:<a href="https://gitee.com/bean-chan/data-structure.git">https://gitee.com/bean-chan/data-structure.git</a></p>
-<h1 id="2-三种队列"><a href="#2-三种队列" class="headerlink" title="2 三种队列"></a>2 三种队列</h1><h2 id="2-1-普通队列"><a href="#2-1-普通队列" class="headerlink" title="2.1 普通队列"></a>2.1 普通队列</h2><h3 id="2-1-1-实现原理"><a href="#2-1-1-实现原理" class="headerlink" title="2.1.1 实现原理"></a>2.1.1 实现原理</h3><p>创建之初,队头与队尾处在第一个位置上</p>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210304111620.png" alt="image-20210304111620056" style="zoom:50%;" />
-
-<p>随后往队伍里连续先后添加两个元素A与B后</p>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210304112336.png" alt="image-20210304112336248" style="zoom:50%;" />
-
-<p>队尾向后连续位移两个位置,并且每添加一次元素,队尾就会向后位移一个位置,直到整个线性表最末端为止,此时则队列不再允许添加元素</p>
-<p>我们进行删除操作时,队头会向后位移一个位置,例如我们将A出队</p>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210304112748.png" alt="image-20210304112748369" style="zoom:50%;" />
-
-<p>之后再将B出队</p>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210304112838.png" alt="image-20210304112838312" style="zoom:50%;" />
-
-<p>当队头与队尾指向同一位置时,说明此刻队列为空</p>
-<h3 id="2-1-2-基于数组实现"><a href="#2-1-2-基于数组实现" class="headerlink" title="2.1.2 基于数组实现"></a>2.1.2 基于数组实现</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Classname</span> NormalQueue</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> ChenBin</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@CreateDate</span> 2021/3/4 1:35 PM</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NormalQueue</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Integer[] dataArr; <span class="comment">// 存放元素的数组</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> capacity; <span class="comment">// 容量</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> font; <span class="comment">// 队头指针</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> rear; <span class="comment">// 队尾指针</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_SIZE = <span class="number">6</span>; <span class="comment">// 默认容量</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 构造器</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">NormalQueue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.dataArr = <span class="keyword">new</span> Integer[DEFAULT_SIZE];</span><br><span class="line">        <span class="keyword">this</span>.capacity = DEFAULT_SIZE;</span><br><span class="line">        <span class="keyword">this</span>.font = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">this</span>.rear = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 队列是否为空</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> rear - font == <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 查看队首元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">peek</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (isEmpty()) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">return</span> dataArr[rear - <span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 入队一个元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">push</span><span class="params">(Integer val)</span> </span>&#123;</span><br><span class="line">        checkCapacity();</span><br><span class="line">        dataArr[rear] = val;</span><br><span class="line">        rear++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 出队一个元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">pop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (isEmpty()) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        checkCapacity();</span><br><span class="line">        Integer temp = dataArr[font];</span><br><span class="line">        dataArr[font++] = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">return</span> temp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 容量检查</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">checkCapacity</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (rear &gt;= capacity) &#123;</span><br><span class="line">            <span class="comment">// 空间不足,扩容</span></span><br><span class="line">            capacity = capacity * <span class="number">2</span>;</span><br><span class="line">            Integer[] tempArr = <span class="keyword">new</span> Integer[capacity];</span><br><span class="line">            System.arraycopy(dataArr, <span class="number">0</span>, tempArr, <span class="number">0</span>, rear - font);</span><br><span class="line">            <span class="keyword">this</span>.dataArr = tempArr;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(</span><br><span class="line">                <span class="string">&quot;NormalQueue&#123;&quot;</span> +</span><br><span class="line">                        <span class="string">&quot;dataArr=&quot;</span> + Arrays.toString(dataArr) +</span><br><span class="line">                        <span class="string">&quot;, capacity=&quot;</span> + capacity +</span><br><span class="line">                        <span class="string">&quot;, font=&quot;</span> + font +</span><br><span class="line">                        <span class="string">&quot;, rear=&quot;</span> + rear +</span><br><span class="line">                        <span class="string">&#x27;&#125;&#x27;</span></span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        NormalQueue queue = <span class="keyword">new</span> NormalQueue();</span><br><span class="line">        System.out.println(queue.peek());</span><br><span class="line">        queue.print();</span><br><span class="line">        queue.push(<span class="number">1</span>);</span><br><span class="line">        queue.push(<span class="number">2</span>);</span><br><span class="line">        queue.push(<span class="number">3</span>);</span><br><span class="line">        queue.push(<span class="number">4</span>);</span><br><span class="line">        queue.push(<span class="number">5</span>);</span><br><span class="line">        queue.push(<span class="number">6</span>);</span><br><span class="line">        queue.push(<span class="number">7</span>);</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        queue.print();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="2-2-循环队列"><a href="#2-2-循环队列" class="headerlink" title="2.2 循环队列"></a>2.2 循环队列</h2><h3 id="2-2-1-实现原理"><a href="#2-2-1-实现原理" class="headerlink" title="2.2.1 实现原理"></a>2.2.1 实现原理</h3><p>普通队列最大的缺点就是出队后空出来的位置无法复用,而循环队列很好的解决了这个问题</p>
-<p>跟普通队列一样,一开始,队头队尾指向第一个位置</p>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210304111620.png" alt="image-20210304111620056" style="zoom:50%;" />
-
-<p>连续添加五个元素</p>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210304150530.png" alt="image-20210304150529969" style="zoom:50%;" />
-
-<p>此时,再添加一个元素时,队尾指针就会超出最大容量,此时队尾指针就成了空指针,而循环队列为了避免这种情况,采用对最大值取模的方式,让队尾指针重新指向队头</p>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210304150818.png" alt="image-20210304150818589" style="zoom:50%;" />
-
-<p>由普通队列得知,当队头与队尾指针指向同一位置时,内容为空,但此时内容满了发现队头与队尾也指向相同位置</p>
-<p>此处解决方案有二:</p>
+    <title>Jenkins</title>
+    <url>/2021/02/02/Jenkins/</url>
+    <content><![CDATA[<h1 id="1-什么是Jenkins"><a href="#1-什么是Jenkins" class="headerlink" title="1. 什么是Jenkins"></a>1. 什么是Jenkins</h1><h2 id="1-1-我们为啥需要jenkins"><a href="#1-1-我们为啥需要jenkins" class="headerlink" title="1.1 我们为啥需要jenkins"></a>1.1 我们为啥需要jenkins</h2><p>在一次系统开发中,往往需要如下几步:</p>
 <ol>
-<li><p>添加一个size属性代表元素容量,当队头与队尾指向同一元素时,如果size&gt;0,则代表队满,如果size=0,则代表队空</p>
+<li>写代码</li>
+<li>代码提交</li>
+<li>四处打听有没有人没提交代码</li>
+<li>项目打包(通常是jar包和war包)</li>
+<li>上传到Linux服务器上</li>
+<li>如果项目正在运行,关闭它</li>
+<li>启动刚刚部署的项目</li>
+<li>如果有人突然举手说我代码好像有点问题!重复步骤1-7,可以说是相等的折磨人了</li>
+</ol>
+<p>这时有人就会问了,<strong>有没有那种可以自动打包部署的工具呢</strong>?</p>
+<p><a href="https://imgchr.com/i/sz9gQ1"><img src="https://img-blog.csdnimg.cn/img_convert/80ef6c5703529b4af9c1ab9dc92f150a.png" alt="sz9gQ1.jpg"></a></p>
+<blockquote>
+<p>正确答案:<strong>Jenkins</strong></p>
+</blockquote>
+<p>Jenkins是一个基于Java构筑的一个<strong>持续集成</strong>工具,可以帮助用户更好地实现持续集成</p>
+<a id="more"></a>
+
+<h2 id="1-2-Jenkin实现原理"><a href="#1-2-Jenkin实现原理" class="headerlink" title="1.2. Jenkin实现原理"></a>1.2. Jenkin实现原理</h2><ol>
+<li><p>程序员们提交代码</p>
 </li>
-<li><p>让队头的前一个位置为空置位,不得塞元素,如下图,此时最大容量为5,即元素F无法入队,当前队列已满,只有出队一个元素才可以再入队</p>
- <img src="https://gitee.com/bean-chan/images/raw/master/img/20210304151404.png" alt="image-20210304151404743" style="zoom:50%;" />
+<li><p>版本控制服务器(git、svm)整合代码库</p>
+</li>
+<li><p>版本控制服务器通知Jenkins自动化部署</p>
+</li>
+<li><p>Jenkins调用git/svn插件获取源码</p>
+</li>
+<li><p>Jenkins调用maven插件打包成war包或者是jar包</p>
+</li>
+<li><p>Jenkins调用命令将项目部署到服务器</p>
+</li>
+<li><p>使用人员:测试/前端</p>
+</li>
+</ol>
+<hr>
+<h1 id="2-Jenkins搭建"><a href="#2-Jenkins搭建" class="headerlink" title="2. Jenkins搭建"></a>2. Jenkins搭建</h1><h2 id="2-1-Jenkins环境搭建-以CentOS7-5为例"><a href="#2-1-Jenkins环境搭建-以CentOS7-5为例" class="headerlink" title="2.1. Jenkins环境搭建(以CentOS7.5为例)"></a>2.1. Jenkins环境搭建(以CentOS7.5为例)</h2><ol>
+<li>jdk</li>
+<li>maven/gradle</li>
+<li>git/svm</li>
+</ol>
+<p>以上为部署java项目的基本环境,请先行搭建好</p>
+<h2 id="2-2-安装Jenkins"><a href="#2-2-安装Jenkins" class="headerlink" title="2.2. 安装Jenkins"></a>2.2. 安装Jenkins</h2><ol>
+<li>安装包下载,Jenkins官网下载较慢,这里提供国内下载地址:<a href="https://mirrors.aliyun.com/jenkins/war/latest/jenkins.war">Jenkins</a></li>
+<li>在安装包根路径下输入:<br> <strong>nohup java -jar -      Dhudson.security.csrf.GlobalCrumbIssuerConfiguration.DISABLE_CSRF_PROTECTION=true  jenkins.war –httpPort=8080 &amp;</strong> <ul>
+<li>nohup …………. &amp; 后台启动</li>
+<li>Dhudson.security.csrf.GlobalCrumbIssuerConfiguration.DISABLE_CSRF_PROTECTION=true 为了关闭CSRF,Jenkins2.2版本之后无法关闭CSRF,会导致项目拉取失败</li>
+<li>jenkins.war 下载下来的war包</li>
+<li>–httpPort=8080 指定jenkins管理页面的端口</li>
+</ul>
+</li>
+<li>安装结束后会有一个很长的初始密码,如果忘了可以在~/.jenkins/secrets/initialAdminPassword文件中查看</li>
+<li>在浏览器输入 <a href="http://localhost:8080/">http://localhost:8080</a></li>
+<li>输入密码后,建议点击安装推荐的插件,保证基本功能可用</li>
+<li>安装完成后设置首个管理员用户和密码</li>
+</ol>
+<h2 id="2-3-Jenkins初始化配置"><a href="#2-3-Jenkins初始化配置" class="headerlink" title="2.3. Jenkins初始化配置"></a>2.3. Jenkins初始化配置</h2><h3 id="2-3-1-汉化插件-可选"><a href="#2-3-1-汉化插件-可选" class="headerlink" title="2.3.1. 汉化插件(可选)"></a>2.3.1. 汉化插件(可选)</h3><p>Linux安装完成后,第一次打开发现内部全都是英文的    <img src="https://tva1.sinaimg.cn/large/008eGmZEly1gnb7mh7zrqj31ov0u0tcf.jpg" alt="yVxkP1.png"></p>
+<p>汉化步骤:</p>
+<ol>
+<li><p>点击Manage Jenkins</p>
+</li>
+<li><p>点击Mange Plugins</p>
+</li>
+<li><p>点击Advanced,设置Update Sites的URL为:<a href="https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/update-center.json">https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/update-center.json</a> 用国内镜像源安装插件速度会很快</p>
+</li>
+<li><p>插件安装(新老版本二选一) </p>
+<ul>
+<li><p>老版的安装<strong>Locale</strong>插件,随后依次点击Manage Jenkins -&gt; Configure System,找到Locale输入<strong>zh_CN</strong>,并在下面打钩</p>
+</li>
+<li><p>新版的安装Localization:Chinese(Simplified)插件即可(笔者自用,Jenkins版本2.277)</p>
+</li>
+</ul>
+</li>
+<li><p>拉到最下方点击save</p>
+</li>
+<li><p>重启( 推荐方式: <a href="http://localhost:8080/restart">http://localhost:8080/restart</a> )真的很省事</p>
+</li>
+</ol>
+<h3 id="2-3-2-全局工具配置-系统管理底下"><a href="#2-3-2-全局工具配置-系统管理底下" class="headerlink" title="2.3.2. 全局工具配置(系统管理底下)"></a>2.3.2. 全局工具配置(系统管理底下)</h3><p>JDK、Git、Maven配置:</p>
+<p><img src="https://tva1.sinaimg.cn/large/008eGmZEly1gnb7rj9camj31180g6405.jpg" alt="y9nACn.png"></p>
+<p><img src="https://tva1.sinaimg.cn/large/008eGmZEgy1gn9c7o1qpej30o018ktb0.jpg" alt="ypAMdI.png"><br>注意项: </p>
+<ol>
+<li>如果没有git的配置项,先在插件里安装一下git插件,具体安装方式参照上面汉化步骤</li>
+<li>是否自动安装自行考虑,网上看别人的建议是用自己的(自己的才是最好的)</li>
+<li>记得拉到最底下点保存</li>
+<li>换上你<strong>自己</strong>的目录配置项</li>
+<li>记得把Maven的settings.xml里的mrror换成阿里源</li>
+<li>上图git记得配置成git<strong>可执行文件</strong>的全路径</li>
+</ol>
+<h3 id="2-3-3-安装远程服务器插件以及其余插件"><a href="#2-3-3-安装远程服务器插件以及其余插件" class="headerlink" title="2.3.3. 安装远程服务器插件以及其余插件"></a>2.3.3. 安装远程服务器插件以及其余插件</h3><p>一共需要安装三个插件(安装步骤参考上面汉化步骤):</p>
+<ol>
+<li>Publish Over SSH 用于连接远程服务器</li>
+<li>Deploy to container 用于把打包的应用发布到远程服务器</li>
+<li>Maven Integration 用于构建Maven项目</li>
+</ol>
+<h2 id="2-4-配置连接远程服务器的SSH"><a href="#2-4-配置连接远程服务器的SSH" class="headerlink" title="2.4. 配置连接远程服务器的SSH"></a>2.4. 配置连接远程服务器的SSH</h2><ol>
+<li>依次点击 系统管理 -&gt; 系统配置</li>
+<li>拉到最底下找到Publish over SSH,参考下图填写完毕<br><img src="https://tva1.sinaimg.cn/large/008eGmZEgy1gn9c7kjjz6j30dk0mxaaz.jpg" alt="在这里插入图片描述"></li>
+</ol>
+<p>参考值:</p>
+<table>
+<thead>
+<tr>
+<th>名字</th>
+<th>对应内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Passphrase</td>
+<td>服务器的密码</td>
+</tr>
+<tr>
+<td>Path to key</td>
+<td>连接远程服务器密钥文件的路径</td>
+</tr>
+<tr>
+<td>Key</td>
+<td>SSH Key (具体内容看下面注意项)</td>
+</tr>
+<tr>
+<td>Name</td>
+<td>自定义服务器名</td>
+</tr>
+<tr>
+<td>HostName</td>
+<td>服务器IP地址</td>
+</tr>
+<tr>
+<td>UserName</td>
+<td>服务器用户名</td>
+</tr>
+<tr>
+<td>Remote Directory</td>
+<td>传输文件的目录</td>
+</tr>
+</tbody></table>
+<p>注意项:</p>
+<ol>
+<li><p>如果找不到Publish over SSH,说明该插件未安装,请参考汉化步骤自行安装</p>
+</li>
+<li><p>登录方式:</p>
+<ul>
+<li>如果是用户名密码登录,输入Passphrase即可</li>
+<li>如果是SSH秘钥登录则输入Path to Key以及Key</li>
+</ul>
+</li>
+<li><p>Key在~/.ssh/id_rsa.pub文件里,若无此文件则命令行输入<strong>ssh-keygen</strong>,然后一路回车自动生成(Windows系统还请自行百度)</p>
+</li>
+<li><p>Remote Directory是你打包后的项目(jar包/war包)存放的地方,请先记住后续需要使用</p>
+</li>
+<li><p>右下角有个Test Configuration可以点一下看看有没有Success</p>
+</li>
+</ol>
+<hr>
+<h1 id="3-守护程序员的笑容—自动化集成部署-来了来了-他来了"><a href="#3-守护程序员的笑容—自动化集成部署-来了来了-他来了" class="headerlink" title="3. 守护程序员的笑容—自动化集成部署(来了来了,他来了)"></a>3. 守护程序员的笑容—自动化集成部署(来了来了,他来了)</h1><h2 id="3-1-项目构建"><a href="#3-1-项目构建" class="headerlink" title="3.1 项目构建"></a>3.1 项目构建</h2><p>以构建maven项目为例,构建步骤如下:</p>
+<ol>
+<li><p>新建任务<br> <img src="https://tva1.sinaimg.cn/large/008eGmZEgy1gn9c7m1759j307z09nt96.jpg" alt="yPMZK1.png"></p>
+</li>
+<li><p>构建maven项目<br><a href="https://imgchr.com/i/ySdOpT"><img src="https://tva1.sinaimg.cn/large/008eGmZEgy1gn9c7pry4uj30lm0f4wg8.jpg" alt="ySdOpT.png"></a></p>
+</li>
+<li><p>源码管理配置(选择github上的项目)</p>
+<p>  <img src="https://tva1.sinaimg.cn/large/008eGmZEly1gnb7tw5j3uj30if0i9wfp.jpg" alt="yVX5JP.png"></p>
+<p> <img src="https://tva1.sinaimg.cn/large/008eGmZEly1gnb7ub1e8vj30d9092jrn.jpg" alt="yVbyH1.png"></p>
+</li>
+<li><p>触发器配置(github稍后会配置)<br> <img src="https://tva1.sinaimg.cn/large/008eGmZEly1gnb7tgo8agj31020j177a.jpg">    </p>
+</li>
+<li><p>构建后操作</p>
+<p><img src="https://tva1.sinaimg.cn/large/008eGmZEly1gnb7unh2zbj30ze0ijdit.jpg" alt="yVbyH1.png"></p>
+</li>
+</ol>
+<h2 id="3-2-github配置"><a href="#3-2-github配置" class="headerlink" title="3.2. github配置"></a>3.2. github配置</h2><p><img src="https://tva1.sinaimg.cn/large/008eGmZEly1gnb7v0p9exj30o70l3n0a.jpg" alt="yVxkP1.png"></p>
+<h2 id="3-3-服务器添加脚本"><a href="#3-3-服务器添加脚本" class="headerlink" title="3.3 服务器添加脚本"></a>3.3 服务器添加脚本</h2><p>进入到2.4配置的Remote Directory里,创建两个脚本(请根据自己的情况修改脚本)</p>
+<p>stop.sh:</p>
+<pre><code>#!/bin/bash
+pid=ps -ef |grep springboot-demo-0.0.1-SNAPSHOT.jar|awk &#39;&#123;print $2&#125;&#39;
+if [ -n &quot;$pid&quot; ]
+then
+kill -9 $pid
+fi
+</code></pre>
+<p>start.sh:</p>
+<pre><code>#!/bin/bash
+chmod 777 /usr/local/java-projects/springboot-demo-0.0.1-SNAPSHOT.jar
+cd /usr/local/java-projects
+nohup java -jar springboot-demo-0.0.1-SNAPSHOT.jar &amp;
+</code></pre>
+<h2 id="3-4-测试"><a href="#3-4-测试" class="headerlink" title="3.4  测试"></a>3.4  测试</h2><ol>
+<li>编写一个HelloController</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">		<span class="meta">@RestController</span></span><br><span class="line">		<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloController</span> </span>&#123;</span><br><span class="line">		    <span class="meta">@GetMapping(&quot;/hello&quot;)</span></span><br><span class="line">		    <span class="function"><span class="keyword">public</span> String <span class="title">hello</span><span class="params">()</span></span>&#123;</span><br><span class="line">		        <span class="keyword">return</span> <span class="string">&quot;Hello World!!!!!!!!!!!!&quot;</span>;</span><br><span class="line">		    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>push项目</li>
+<li>jenkins开始自动部署项目<img src="https://s3.ax1x.com/2021/02/01/yZPeMt.png"/>
+
 
 </li>
 </ol>
-<p>基于方案二,此时再删除一个元素A、添加一个F,则此时队列情况如下</p>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210304152420.png" alt="image-20210304152420838" style="zoom:50%;" />
-
-
-
-
-
-<h3 id="2-2-2-基于数组实现-方案二"><a href="#2-2-2-基于数组实现-方案二" class="headerlink" title="2.2.2 基于数组实现(方案二)"></a>2.2.2 基于数组实现(方案二)</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Classname</span> NormalQueue</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> ChenBin</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@CreateDate</span> 2021/3/4 1:35 PM</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CircularQueue</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Integer[] dataArr;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> capacity;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> font;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> rear;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_SIZE = <span class="number">6</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 构造器</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CircularQueue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.dataArr = <span class="keyword">new</span> Integer[DEFAULT_SIZE];</span><br><span class="line">        <span class="keyword">this</span>.capacity = DEFAULT_SIZE;</span><br><span class="line">        <span class="keyword">this</span>.font = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">this</span>.rear = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 队列是否为空</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> rear - font == <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 查看队首元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">peek</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (isEmpty()) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        <span class="comment">// rear先加capacity,再对capacity取模</span></span><br><span class="line">        <span class="keyword">return</span> dataArr[(rear + capacity - <span class="number">1</span>) % capacity];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 入队一个元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">push</span><span class="params">(Integer val)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 队满</span></span><br><span class="line">        <span class="keyword">if</span> ((rear + <span class="number">1</span>) % capacity == font) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;队满,无法添加&quot;</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        dataArr[(rear) % capacity] = val;</span><br><span class="line">        rear = (rear + <span class="number">1</span>) % capacity;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 出队一个元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">pop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (isEmpty()) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        Integer temp = dataArr[(font + capacity) % capacity];</span><br><span class="line">        dataArr[(font + capacity) % capacity] = <span class="keyword">null</span>;</span><br><span class="line">        font++;</span><br><span class="line">        <span class="keyword">return</span> temp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(</span><br><span class="line">                <span class="string">&quot;NormalQueue&#123;&quot;</span> +</span><br><span class="line">                        <span class="string">&quot;dataArr=&quot;</span> + Arrays.toString(dataArr) +</span><br><span class="line">                        <span class="string">&quot;, capacity=&quot;</span> + capacity +</span><br><span class="line">                        <span class="string">&quot;, font=&quot;</span> + font +</span><br><span class="line">                        <span class="string">&quot;, rear=&quot;</span> + rear +</span><br><span class="line">                        <span class="string">&#x27;&#125;&#x27;</span></span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        CircularQueue queue = <span class="keyword">new</span> CircularQueue();</span><br><span class="line"><span class="comment">//        System.out.println(queue.peek());</span></span><br><span class="line">        queue.print();</span><br><span class="line">        queue.push(<span class="number">1</span>);</span><br><span class="line">        queue.print();</span><br><span class="line">        queue.push(<span class="number">2</span>);</span><br><span class="line">        queue.push(<span class="number">3</span>);</span><br><span class="line">        queue.push(<span class="number">4</span>);</span><br><span class="line">        queue.push(<span class="number">5</span>);</span><br><span class="line">        queue.print();</span><br><span class="line">        queue.push(<span class="number">6</span>);</span><br><span class="line">        queue.print();</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        queue.print();</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        queue.print();</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        queue.print();</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        queue.print();</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        queue.print();</span><br><span class="line">        System.out.println(queue.pop());</span><br><span class="line">        queue.push(<span class="number">6</span>);</span><br><span class="line">        queue.push(<span class="number">7</span>);</span><br><span class="line">        queue.print();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="2-3-双端队列"><a href="#2-3-双端队列" class="headerlink" title="2.3 双端队列"></a>2.3 双端队列</h2><h3 id="2-3-1-实现原理"><a href="#2-3-1-实现原理" class="headerlink" title="2.3.1 实现原理"></a>2.3.1 实现原理</h3><p>前两种队列都只能做到队头出,队尾进,尽管这也是队列设计出来的初衷,但是有些情况就是需要既可以队头进出元素,又可以队尾进出元素,而这就是双端队列</p>
-<p>具体原理与普通队列相似,只是首尾都可以进出元素,除了有后继指针外,还需要前驱指针,否则队尾弹出元素后无法指定队尾</p>
-<img src="https://gitee.com/bean-chan/images/raw/master/img/20210305162405.png" alt="image-20210305162405642" style="zoom:50%;" />
-
-<h3 id="2-3-2-基于链表实现"><a href="#2-3-2-基于链表实现" class="headerlink" title="2.3.2 基于链表实现"></a>2.3.2 基于链表实现</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Classname</span> Node</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> ChenBin</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@CreateDate</span> 2021/3/4 4:27 PM</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 节点值</span></span><br><span class="line">    Integer value;</span><br><span class="line">    <span class="comment">// 后继</span></span><br><span class="line">    Node next;</span><br><span class="line">    <span class="comment">// 前驱</span></span><br><span class="line">    Node prev;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(Integer value)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.value = value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">getValue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setValue</span><span class="params">(Integer value)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.value = value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Node <span class="title">getNext</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setNext</span><span class="params">(Node next)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.next = next;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Classname</span> NormalQueue</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> ChenBin</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@CreateDate</span> 2021/3/4 1:35 PM</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Deque</span> </span>&#123;</span><br><span class="line">  </span><br><span class="line">    <span class="comment">// 队头</span></span><br><span class="line">    Node head;</span><br><span class="line">    <span class="comment">// 队尾</span></span><br><span class="line">    Node rear;</span><br><span class="line">    <span class="keyword">int</span> size;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Deque</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        head = <span class="keyword">new</span> Node();</span><br><span class="line">        rear = head;</span><br><span class="line">        size = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 队列是否为空</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> size == <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 查看队首元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">peek</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (isEmpty()) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">return</span> head.next.value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 队头入队一个元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addFirst</span><span class="params">(Integer val)</span> </span>&#123;</span><br><span class="line">        size++;</span><br><span class="line">        Node node = <span class="keyword">new</span> Node(val);</span><br><span class="line">        node.next = head.next;</span><br><span class="line">        <span class="keyword">if</span> (head.next != <span class="keyword">null</span>)</span><br><span class="line">            head.next.prev = node;</span><br><span class="line">        head.next = node;</span><br><span class="line">        node.prev = head;</span><br><span class="line">        <span class="keyword">if</span> (size == <span class="number">1</span>) &#123;</span><br><span class="line">            rear = node;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 队尾入队一个元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addLast</span><span class="params">(Integer val)</span> </span>&#123;</span><br><span class="line">        size++;</span><br><span class="line">        Node newNode = <span class="keyword">new</span> Node(val);</span><br><span class="line">        newNode.prev = rear;</span><br><span class="line">        rear.next = newNode;</span><br><span class="line">        rear = newNode;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 队头出队一个元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">removeFirst</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (size == <span class="number">0</span>) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (size == <span class="number">1</span>) &#123;</span><br><span class="line">            Integer val = head.next.value;</span><br><span class="line">            head.next = <span class="keyword">null</span>;</span><br><span class="line">            rear = head;</span><br><span class="line">            <span class="keyword">return</span> val;</span><br><span class="line">        &#125;</span><br><span class="line">        size = size - <span class="number">1</span> &lt; <span class="number">0</span> ? <span class="number">0</span> : size - <span class="number">1</span>;</span><br><span class="line">        <span class="comment">// 两个元素以上</span></span><br><span class="line">        Node temp = head.next;</span><br><span class="line">        temp.next.prev = head;</span><br><span class="line">        head.next = temp.next;</span><br><span class="line">        <span class="keyword">return</span> temp.value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 队尾出队一个元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">removeLast</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (size == <span class="number">0</span>) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        size = size - <span class="number">1</span> &lt; <span class="number">0</span> ? <span class="number">0</span> : size - <span class="number">1</span>;</span><br><span class="line">        Node temp = rear.prev;</span><br><span class="line">        rear = temp;</span><br><span class="line">        rear.next = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">return</span> temp.value;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Node temp = head;</span><br><span class="line">        System.out.print(<span class="string">&quot;Arr[ &quot;</span>);</span><br><span class="line">        <span class="keyword">while</span> (temp.next != <span class="keyword">null</span>) &#123;</span><br><span class="line">            System.out.print(temp.next.value + <span class="string">&quot; &quot;</span>);</span><br><span class="line">            temp = temp.next;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">&quot;]&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Deque queue = <span class="keyword">new</span> Deque();</span><br><span class="line">        System.out.println(queue.peek());</span><br><span class="line">        queue.addFirst(<span class="number">1</span>);</span><br><span class="line">        queue.print();</span><br><span class="line">        queue.addLast(<span class="number">2</span>);</span><br><span class="line">        queue.addFirst(<span class="number">0</span>);</span><br><span class="line">        queue.print();</span><br><span class="line">        queue.removeFirst();</span><br><span class="line">        queue.print();</span><br><span class="line">        queue.removeLast();</span><br><span class="line">        queue.print();</span><br><span class="line">        queue.removeFirst();</span><br><span class="line">        queue.print();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
+<ol start="4">
+<li>点击进项目,可查看控制台<br><img src="https://tva1.sinaimg.cn/large/008eGmZEgy1gn9c7ozkpqj30wb0e0ae4.jpg" alt="在这里插入图片描述"></li>
+</ol>
+<ol start="5">
+<li>访问项目路径 <a href="http://beanchan.cn/hello">http://beanchan.cn/hello</a> (我的,给你偷偷看一眼)</li>
+</ol>
+<hr>
+<p>&emsp;&emsp;至此我的处女作也算是小小的完结了,内容也只是入门,后续部分会慢慢完善,在哪里如有存在着问题,或者这篇哪里还可以改进的,又或者你在通篇按照我的指示完成后还是无法正常使用欢迎与我探讨探讨,感谢你的观看。</p>
 ]]></content>
       <categories>
-        <category>数据结构</category>
+        <category>运维</category>
       </categories>
       <tags>
-        <tag>队列</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>maven依赖冲突</title>
-    <url>/2021/03/08/maven%E4%BE%9D%E8%B5%96%E5%86%B2%E7%AA%81/</url>
-    <content><![CDATA[<h1 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h1><p>因将swagger从2.7.0升级到了2.9.2,再次启动项目时,爆出</p>
-<blockquote>
-<p>The following method did not exist:</p>
-<p>com.google.common.collect.FluentIterable.concat(Ljava/lang/Iterable;Ljava/lang/Iterable;)Lcom/google/common/collect/FluentIterable;</p>
-</blockquote>
-<p>升级完依赖遇到这种什么方法找不到的,十有八九就是发生依赖冲突了</p>
-<p>在同事推荐下,下载来IDEA插件<code>MavenHelper</code>来解决问题</p>
-<p>项目情况如下:</p>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210319095327.png" alt="image-20210319092655363"></p>
-<p>我在模块A引入了Swagger,在admin模块下的pom.xml下,此时通过MavenHelper发现,冲突包为guava,此时需要20版本的guava包,但是maven找到的只有18.0</p>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210319095333.png" alt="image-20210319094335639"></p>
-<p>因为maven肯定是会下载swagger所需要的包,但此时却找不到包,只有一种可能</p>
-<p>整个项目使用了别的有着guava-18.0的jar包,而忽略了有着guava-20.0的这个包</p>
-<p>因为项目自己选择了18.0但我们需要20.0,所以我选择直接排除guava-18.0这个依赖,再点击reimport</p>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210319095337.png" alt="image-20210319094616954"></p>
-<p>此时在看其他模块,发现有个模块已经排除了guava-18这个依赖</p>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210319095346.png" alt="image-20210319094725485"></p>
-<p>此时再启动项目,项目运行成功,但是上面这个模块原先运行着guava-18的依赖,现在强制给他升级到20.0,可能会有着别的问题</p>
-<p>如果有问题的话还是可以使用那个万金油方法,回滚swagger依赖版本到2.7.0,能用就行,还要啥自行车</p>
-]]></content>
-      <categories>
-        <category>技术杂谈</category>
-      </categories>
-      <tags>
-        <tag>maven</tag>
-        <tag>Java</tag>
+        <tag>Jenkins</tag>
       </tags>
   </entry>
 </search>
