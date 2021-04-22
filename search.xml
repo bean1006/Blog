@@ -1,6 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Springboot项目打包成Docker容器</title>
+    <url>/2021/04/22/Springboot%E9%A1%B9%E7%9B%AE%E6%89%93%E5%8C%85Docker%E5%AE%B9%E5%99%A8/</url>
+    <content><![CDATA[<h1 id="1-问题描述"><a href="#1-问题描述" class="headerlink" title="1 问题描述"></a>1 问题描述</h1><h3 id="1-1-版本与系统参数"><a href="#1-1-版本与系统参数" class="headerlink" title="1.1 版本与系统参数"></a>1.1 版本与系统参数</h3><table>
+<thead>
+<tr>
+<th align="center">系统与工具</th>
+<th align="center">版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">操作系统系统</td>
+<td align="center">MacOS</td>
+</tr>
+<tr>
+<td align="center">Docker</td>
+<td align="center">20.10.5</td>
+</tr>
+<tr>
+<td align="center">docker-maven-plugin插件</td>
+<td align="center">1.2.2</td>
+</tr>
+</tbody></table>
+<h3 id="1-2-问题分析"><a href="#1-2-问题分析" class="headerlink" title="1.2 问题分析"></a>1.2 问题分析</h3><p>当我需要在IDEA中把SpringBoot项目打包成Docker项目时,会报如下错误</p>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210422153528.png" alt="在这里插入图片描述"></p>
+<a id="more"></a>
+
+<p>查全栈,发现问题出在无法连接上2375端口</p>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210422113432.png" alt="image-20210422113432867"></p>
+<p>调用命令 <code>nc -vz -w 2 localhost 2375</code>,发现确实是没打开</p>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210422150923.png" alt="image-20210422150923346"></p>
+<h1 id="2-尝试解决"><a href="#2-尝试解决" class="headerlink" title="2 尝试解决"></a>2 尝试解决</h1><p>不知道有多少人和我一样查到如下的解决方案</p>
+<ol>
+<li>改版本: 把1.2.2改成1.0.0</li>
+<li>IDEA加参数: -Djdk.tls.client.protocols=TLSv1.2</li>
+<li>在docker客户端中勾选选项:   expose daemon on tcp://localhost:2375 without TLS</li>
+<li></li>
+</ol>
+<p>然鹅,并没什么效果,解决方案三的选项在我的客户端中也找不到<br>买家秀:<br><img src="https://img-blog.csdnimg.cn/20210421155105183.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NiNTQ3Nzg4NzE4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>卖家秀:<br><img src="https://gitee.com/bean-chan/images/raw/master/img/20210422160726.png" alt="image-20210422160726703"></p>
+<h1 id="3-最终解决方案"><a href="#3-最终解决方案" class="headerlink" title="3 最终解决方案"></a>3 最终解决方案</h1><p>主要原因就是: mac的2375端口没打开,导致打包的时候插件无法连接上</p>
+<p>解决方案:用socat来模拟一个2375端口</p>
+<p>具体命令如下:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run -it -d --name=socat -p 2375:2375 -v    /var/run/docker.sock:/var/run/docker.sock bobrik/socat TCP4-LISTEN:2375,fork,reuseaddr UNIX-CONNECT:/var/run/docker.sock</span><br></pre></td></tr></table></figure>
+<p>查看效果:</p>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210422161118.png" alt="image-20210422161117966"></p>
+<p>连接成功!</p>
+<p>再次打包看看</p>
+<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210422161301.png" alt="image-20210422161301852"></p>
+]]></content>
+      <categories>
+        <category>运维</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>Docker</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>maven依赖冲突</title>
     <url>/2021/03/08/maven%E4%BE%9D%E8%B5%96%E5%86%B2%E7%AA%81/</url>
     <content><![CDATA[<h1 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h1><p>因将swagger升级到了2.9.2,再次启动项目时,爆出</p>
