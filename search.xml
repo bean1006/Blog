@@ -50,11 +50,11 @@
 <p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210422161301.png" alt="image-20210422161301852"></p>
 ]]></content>
       <categories>
-        <category>运维</category>
+        <category>问题解决</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>Docker</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -83,11 +83,11 @@
 <p>如果有问题的话还是可以使用那个万金油方法,回滚swagger依赖版本到2.7.0,毕竟能用就行,还要啥自行车</p>
 ]]></content>
       <categories>
-        <category>技术杂谈</category>
+        <category>问题解决</category>
       </categories>
       <tags>
-        <tag>maven</tag>
         <tag>Java</tag>
+        <tag>maven</tag>
       </tags>
   </entry>
   <entry>
