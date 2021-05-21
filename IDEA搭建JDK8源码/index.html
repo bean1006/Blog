@@ -22,26 +22,27 @@
     var CONFIG = {"hostname":"chenb.in","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="起因因将swagger升级到了2.9.2,再次启动项目时,爆出  The following method did not exist: com.google.common.collect.FluentIterable.concat(Ljava&#x2F;lang&#x2F;Iterable;Ljava&#x2F;lang&#x2F;Iterable;)Lcom&#x2F;google&#x2F;common&#x2F;collect&#x2F;FluentIterable;">
+  <meta name="description" content="IDEA上导入JDK8的源码并可对代码进行备注">
 <meta property="og:type" content="article">
-<meta property="og:title" content="maven依赖冲突">
-<meta property="og:url" content="https://chenb.in/2021/03/08/maven%E4%BE%9D%E8%B5%96%E5%86%B2%E7%AA%81/index.html">
+<meta property="og:title" content="IDEA搭建JDK8源码">
+<meta property="og:url" content="https://chenb.in/IDEA%E6%90%AD%E5%BB%BAJDK8%E6%BA%90%E7%A0%81/index.html">
 <meta property="og:site_name" content="BeanChan&#39;s Blog">
-<meta property="og:description" content="起因因将swagger升级到了2.9.2,再次启动项目时,爆出  The following method did not exist: com.google.common.collect.FluentIterable.concat(Ljava&#x2F;lang&#x2F;Iterable;Ljava&#x2F;lang&#x2F;Iterable;)Lcom&#x2F;google&#x2F;common&#x2F;collect&#x2F;FluentIterable;">
+<meta property="og:description" content="IDEA上导入JDK8的源码并可对代码进行备注">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://gitee.com/bean-chan/images/raw/master/img/20210319095327.png">
-<meta property="og:image" content="https://gitee.com/bean-chan/images/raw/master/img/20210319095333.png">
-<meta property="og:image" content="https://gitee.com/bean-chan/images/raw/master/img/20210319095337.png">
-<meta property="og:image" content="https://gitee.com/bean-chan/images/raw/master/img/20210319095346.png">
-<meta property="article:published_time" content="2021-03-08T03:06:50.000Z">
-<meta property="article:modified_time" content="2021-04-22T08:23:25.952Z">
+<meta property="og:image" content="https://gitee.com/bean-chan/images/raw/master/img/20210511200253.png">
+<meta property="og:image" content="https://gitee.com/bean-chan/images/raw/master/img/20210511200332.png">
+<meta property="og:image" content="https://gitee.com/bean-chan/images/raw/master/img/20210511201539.png">
+<meta property="og:image" content="https://gitee.com/bean-chan/images/raw/master/img/20210511202259.png">
+<meta property="og:image" content="https://gitee.com/bean-chan/images/raw/master/img/20210511202907.png">
+<meta property="og:image" content="https://gitee.com/bean-chan/images/raw/master/img/20210511203133.png">
+<meta property="article:published_time" content="2021-05-11T12:00:11.000Z">
+<meta property="article:modified_time" content="2021-05-12T02:56:52.706Z">
 <meta property="article:author" content="BeanChan">
-<meta property="article:tag" content="Java">
-<meta property="article:tag" content="maven">
+<meta property="article:tag" content="java">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://gitee.com/bean-chan/images/raw/master/img/20210319095327.png">
+<meta name="twitter:image" content="https://gitee.com/bean-chan/images/raw/master/img/20210511200253.png">
 
-<link rel="canonical" href="https://chenb.in/2021/03/08/maven%E4%BE%9D%E8%B5%96%E5%86%B2%E7%AA%81/">
+<link rel="canonical" href="https://chenb.in/IDEA%E6%90%AD%E5%BB%BAJDK8%E6%BA%90%E7%A0%81/">
 
 
 <script id="page-configurations">
@@ -54,7 +55,7 @@
   };
 </script>
 
-  <title>maven依赖冲突 | BeanChan's Blog</title>
+  <title>IDEA搭建JDK8源码 | BeanChan's Blog</title>
   
 
 
@@ -195,7 +196,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://chenb.in/2021/03/08/maven%E4%BE%9D%E8%B5%96%E5%86%B2%E7%AA%81/">
+    <link itemprop="mainEntityOfPage" href="https://chenb.in/IDEA%E6%90%AD%E5%BB%BAJDK8%E6%BA%90%E7%A0%81/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -208,7 +209,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          maven依赖冲突
+          IDEA搭建JDK8源码
         </h1>
 
         <div class="post-meta">
@@ -218,14 +219,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2021-03-08 11:06:50" itemprop="dateCreated datePublished" datetime="2021-03-08T11:06:50+08:00">2021-03-08</time>
+              <time title="创建时间：2021-05-11 20:00:11" itemprop="dateCreated datePublished" datetime="2021-05-11T20:00:11+08:00">2021-05-11</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:23:25" itemprop="dateModified" datetime="2021-04-22T16:23:25+08:00">2021-04-22</time>
+                <time title="修改时间：2021-05-12 10:56:52" itemprop="dateModified" datetime="2021-05-12T10:56:52+08:00">2021-05-12</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -233,7 +234,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3/" itemprop="url" rel="index"><span itemprop="name">问题解决</span></a>
+                  <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" itemprop="url" rel="index"><span itemprop="name">环境搭建</span></a>
                 </span>
             </span>
 
@@ -245,6 +246,7 @@
               <span class="post-meta-item-text">阅读次数：</span>
               <span id="busuanzi_value_page_pv"></span>
             </span>
+            <div class="post-description">IDEA上导入JDK8的源码并可对代码进行备注</div>
 
         </div>
       </header>
@@ -255,27 +257,24 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h1><p>因将swagger升级到了2.9.2,再次启动项目时,爆出</p>
-<blockquote>
-<p>The following method did not exist:</p>
-<p>com.google.common.collect.FluentIterable.concat(Ljava/lang/Iterable;Ljava/lang/Iterable;)Lcom/google/common/collect/FluentIterable;</p>
-</blockquote>
-<p>升级完依赖遇到这种什么方法找不到的,十有八九就是发生依赖冲突了</p>
-<a id="more"></a>
-
-<h1 id="解决方式"><a href="#解决方式" class="headerlink" title="解决方式"></a>解决方式</h1><p>在同事推荐下,下载来IDEA插件<code>MavenHelper</code>来解决问题</p>
-<p>项目情况如下:</p>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210319095327.png" alt="image-20210319092655363"></p>
-<p>我在模块A引入了Swagger,在admin模块下的pom.xml下,此时通过MavenHelper发现,冲突包为guava,此时需要20版本的guava包,但是maven找到的只有18.0</p>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210319095333.png" alt="image-20210319094335639"></p>
-<p>因为maven肯定是会下载swagger所需要的包,但此时却找不到包,只有一种可能</p>
-<p>整个项目使用了别的有着guava-18.0的jar包,而忽略了有着guava-20.0的这个包</p>
-<p>因为项目自己选择了18.0但我们需要20.0,所以我选择直接排除guava-18.0这个依赖,再点击reimport</p>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210319095337.png" alt="image-20210319094616954"></p>
-<p>此时在看其他模块,发现有个模块已经排除了guava-18这个依赖</p>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210319095346.png" alt="image-20210319094725485"></p>
-<h1 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h1><p>此时再启动项目,项目运行成功,但是上面这个模块原先运行着guava-18的依赖,现在强制给他升级到20.0,可能会有着别的问题,就像jdk升级版本会有各种问题一样</p>
-<p>如果有问题的话还是可以使用那个万金油方法,回滚swagger依赖版本到2.7.0,毕竟能用就行,还要啥自行车</p>
+        <p>为了能够更好地学习JDK源码(给源码批上备注),特此将jdk导入到IDEA中</p>
+<h2 id="具体步骤"><a href="#具体步骤" class="headerlink" title="# 具体步骤"></a># 具体步骤</h2><ol>
+<li><p>新建一个java项目,最最普通的就行</p>
+</li>
+<li><p>打开自己的java_home<br> <img src="https://gitee.com/bean-chan/images/raw/master/img/20210511200253.png" alt="image-20210511200253100"></p>
+</li>
+<li><p>将src文件解压到桌面<br> <img src="https://gitee.com/bean-chan/images/raw/master/img/20210511200332.png" alt="image-20210511200332374"></p>
+</li>
+<li><p>右上角找到Project Structure并如下方式新建一个sdk<br> <img src="https://gitee.com/bean-chan/images/raw/master/img/20210511201539.png" alt="image-20210511201530152"></p>
+</li>
+<li><p>按如下步骤删除框内的元素<br><img src="https://gitee.com/bean-chan/images/raw/master/img/20210511202259.png" alt="image-20210511202259549"></p>
+</li>
+<li><p>再按加号导入先前<strong>解压好的文件夹</strong> <strong>解压好的文件夹</strong> <strong>解压好的文件夹</strong>(我已改名)<br> <img src="https://gitee.com/bean-chan/images/raw/master/img/20210511202907.png" alt="image-20210511202907624"></p>
+</li>
+<li><p>切换SDK为新创建的<br> <img src="https://gitee.com/bean-chan/images/raw/master/img/20210511203133.png" alt="image-20210511203133559"></p>
+</li>
+</ol>
+<p>完事,开始快乐的学习吧</p>
 
     </div>
 	<div>
@@ -320,7 +319,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://chenb.in/2021/03/08/maven%E4%BE%9D%E8%B5%96%E5%86%B2%E7%AA%81/" title="maven依赖冲突">https://chenb.in/2021/03/08/maven依赖冲突/</a>
+    <a href="https://chenb.in/IDEA%E6%90%AD%E5%BB%BAJDK8%E6%BA%90%E7%A0%81/" title="IDEA搭建JDK8源码">https://chenb.in/IDEA搭建JDK8源码/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -331,8 +330,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Java/" rel="tag"><i class="fa fa-tag"></i> Java</a>
-              <a href="/tags/maven/" rel="tag"><i class="fa fa-tag"></i> maven</a>
+              <a href="/tags/java/" rel="tag"><i class="fa fa-tag"></i> java</a>
           </div>
 
         
@@ -341,12 +339,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/03/04/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E9%98%9F%E5%88%97/" rel="prev" title="数据结构-队列">
-      <i class="fa fa-chevron-left"></i> 数据结构-队列
+    <a href="/SpringBoot%E9%A1%B9%E7%9B%AE%E6%89%93%E5%8C%85Docker%E9%95%9C%E5%83%8F/" rel="prev" title="SpringBoot项目打包成Docker镜像">
+      <i class="fa fa-chevron-left"></i> SpringBoot项目打包成Docker镜像
     </a></div>
       <div class="post-nav-item">
-    <a href="/2021/04/22/Springboot%E9%A1%B9%E7%9B%AE%E6%89%93%E5%8C%85Docker%E5%AE%B9%E5%99%A8/" rel="next" title="Springboot项目打包成Docker容器">
-      Springboot项目打包成Docker容器 <i class="fa fa-chevron-right"></i>
+    <a href="/%E9%9B%86%E5%90%88-ArrayList/" rel="next" title="集合-ArrayList">
+      集合-ArrayList <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -411,7 +409,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B5%B7%E5%9B%A0"><span class="nav-text">起因</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E5%BC%8F"><span class="nav-text">解决方式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%93%E6%9D%9F%E8%AF%AD"><span class="nav-text">结束语</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B7%E4%BD%93%E6%AD%A5%E9%AA%A4"><span class="nav-text"># 具体步骤</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -429,20 +427,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-count">8</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

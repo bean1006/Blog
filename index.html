@@ -185,7 +185,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://chenb.in/2021/04/22/Springboot%E9%A1%B9%E7%9B%AE%E6%89%93%E5%8C%85Docker%E5%AE%B9%E5%99%A8/">
+    <link itemprop="mainEntityOfPage" href="https://chenb.in/%E9%9B%86%E5%90%88-ArrayList/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -199,7 +199,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/04/22/Springboot%E9%A1%B9%E7%9B%AE%E6%89%93%E5%8C%85Docker%E5%AE%B9%E5%99%A8/" class="post-title-link" itemprop="url">Springboot项目打包成Docker容器</a>
+            <a href="/%E9%9B%86%E5%90%88-ArrayList/" class="post-title-link" itemprop="url">集合-ArrayList</a>
         </h2>
 
         <div class="post-meta">
@@ -208,17 +208,23 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-04-22 15:35:15 / 修改时间：20:19:17" itemprop="dateCreated datePublished" datetime="2021-04-22T15:35:15+08:00">2021-04-22</time>
+              <time title="创建时间：2021-05-11 22:00:11" itemprop="dateCreated datePublished" datetime="2021-05-11T22:00:11+08:00">2021-05-11</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-05-16 15:16:05" itemprop="dateModified" datetime="2021-05-16T15:16:05+08:00">2021-05-16</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3/" itemprop="url" rel="index"><span itemprop="name">问题解决</span></a>
+                  <a href="/categories/JDK8%E6%BA%90%E7%A0%81/" itemprop="url" rel="index"><span itemprop="name">JDK8源码</span></a>
                 </span>
             </span>
 
@@ -233,31 +239,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="1-问题描述"><a href="#1-问题描述" class="headerlink" title="1 问题描述"></a>1 问题描述</h1><h3 id="1-1-版本与系统参数"><a href="#1-1-版本与系统参数" class="headerlink" title="1.1 版本与系统参数"></a>1.1 版本与系统参数</h3><table>
-<thead>
-<tr>
-<th align="center">系统与工具</th>
-<th align="center">版本</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">操作系统</td>
-<td align="center">MacOS</td>
-</tr>
-<tr>
-<td align="center">Docker</td>
-<td align="center">20.10.5</td>
-</tr>
-<tr>
-<td align="center">docker-maven-plugin插件</td>
-<td align="center">1.2.2</td>
-</tr>
-</tbody></table>
-<h3 id="1-2-问题分析"><a href="#1-2-问题分析" class="headerlink" title="1.2 问题分析"></a>1.2 问题分析</h3><p>当我需要在IDEA中把SpringBoot项目打包成Docker项目时,会报如下错误</p>
-<p><img src="https://gitee.com/bean-chan/images/raw/master/img/20210422153528.png" alt="在这里插入图片描述"></p>
+          <p>从源码的层面一步步剖析jdk8中ArrayList的各项实现细节并做好备注</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2021/04/22/Springboot%E9%A1%B9%E7%9B%AE%E6%89%93%E5%8C%85Docker%E5%AE%B9%E5%99%A8/#more" rel="contents">
+              <a class="btn" href="/%E9%9B%86%E5%90%88-ArrayList/">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -283,7 +268,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://chenb.in/2021/03/08/maven%E4%BE%9D%E8%B5%96%E5%86%B2%E7%AA%81/">
+    <link itemprop="mainEntityOfPage" href="https://chenb.in/IDEA%E6%90%AD%E5%BB%BAJDK8%E6%BA%90%E7%A0%81/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -297,7 +282,173 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/03/08/maven%E4%BE%9D%E8%B5%96%E5%86%B2%E7%AA%81/" class="post-title-link" itemprop="url">maven依赖冲突</a>
+            <a href="/IDEA%E6%90%AD%E5%BB%BAJDK8%E6%BA%90%E7%A0%81/" class="post-title-link" itemprop="url">IDEA搭建JDK8源码</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-05-11 20:00:11" itemprop="dateCreated datePublished" datetime="2021-05-11T20:00:11+08:00">2021-05-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-05-12 10:56:52" itemprop="dateModified" datetime="2021-05-12T10:56:52+08:00">2021-05-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" itemprop="url" rel="index"><span itemprop="name">环境搭建</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>IDEA上导入JDK8的源码并可对代码进行备注</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/IDEA%E6%90%AD%E5%BB%BAJDK8%E6%BA%90%E7%A0%81/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+	<div>
+         
+		 </div>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://chenb.in/SpringBoot%E9%A1%B9%E7%9B%AE%E6%89%93%E5%8C%85Docker%E9%95%9C%E5%83%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="BeanChan">
+      <meta itemprop="description" content="爱玩爱闹,但也有着一颗积极向上的心">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BeanChan's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/SpringBoot%E9%A1%B9%E7%9B%AE%E6%89%93%E5%8C%85Docker%E9%95%9C%E5%83%8F/" class="post-title-link" itemprop="url">SpringBoot项目打包成Docker镜像</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-22 15:35:15" itemprop="dateCreated datePublished" datetime="2021-04-22T15:35:15+08:00">2021-04-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-05-12 10:33:33" itemprop="dateModified" datetime="2021-05-12T10:33:33+08:00">2021-05-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">杂谈</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>macOS操作系统中,SpringBoot项目打包成Dokcer镜像时遇到的问题</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/SpringBoot%E9%A1%B9%E7%9B%AE%E6%89%93%E5%8C%85Docker%E9%95%9C%E5%83%8F/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+	<div>
+         
+		 </div>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://chenb.in/maven%E4%BE%9D%E8%B5%96%E5%86%B2%E7%AA%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="BeanChan">
+      <meta itemprop="description" content="爱玩爱闹,但也有着一颗积极向上的心">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BeanChan's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/maven%E4%BE%9D%E8%B5%96%E5%86%B2%E7%AA%81/" class="post-title-link" itemprop="url">maven依赖冲突</a>
         </h2>
 
         <div class="post-meta">
@@ -314,7 +465,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:23:25" itemprop="dateModified" datetime="2021-04-22T16:23:25+08:00">2021-04-22</time>
+                <time title="修改时间：2021-05-12 10:30:13" itemprop="dateModified" datetime="2021-05-12T10:30:13+08:00">2021-05-12</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -322,7 +473,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3/" itemprop="url" rel="index"><span itemprop="name">问题解决</span></a>
+                  <a href="/categories/%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">杂谈</span></a>
                 </span>
             </span>
 
@@ -337,15 +488,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h1><p>因将swagger升级到了2.9.2,再次启动项目时,爆出</p>
-<blockquote>
-<p>The following method did not exist:</p>
-<p>com.google.common.collect.FluentIterable.concat(Ljava/lang/Iterable;Ljava/lang/Iterable;)Lcom/google/common/collect/FluentIterable;</p>
-</blockquote>
-<p>升级完依赖遇到这种什么方法找不到的,十有八九就是发生依赖冲突了</p>
+          <p>因升级swagger而带来的maven依赖冲突问题</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2021/03/08/maven%E4%BE%9D%E8%B5%96%E5%86%B2%E7%AA%81/#more" rel="contents">
+              <a class="btn" href="/maven%E4%BE%9D%E8%B5%96%E5%86%B2%E7%AA%81/">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -371,7 +517,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://chenb.in/2021/03/04/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E9%98%9F%E5%88%97/">
+    <link itemprop="mainEntityOfPage" href="https://chenb.in/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E9%98%9F%E5%88%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -385,7 +531,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/03/04/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E9%98%9F%E5%88%97/" class="post-title-link" itemprop="url">数据结构-队列</a>
+            <a href="/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E9%98%9F%E5%88%97/" class="post-title-link" itemprop="url">数据结构-队列</a>
         </h2>
 
         <div class="post-meta">
@@ -402,7 +548,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-03-19 10:14:40" itemprop="dateModified" datetime="2021-03-19T10:14:40+08:00">2021-03-19</time>
+                <time title="修改时间：2021-05-12 10:56:23" itemprop="dateModified" datetime="2021-05-12T10:56:23+08:00">2021-05-12</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -425,10 +571,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="1-队列介绍"><a href="#1-队列介绍" class="headerlink" title="1 队列介绍"></a>1 队列介绍</h1><h2 id="1-1-定义"><a href="#1-1-定义" class="headerlink" title="1.1 定义"></a>1.1 定义</h2><p>队列是一种特殊的线性表,遵循FIFO(first in first out)先进先出原则,整个队列由一个线性表构成,可以是数组或者链表,同时由队头(font)来表示第一个元素、队尾(rear)最后一个元素,并且队列只允许在队头删除元素,队尾添加元素</p>
+          <p>剖析数据结构中的队列,并贴出具体实现代码</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2021/03/04/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E9%98%9F%E5%88%97/#more" rel="contents">
+              <a class="btn" href="/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E9%98%9F%E5%88%97/">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -454,7 +600,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://chenb.in/2021/02/20/Git/">
+    <link itemprop="mainEntityOfPage" href="https://chenb.in/Git/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -468,7 +614,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/02/20/Git/" class="post-title-link" itemprop="url">Git</a>
+            <a href="/Git/" class="post-title-link" itemprop="url">Git</a>
         </h2>
 
         <div class="post-meta">
@@ -485,7 +631,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-03-19 10:15:26" itemprop="dateModified" datetime="2021-03-19T10:15:26+08:00">2021-03-19</time>
+                <time title="修改时间：2021-05-12 10:56:31" itemprop="dateModified" datetime="2021-05-12T10:56:31+08:00">2021-05-12</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -508,13 +654,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="1-Git介绍"><a href="#1-Git介绍" class="headerlink" title="1 Git介绍"></a>1 Git介绍</h1><h2 id="1-1-什么是git"><a href="#1-1-什么是git" class="headerlink" title="1.1 什么是git"></a>1.1 什么是git</h2><p>按官方的话说:世界上最先进的分布式版本控制工具</p>
-<p>如果不用版本控制工具我们怎么整合代码?</p>
-<p>这里讲述一个Git出生前的一些事:</p>
-<p>大家都知道Linux是一个开源操作系统,是一个举全世界之力创建的一个开源操作系统,大家都把自己写好的源码发给作者Linus Benedict Torvalds(林纳斯·托瓦兹),然后linus再自己一个人Ctrl C + Ctrl V,再取其精华去其糟粕,随着代码库的不断完善,工作量也越来越大,靠人工完成代码整合的难度也越来越大,这个时候版本控制工具就显得尤为重要,但是Linus不喜欢当时比较流行的开源版本控制工具CVS、SVN,因为他们需要联网才能工作,这个时候一个名叫BitMover的公司无偿提供公司旗下的分布式版本控制工具<strong>BitKeeper</strong>给Linux社区,这样问题也就算是解决了,并且也相安无事好长一段时间,后来因为社区大牛试图破解BitKeeper的协议,BitMover一生气,就把使用权回收了,然后Linus一人,扶大厦之将倾,挽狂澜于既倒,用了两周时间开发出了现如今闻名于世的Git</p>
+          <p>史上最强版本控制工具</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2021/02/20/Git/#more" rel="contents">
+              <a class="btn" href="/Git/">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -540,7 +683,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://chenb.in/2021/02/07/Solr/">
+    <link itemprop="mainEntityOfPage" href="https://chenb.in/Solr/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -554,7 +697,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/02/07/Solr/" class="post-title-link" itemprop="url">Solr</a>
+            <a href="/Solr/" class="post-title-link" itemprop="url">Solr</a>
         </h2>
 
         <div class="post-meta">
@@ -571,7 +714,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-03-19 10:15:40" itemprop="dateModified" datetime="2021-03-19T10:15:40+08:00">2021-03-19</time>
+                <time title="修改时间：2021-05-12 10:31:32" itemprop="dateModified" datetime="2021-05-12T10:31:32+08:00">2021-05-12</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -594,24 +737,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="1-Solr基础介绍"><a href="#1-Solr基础介绍" class="headerlink" title="1 Solr基础介绍"></a>1 Solr基础介绍</h1><h2 id="1-1-什么是Solr"><a href="#1-1-什么是Solr" class="headerlink" title="1.1 什么是Solr"></a>1.1 什么是Solr</h2><p>Solr是Apache开源的、基于Lucene的Java Api的封装,是一款成熟稳定的搜索引擎。</p>
-<h2 id="1-2-Solr的优缺点"><a href="#1-2-Solr的优缺点" class="headerlink" title="1.2 Solr的优缺点"></a>1.2 Solr的优缺点</h2><p>优点: </p>
-<ol>
-<li><p>大量的用户群体与成熟的社区</p>
-</li>
-<li><p>支持多种格式索引,例如HTML、CSV、JSON、XML等</p>
-</li>
-<li><p>诞生于与2004年,多年的沉淀使得Solr成熟、稳定</p>
-</li>
-<li><p><strong>如果不考虑建索引的同时进行查询,查询速度更快</strong>,像我目前接手的法律查询软件,法律的录入不是十分频繁,那么用Solr就会比较合适</p>
-</li>
-</ol>
-<p>缺点:</p>
-<ol>
-<li><p>在建立索引时,搜索效率不高,例如淘宝热卖那种需要实时更新索引的项目,Solr就显得有点力不从心了</p>
+          <p>开源成熟稳定的基于Lucene的搜索框架</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2021/02/07/Solr/#more" rel="contents">
+              <a class="btn" href="/Solr/">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -637,7 +766,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://chenb.in/2021/02/02/Jenkins/">
+    <link itemprop="mainEntityOfPage" href="https://chenb.in/Jenkins/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -651,7 +780,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/02/02/Jenkins/" class="post-title-link" itemprop="url">Jenkins</a>
+            <a href="/Jenkins/" class="post-title-link" itemprop="url">Jenkins</a>
         </h2>
 
         <div class="post-meta">
@@ -668,7 +797,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-03-19 10:15:28" itemprop="dateModified" datetime="2021-03-19T10:15:28+08:00">2021-03-19</time>
+                <time title="修改时间：2021-05-12 10:57:13" itemprop="dateModified" datetime="2021-05-12T10:57:13+08:00">2021-05-12</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -691,26 +820,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="1-什么是Jenkins"><a href="#1-什么是Jenkins" class="headerlink" title="1. 什么是Jenkins"></a>1. 什么是Jenkins</h1><h2 id="1-1-我们为啥需要jenkins"><a href="#1-1-我们为啥需要jenkins" class="headerlink" title="1.1 我们为啥需要jenkins"></a>1.1 我们为啥需要jenkins</h2><p>在一次系统开发中,往往需要如下几步:</p>
-<ol>
-<li>写代码</li>
-<li>代码提交</li>
-<li>四处打听有没有人没提交代码</li>
-<li>项目打包(通常是jar包和war包)</li>
-<li>上传到Linux服务器上</li>
-<li>如果项目正在运行,关闭它</li>
-<li>启动刚刚部署的项目</li>
-<li>如果有人突然举手说我代码好像有点问题!重复步骤1-7,可以说是相等的折磨人了</li>
-</ol>
-<p>这时有人就会问了,<strong>有没有那种可以自动打包部署的工具呢</strong>?</p>
-<p><a target="_blank" rel="noopener" href="https://imgchr.com/i/sz9gQ1"><img src="https://img-blog.csdnimg.cn/img_convert/80ef6c5703529b4af9c1ab9dc92f150a.png" alt="sz9gQ1.jpg"></a></p>
-<blockquote>
-<p>正确答案:<strong>Jenkins</strong></p>
-</blockquote>
-<p>Jenkins是一个基于Java构筑的一个<strong>持续集成</strong>工具,可以帮助用户更好地实现持续集成</p>
+          <p>自动化打包部署,程序员的发际线守护者</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2021/02/02/Jenkins/#more" rel="contents">
+              <a class="btn" href="/Jenkins/">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -802,20 +915,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-count">8</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
